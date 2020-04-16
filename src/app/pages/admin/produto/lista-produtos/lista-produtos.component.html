@@ -1,0 +1,34 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <div class="col-md-8">
+        Lista de produtos
+      </div>
+      <div class="col-md-4">
+        <button nbButton routerLink="/pages/admin/produto/editar/novo" style="padding: 6px;">
+          Novo produto
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item *ngFor="let produto of produtos" [routerLink]="['/pages/admin/produto/editar', produto._id]">
+        <div class="row ">
+          <div class="col-md-4 form-group">
+            {{produto.nome}}
+          </div>
+          <div class="col-md-4 form-group">
+            {{produto.descricao}}
+          </div>
+          <div class="col-md-2 form-group">
+            R$ {{produto.valor}}
+          </div>
+          <div class="col-md-2 form-group">
+            <nb-icon icon='edit-outline'></nb-icon>
+          </div>
+        </div>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>

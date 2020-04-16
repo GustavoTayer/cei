@@ -1,0 +1,66 @@
+<h1 id="title" class="title">Convivum Interno</h1>
+<p class="sub-title">Olá! Bem vindo ao nosso sistema interno para seminaristas e formadores</p>
+
+<nb-alert *ngIf="errors && errors.length" outline="danger" role="alert">
+  <p class="alert-title"><b>Ah não!</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+  </ul>
+</nb-alert>
+
+<form [formGroup]="form">
+  <div class="form-control-group">
+    <label class="label" for="input-email">Email:</label>
+    <input nbInput
+           fullWidth
+           name="email"
+           id="input-email"
+           placeholder="Email"
+           fieldSize="large"
+           formControlName="email"
+           [status]="(form.controls.email.invalid  ? 'danger' : 'success')"
+           autofocus
+         >
+    <ng-container *ngIf="form.controls.email.invalid && form.controls.email.touched">
+      <p class="caption status-danger" *ngIf="form.controls.email.errors?.required">
+        Favor digitar o email!
+      </p>
+      <p class="caption status-danger" *ngIf="form.controls.email.errors?.email">
+        Favor digitar um email válido!
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <span class="label-with-link">
+      <label class="label" for="input-password">Senha:</label>
+      <a class="forgot-password caption-2" routerLink="../request-password">Forgot Password?</a>
+    </span>
+    <input nbInput
+           fullWidth
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="Senha"
+           fieldSize="large"
+           formControlName="password"
+           [status]="(form.controls.password.invalid  ? 'danger' : 'success')"
+           >
+    <ng-container *ngIf="form.controls.password.invalid && form.controls.password.touched">
+      <p class="caption status-danger" *ngIf="form.controls.password.errors?.required">
+        Favor, digitar a senha!
+      </p>
+    </ng-container>
+  </div>
+
+  <button nbButton
+          fullWidth
+          status="primary"
+          size="large" (click)="login()">
+    Entrar
+  </button>
+</form>
+
+<section class="another-action" aria-label="Register">
+  Não possui uma conta? Solicite um convite ao responsável.
+</section>

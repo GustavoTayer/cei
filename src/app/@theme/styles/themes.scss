@@ -1,0 +1,167 @@
+// @nebular theming framework
+@import '~@nebular/theme/styles/theming';
+// @nebular out of the box themes
+@import '~@nebular/theme/styles/themes';
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: #f7f9fc,
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), default, default);
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: #252547,
+  slide-out-shadow-color: 2px 0 3px #29157a,
+  slide-out-shadow-color-rtl: -2px 0 3px #29157a,
+), cosmic, cosmic);
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: linear-gradient(270deg, #edf1f7 0%, #e4e9f2 100%),
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), corporate, corporate);
+
+$nb-themes: nb-register-theme((
+  layout-padding-top: 2.25rem,
+
+  menu-item-icon-margin: 0 0.5rem 0 0,
+
+  card-height-tiny: 13.5rem,
+  card-height-small: 21.1875rem,
+  card-height-medium: 28.875rem,
+  card-height-large: 36.5625rem,
+  card-height-giant: 44.25rem,
+  card-margin-bottom: 1.875rem,
+  card-header-with-select-padding-top: 0.5rem,
+  card-header-with-select-padding-bottom: 0.5rem,
+
+  select-min-width: 6rem,
+
+  slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
+  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
+), dark, dark);
+
+$nb-themes: nb-register-theme((
+  color-primary-100: #F9E5DC,
+  color-primary-200: #F3C7BA,
+  color-primary-300: #DB998E,
+  color-primary-400: #B76B67,
+  color-primary-500: #88393C,
+  color-primary-600: #742933,
+  color-primary-700: #611C2B,
+  color-primary-800: #4E1224,
+  color-primary-900: #410A20,
+  color-primary-transparent-100: rgba(136, 57, 60, 0.08),
+  color-primary-transparent-200: rgba(136, 57, 60, 0.16),
+  color-primary-transparent-300: rgba(136, 57, 60, 0.24),
+  color-primary-transparent-400: rgba(136, 57, 60, 0.32),
+  color-primary-transparent-500: rgba(136, 57, 60, 0.4),
+  color-primary-transparent-600: rgba(136, 57, 60, 0.48),
+  color-success-100: #F0F9CB,
+  color-success-200: #DFF499,
+  color-success-300: #BEDE62,
+  color-success-400: #97BE39,
+  color-success-500: #66930A,
+  color-success-600: #537E07,
+  color-success-700: #416905,
+  color-success-800: #315503,
+  color-success-900: #264601,
+  color-success-transparent-100: rgba(102, 147, 10, 0.08),
+  color-success-transparent-200: rgba(102, 147, 10, 0.16),
+  color-success-transparent-300: rgba(102, 147, 10, 0.24),
+  color-success-transparent-400: rgba(102, 147, 10, 0.32),
+  color-success-transparent-500: rgba(102, 147, 10, 0.4),
+  color-success-transparent-600: rgba(102, 147, 10, 0.48),
+  color-info-100: #C8F1F9,
+  color-info-200: #93DEF4,
+  color-info-300: #5AB9DE,
+  color-info-400: #318EBE,
+  color-info-500: #025993,
+  color-info-600: #01457E,
+  color-info-700: #013369,
+  color-info-800: #002455,
+  color-info-900: #001946,
+  color-info-transparent-100: rgba(2, 89, 147, 0.08),
+  color-info-transparent-200: rgba(2, 89, 147, 0.16),
+  color-info-transparent-300: rgba(2, 89, 147, 0.24),
+  color-info-transparent-400: rgba(2, 89, 147, 0.32),
+  color-info-transparent-500: rgba(2, 89, 147, 0.4),
+  color-info-transparent-600: rgba(2, 89, 147, 0.48),
+  color-warning-100: #FAEAC8,
+  color-warning-200: #F5D194,
+  color-warning-300: #E3A95B,
+  color-warning-400: #C78032,
+  color-warning-500: #A34D01,
+  color-warning-600: #8C3A00,
+  color-warning-700: #752A00,
+  color-warning-800: #5E1D00,
+  color-warning-900: #4E1400,
+  color-warning-transparent-100: rgba(163, 77, 1, 0.08),
+  color-warning-transparent-200: rgba(163, 77, 1, 0.16),
+  color-warning-transparent-300: rgba(163, 77, 1, 0.24),
+  color-warning-transparent-400: rgba(163, 77, 1, 0.32),
+  color-warning-transparent-500: rgba(163, 77, 1, 0.4),
+  color-warning-transparent-600: rgba(163, 77, 1, 0.48),
+  color-danger-100: #FBD5CE,
+  color-danger-200: #F7A59E,
+  color-danger-300: #E76B6E,
+  color-danger-400: #CF4455,
+  color-danger-500: #AF1335,
+  color-danger-600: #960D38,
+  color-danger-700: #7D0939,
+  color-danger-800: #650636,
+  color-danger-900: #530333,
+  color-danger-transparent-100: rgba(175, 19, 53, 0.08),
+  color-danger-transparent-200: rgba(175, 19, 53, 0.16),
+  color-danger-transparent-300: rgba(175, 19, 53, 0.24),
+  color-danger-transparent-400: rgba(175, 19, 53, 0.32),
+  color-danger-transparent-500: rgba(175, 19, 53, 0.4),
+  color-danger-transparent-600: rgba(175, 19, 53, 0.48)
+
+), cnv, corporate)

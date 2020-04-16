@@ -1,0 +1,42 @@
+<form [formGroup]="form">
+  <nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col-md-8">
+          Solicitação de produtos
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-control-group">
+            <label class="label">Data desejável:</label>
+            <input  nbInput formControlName="dataEntrega" [nbDatepicker]="rangepicker"
+            [status]="(form.controls.dataEntrega.invalid  ? 'danger' : 'success')">
+            <nb-datepicker #rangepicker [min]="min" format="DD/MM/YYYY"></nb-datepicker>
+            <ng-container *ngIf="form.controls.dataEntrega.invalid && form.controls.dataEntrega.touched">
+              <p class="caption status-danger" *ngIf="form.controls.dataEntrega.errors?.required">
+                Favor digitar a data desejada!
+              </p>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 10px;margin-left: 0px;">
+        <div class="cow">
+            <ng2-smart-table [source]="produtosSolicitados" [settings]="settings"></ng2-smart-table>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-md-4">
+          <button nbButton (click)="salvar()" style="padding: 6px;">
+            Salvar
+          </button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</form>

@@ -1,0 +1,5 @@
+<ngx-lista-solicitacao-desktop *ngIf="(isHandset$ | async) === false; else mobileList"></ngx-lista-solicitacao-desktop>
+<ng-template #mobileList>
+  <ngx-lista-solicitacao-mobile></ngx-lista-solicitacao-mobile>
+</ng-template>
+
