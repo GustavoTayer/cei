@@ -7,7 +7,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'ngx-usuario-editar',
   templateUrl: './usuario-editar.component.html',
-  styleUrls: ['./usuario-editar.component.scss']
+  styleUrls: ['./usuario-editar.component.scss'],
 })
 export class UsuarioEditarComponent implements OnInit {
   id: string;

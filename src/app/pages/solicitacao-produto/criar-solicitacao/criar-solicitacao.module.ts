@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CriarSolicitacaoComponent } from './criar-solicitacao.component';
 import { RouterModule } from '@angular/router';
 import { NbCardModule, NbInputModule, NbButtonModule, NbListModule,
-  NbSelectModule, NbIconModule, NbDatepickerModule, NbAlertModule } from '@nebular/theme';
+  NbSelectModule, NbIconModule, NbDatepickerModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ProductSelectComponent } from '../../util/product-select/product-select.component';

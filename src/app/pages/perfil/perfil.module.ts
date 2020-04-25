@@ -30,6 +30,6 @@ import { NbMomentDateModule } from '@nebular/moment';
     NbDatepickerModule,
     NbMomentDateModule,
     NbCheckboxModule,
-  ]
+  ],
 })
 export class PerfilModule { }

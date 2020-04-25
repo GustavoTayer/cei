@@ -20,6 +20,6 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
         component: ListaProdutosComponent,
       },
     ]),
-  ]
+  ],
 })
 export class ListaProdutosModule { }

@@ -8,7 +8,7 @@ describe('ListaSolicitacaoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListaSolicitacaoComponent ]
+      declarations: [ ListaSolicitacaoComponent ],
     })
     .compileComponents();
   }));

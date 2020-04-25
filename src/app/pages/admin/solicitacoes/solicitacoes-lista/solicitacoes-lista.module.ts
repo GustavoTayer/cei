@@ -54,6 +54,6 @@ import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.compo
         component: SolicitacoesListaComponent,
       },
     ]),
-  ]
+  ],
 })
 export class SolicitacoesListaModule { }

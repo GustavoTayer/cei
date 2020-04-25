@@ -7,7 +7,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'ngx-lista-solicitacao',
   templateUrl: './lista-solicitacao.component.html',
-  styleUrls: ['./lista-solicitacao.component.scss']
+  styleUrls: ['./lista-solicitacao.component.scss'],
 })
 export class ListaSolicitacaoComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -15,7 +15,7 @@ export class ListaSolicitacaoComponent implements OnInit {
     map(result => result.matches),
     shareReplay(),
   );
-  private mobile: boolean;
+  // private mobile: boolean;
 
   constructor(private breakpointObserver: BreakpointObserver) { }
 

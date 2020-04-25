@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbSortDirection, NbTreeGridDataSource, NbSortRequest, NbTreeGridDataSourceBuilder } from '@nebular/theme';
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao } from '../../../models/DbModels';
 import * as moment from 'moment';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';

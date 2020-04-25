@@ -10,7 +10,7 @@ import { Produto } from '../../../models/DbModels';
 @Component({
   selector: 'ngx-criar-solicitacao',
   templateUrl: './criar-solicitacao.component.html',
-  styleUrls: ['./criar-solicitacao.component.scss']
+  styleUrls: ['./criar-solicitacao.component.scss'],
 })
 export class CriarSolicitacaoComponent implements OnInit {
   form = this.fb.group({
@@ -92,7 +92,7 @@ export class CriarSolicitacaoComponent implements OnInit {
     }
 
    printErros() {
-     return JSON.stringify(this.form.controls.dataEntrega.errors)
+     return JSON.stringify(this.form.controls.dataEntrega.errors);
    }
 
    ngOnInit() {

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
   errors: string[];
@@ -20,8 +19,7 @@ export class RegisterComponent implements OnInit {
     bd: null,
   });
   id: string;
-  constructor(private fb: FormBuilder,
-    private http: HttpClient, private authService: AuthService,
+  constructor(private fb: FormBuilder, private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router) {
     this.route.params.subscribe(params => {
@@ -39,7 +37,7 @@ export class RegisterComponent implements OnInit {
   }
   password = '';
   ngOnInit(): void {
-    this.form.controls.password.valueChanges.subscribe((a)=> {
+    this.form.controls.password.valueChanges.subscribe((a) => {
       this.password = a;
     });
   }
@@ -63,8 +61,6 @@ export class RegisterComponent implements OnInit {
         localStorage.setItem('usuarioNome', res.name);
         localStorage.setItem('token', res.token);
         this.router.navigate(['pages/dashboard']);
-      }, err => {
-        console.log(err);
       });
   }
 

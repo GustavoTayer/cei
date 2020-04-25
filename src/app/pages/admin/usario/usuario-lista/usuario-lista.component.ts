@@ -6,7 +6,7 @@ import { EComunidadeUsuario} from '../../../../models/DbModels';
 @Component({
   selector: 'ngx-usuario-lista',
   templateUrl: './usuario-lista.component.html',
-  styleUrls: ['./usuario-lista.component.scss']
+  styleUrls: ['./usuario-lista.component.scss'],
 })
 export class UsuarioListaComponent implements OnInit {
   faSearch = faSearch;

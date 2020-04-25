@@ -8,7 +8,7 @@ describe('ListaSolicitacaoMobileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListaSolicitacaoMobileComponent ]
+      declarations: [ ListaSolicitacaoMobileComponent ],
     })
     .compileComponents();
   }));

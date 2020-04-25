@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EComunidadeUsuario, EHierarquiaUsuario } from '../../../../models/DbModels';
 import { UsuarioService } from '../usuario.service';
-import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-usuario-convidar',
   templateUrl: './usuario-convidar.component.html',
-  styleUrls: ['./usuario-convidar.component.scss']
+  styleUrls: ['./usuario-convidar.component.scss'],
 })
 export class UsuarioConvidarComponent implements OnInit {
 
@@ -20,13 +19,13 @@ export class UsuarioConvidarComponent implements OnInit {
   convidados: FormGroup[] = [];
   constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService,
-    private toastrService: NbToastrService) { }
+    ) { }
 
   ngOnInit(): void {
   }
 
   remove(convidado) {
-    this.convidados = this.convidados.filter(it => it.value.email !== convidado.value.email)
+    this.convidados = this.convidados.filter(it => it.value.email !== convidado.value.email);
   }
 
   add() {

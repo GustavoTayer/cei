@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EEquipeUsuario, EComunidadeUsuario, EHierarquiaUsuario } from '../../models/DbModels';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { UsuarioService } from '../admin/usario/usuario.service';
 import * as moment from 'moment';
@@ -8,7 +8,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'ngx-perfil',
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.scss']
+  styleUrls: ['./perfil.component.scss'],
 })
 export class PerfilComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class PerfilComponent implements OnInit {
   comunidades = Object.keys(EComunidadeUsuario).map(it => ({k: it, v: EComunidadeUsuario[it]}));
   hierarquia = Object.keys(EHierarquiaUsuario).map(it => ({k: it, v: EHierarquiaUsuario[it]}));
   mudarSenha = false;
-  constructor(private route: ActivatedRoute,
+  constructor(
     private router: Router,
     private fb: FormBuilder,
     private usuarioService: UsuarioService) { }

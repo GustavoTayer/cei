@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
   url = `${SECURED_URL}/user`;
@@ -36,7 +36,7 @@ export class UsuarioService {
         return res;
       }),
       catchError( err => {
-        this.toastrService.danger(err.error.errors, 'Erro!')
+        this.toastrService.danger(err.error.errors, 'Erro!');
         return [];
       }));
   }
