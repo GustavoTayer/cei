@@ -4,9 +4,7 @@
 
 $nb-themes: nb-register-theme((
   layout-padding-top: 2.25rem,
-
   menu-item-icon-margin: 0 0.5rem 0 0,
-
   card-height-tiny: 13.5rem,
   card-height-small: 21.1875rem,
   card-height-medium: 28.875rem,
@@ -163,4 +161,4 @@ $nb-themes: nb-register-theme((
   color-danger-transparent-500: rgba(175, 19, 53, 0.4),
   color-danger-transparent-600: rgba(175, 19, 53, 0.48)
 
-), cnv, corporate)
+), cnv, corporate);
