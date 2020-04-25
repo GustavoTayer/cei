@@ -1,10 +1,153 @@
-<ngx-charts-advanced-pie-chart
-  [view]="view"
-  [scheme]="colorScheme"
-  [results]="single"
-  [gradient]="gradient"
-  (select)="onSelect($event)"
-  (activate)="onActivate($event)"
-  (deactivate)="onDeactivate($event)"
-  >
-</ngx-charts-advanced-pie-chart>
+
+<nb-alert status="warning" *ngIf="!filtroStatus">
+  Especifique o status na pesquisa para poder altera-lo!
+</nb-alert>
+<nb-alert status="warning" *ngIf="filtroStatus === 'PAGO'">
+  Não é possível alterar status de solicitações pagas!
+</nb-alert>
+<div class="row">
+  <div class='col-md-8'>
+    <nb-card>
+      <nb-card-header>
+        Filtro de Solicitações
+      </nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="filtro">
+          <div class="row form-group">
+            <div class="form-group col-md-6">
+              <label for="Nome" class="label" required>Status</label>
+              <nb-select placeholder="Status" formControlName="status" fullWidth>
+                <nb-option value="">Todos</nb-option>
+                <nb-option *ngFor="let s of status" [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase()}}</nb-option>
+              </nb-select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="Usuario" class="label" required>Usuário</label>
+              <nb-select placeholder="Usuário" formControlName="usuario" fullWidth>
+                <nb-option value="">Todos</nb-option>
+                <nb-option *ngFor="let u of usuarios" [value]="u._id">{{u.name}}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="row">
+          <div class="col-md-6">
+                <label class="label">Data de criação:</label>
+                <input fullWidth  nbInput formControlName="dataCriacao" [nbDatepicker]="rangepicker">
+                <nb-rangepicker #rangepicker format="DD/MM/YYYY"></nb-rangepicker>
+            </div>
+            <div class="col-md-6">
+                <label class="label">Data desejada:</label>
+                <input fullWidth nbInput formControlName="dataDesejada" [nbDatepicker]="dataDesejada">
+                <nb-rangepicker #dataDesejada format="DD/MM/YYYY"></nb-rangepicker>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton size="small" (click)="buscar()"><fa-icon [icon]="faSearch" style="margin-right: 5px;"></fa-icon> Buscar</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+  <div class='col-md-4'>
+    <nb-card style="height: 322px;">
+      <nb-card-header>
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            Produto / Quantidade
+          </div>
+          <div>
+            <button
+              [disabled]="!filtroStatus || filtroStatus === 'PAGO'"
+              nbTooltip="Alterar Status"
+              nbTooltipStatus="primary" nbButton
+              status="basic" size="tiny"
+              (click)="alterarStatusTodos()">
+              <fa-icon [icon]="faExchangeAlt"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item *ngFor="let pc of produtosCount">
+            <div class="col-md-9">
+              {{pc.produto[0] && pc.produto[0].nome || '-'}}
+            </div>
+            <div class="col-md-3">
+              {{pc.count}}
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<nb-card>
+  <nb-card-body>
+    <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
+      <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+      <tr [clickToToggle]="false" nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+      <ng-container  nbTreeGridColumnDef="action">
+        <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+          <button
+          [disabled]="!filtroStatus || filtroStatus === 'PAGO'"
+          nbTooltip="Alterar status das solicitações selecionadas"
+          nbTooltipStatus="primary" nbButton
+          status="basic" size="tiny"
+          (click)="alterarStatusSelecionados()">
+          <fa-icon [icon]="faExchangeAlt"></fa-icon>
+        </button>
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          <nb-tree-grid-row-toggle
+                [expanded]="row.expanded"
+                *ngIf="row.children "
+                >
+              </nb-tree-grid-row-toggle>
+
+          <nb-checkbox [disabled]="!filtroStatus || filtroStatus === 'PAGO'" *ngIf="row.children" [checked]="isChecked(row)" (checkedChange)="toggle($event, row)"></nb-checkbox>
+        </td>
+      </ng-container>
+      <ng-container [nbTreeGridColumnDef]="customColumn">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('nome')" *nbTreeGridHeaderCellDef>
+          Usuário/Produto
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          {{row.data['nome']}}
+        </td>
+      </ng-container>
+      <ng-container nbTreeGridColumnDef="uq">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('uq')" *nbTreeGridHeaderCellDef>
+          Status/Qtd. Solicitada
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          {{row.data['uq']}}
+        </td>
+      </ng-container>
+      <ng-container nbTreeGridColumnDef="valor">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('valor')" *nbTreeGridHeaderCellDef>
+          Valor
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          {{row.data['valor']}}
+        </td>
+      </ng-container>
+      <ng-container nbTreeGridColumnDef="dataDesejada">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('dataDesejada')" *nbTreeGridHeaderCellDef>
+          Data Desejada
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">
+          {{row.data['dataDesejada']}}
+        </td>
+      </ng-container>
+      <!-- <ng-container *ngFor="let column of defaultColumns; let index = index"
+                    [nbTreeGridColumnDef]="column"
+                    [showOn]="getShowOn(index)">
+        <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)" *nbTreeGridHeaderCellDef>
+          {{column}}
+        </th>
+        <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+      </ng-container> -->
+    </table>
+  </nb-card-body>
+</nb-card>

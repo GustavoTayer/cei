@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
         email: this.form.value.email,
         password: this.form.value.password,
       }).subscribe(res => {
+        localStorage.setItem('usuarioNome', res.name);
         localStorage.setItem('token', res.token);
         this.router.navigate(['pages/dashboard']);
       },

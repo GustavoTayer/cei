@@ -15,8 +15,13 @@ const routes: Routes = [{
     {
       path: 'solicitacao-produto',
       loadChildren: () => import('./solicitacao-produto/solicitacao-produto.module')
-      .then(m => m.SolicitacaoProdutoModule),
+        .then(m => m.SolicitacaoProdutoModule),
     },
+    {
+      path: 'perfil',
+      loadChildren: () => import('./perfil/perfil.module')
+        .then(m => m.PerfilModule) },
+
     {
       path: 'admin',
       loadChildren: () => import('./admin/admin.module')

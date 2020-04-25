@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
-
-import { UserData } from '../../../@core/data/users';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { UsuarioService } from '../../../pages/admin/usario/usuario.service';
 
 @Component({
   selector: 'ngx-header',
@@ -37,21 +36,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Meu Perfil' }, { title: 'Sair', link: 'auth/logout' } ];
+  userMenu = [ { title: 'Meu Perfil', link: 'pages/perfil' }, { title: 'Sair', link: 'auth/logout' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
-              private userService: UserData,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private usuarioService: UsuarioService) {
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+    this.user = localStorage.getItem('usuarioNome');
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()

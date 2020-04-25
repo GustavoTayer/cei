@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-header>Usuários</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="filtro">
+      <div class="form-group col-md-4">
+        <label for="Nome" class="label" required>Nome </label>
+        <input type="text" nbInput placeholder="Nome" fullWidth id="nome"
+          formControlName="nome" />
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="basic" (click)="buscar()" style="padding: 6px; margin-right: 8px;">
+      <fa-icon [icon]="faSearch" style="margin-right: 5px;"></fa-icon>buscar
+    </button>
+    <button nbButton status="primary" routerLink="/pages/admin/usuarios/convidar" style="padding: 6px;">
+      <fa-icon [icon]="faPlus" style="margin-right: 5px;"></fa-icon>Convidar
+    </button>
+  </nb-card-footer>
+</nb-card>
+<nb-card >
+  <nb-list>
+    <nb-list-item *ngFor="let user of users" [routerLink]="['/pages/admin/usuarios/editar/', user._id]">
+      <nb-user [name]="user.name" [title]="user.comunidade">
+      </nb-user>
+    </nb-list-item>
+  </nb-list>
+</nb-card>

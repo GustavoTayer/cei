@@ -17,6 +17,9 @@ export class CriarSolicitacaoComponent implements OnInit {
     dataEntrega: [null, Validators.required],
   });
 
+  date = new Date();
+  filter = date => date.day() === 4;
+
   produtosSolicitados: any[] = [];
 
   tiposProduto: Produto[] = [];

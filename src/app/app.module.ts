@@ -29,10 +29,8 @@ import localeExtraPT from '@angular/common/locales/extra/pt';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(localePT, 'pt', localeExtraPT);
 
-@NgModule({
-  declarations: [AppComponent, LogoutComponent],
-  imports: [
-    BrowserModule,
+/*
+BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -46,8 +44,31 @@ registerLocaleData(localePT, 'pt', localeExtraPT);
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
-    CoreModule.forRoot(),
+    CoreModule.forRoot(), // cortado
     NbMomentDateModule,
+    */
+
+
+@NgModule({
+  declarations: [AppComponent, LogoutComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
+    NbDatepickerModule.forRoot(),
+    NbDialogModule.forRoot(),
+    NbWindowModule.forRoot(),
+    NbToastrModule.forRoot(),
+    NbChatModule.forRoot({
+      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
+    }),
+    NbMomentDateModule,
+    CoreModule.forRoot(),
+    ThemeModule.forRoot(),
+    NbDialogModule.forRoot(),
   ],
   bootstrap: [AppComponent],
   providers: [

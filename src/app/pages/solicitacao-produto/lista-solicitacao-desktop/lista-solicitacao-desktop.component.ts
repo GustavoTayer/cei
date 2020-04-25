@@ -4,6 +4,7 @@ import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { EStatusSolicitacao } from '../../../models/DbModels';
 import * as moment from 'moment';
+import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface TreeNode<T> {
   data: T;
@@ -37,9 +38,18 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
     dataDesejada: null,
     status: null,
   });
+  faSearch = faSearch;
+  faPlus = faPlus;
 
   async ngOnInit() {
-    this.solicitacaoProdutoService.buscarSolicitacoes({}).subscribe(res => this.setData(res));
+    const start = moment().startOf('month');
+    const end = moment().endOf('month');
+    this.filtro.patchValue({
+      status: EStatusSolicitacao.ABERTO,
+      dataCriacao: {start, end},
+      dataDesejada: {start, end},
+    });
+    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value).subscribe(res => this.setData(res));
   }
 
   constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
@@ -62,12 +72,13 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
         };
        });
       const dataDesejada = moment(sol.dataDesejada).format('DD/MM/YYYY');
+      const criadoEm = moment(sol.criadoEm).format('DD/MM/YYYY');
       return {
         data: {
-          nome: sol.usuario.name,
-          uq: sol.status.toLowerCase(),
+          nome: sol.status.charAt(0) + sol.status.slice(1).toLowerCase(),
+          uq: dataDesejada,
           valor: `R$ ${sol.valorTotal.toFixed(2)}`,
-          dataDesejada,
+          criadoEm,
         },
         children,
       };

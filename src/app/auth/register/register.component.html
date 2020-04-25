@@ -1,0 +1,101 @@
+<h1 id="title" class="title">Registro</h1>
+
+<nb-alert *ngIf="errors?.length" outline="danger" role="alert">
+  <p class="alert-title"><b>Oh snap!</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+  </ul>
+</nb-alert>
+<form (ngSubmit)="register()"  [formGroup]="form" aria-labelledby="title">
+  <div class="form-control-group">
+    <label class="label" for="input-name">Nome:</label>
+    <input nbInput
+           formControlName="name"
+           id="input-name"
+           name="fullName"
+           placeholder="Nome"
+           autofocus
+           fullWidth
+           fieldSize="large"
+           [status]="verificaValidacaoCampo('name') ? 'danger' : 'basic'"
+          >
+    <ng-container *ngIf="verificaValidacaoCampo('name')">
+      <p class="caption status-danger" *ngIf="verificaValidacaoCampo('name', 'required')">
+        Campo obrigatório!
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-email">Email:</label>
+    <input nbInput
+           formControlName='email'
+           id="input-email"
+           name="email"
+           placeholder="Email"
+           fullWidth
+           fieldSize="large">
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-password">Senha:</label>
+    <input nbInput
+           formControlName="password"
+           type="password"
+           id="input-password"
+           name="password"
+           placeholder="Senha"
+           fullWidth
+           fieldSize="large"
+           [status]="verificaValidacaoCampo('password') ? 'danger' : 'basic'">
+    <ng-container *ngIf="verificaValidacaoCampo('password')">
+      <p class="caption status-danger" *ngIf="verificaValidacaoCampo('password', 'required')">
+        Senha é obrigatório!
+      </p>
+      <p class="caption status-danger" *ngIf="verificaValidacaoCampo('password', 'senhaFraca')">
+        Senha precisar ter: uma letra maiúscula, uma letra minúscula, um número, um caractere especial (@#$%) e tamanho entre 6-20.
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <label class="label" for="input-re-password">Confirmar senha:</label>
+    <input nbInput
+           formControlName="confirm_password"
+           type="password"
+           id="input-re-password"
+           name="rePass"
+           placeholder="Confirmar senha"
+           fullWidth
+           fieldSize="large"
+           [status]="verificaValidacaoCampo('confirm_password') || validateEqualPassword() ? 'danger' : 'basic'">
+
+    <ng-container *ngIf="verificaValidacaoCampo('confirm_password') || validateEqualPassword()">
+      <p class="caption status-danger" *ngIf="verificaValidacaoCampo('confirm_password', 'required')">
+        Confimar senha é obrigatório!
+      </p>
+      <p class="caption status-danger" *ngIf="validateEqualPassword()">
+        As senhas não estão combinando
+      </p>
+    </ng-container>
+  </div>
+
+  <!-- <div class="form-control-group accept-group" *ngIf="getConfigValue('forms.register.terms')">
+    <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">
+      Agree to <a href="#" target="_blank"><strong>Terms & Conditions</strong></a>
+    </nb-checkbox>
+  </div> -->
+
+  <button nbButton
+          fullWidth
+          status="primary"
+          size="large"
+          [disabled]="!form.valid || validateEqualPassword()"
+          >
+    Criar conta
+  </button>
+</form>
+
+<section class="another-action" aria-label="Sign in">
+  Já possui uma conta? <a class="text-link" [routerLink]="['/auth/login']">entrar</a>
+</section>

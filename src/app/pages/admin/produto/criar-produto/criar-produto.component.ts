@@ -19,7 +19,7 @@ export class CriarProdutoComponent implements OnInit {
     ativo: null,
   });
   id: string;
-
+  headerMessage: 'Criar' | 'Editar';
   constructor(private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -29,11 +29,14 @@ export class CriarProdutoComponent implements OnInit {
       this.route.params.subscribe(params => {
       this.id = params['id'];
       if (this.id !== 'novo') {
+        this.headerMessage = 'Editar';
         this.produtoService.buscarProdutoPorId(this.id).subscribe(res => {
           this.form.patchValue({
             ...res,
           });
         });
+      } else {
+        this.headerMessage = 'Criar';
       }
    });
   }

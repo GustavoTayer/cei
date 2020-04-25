@@ -3,6 +3,7 @@
     <nb-card-header>
       <div class="row">
         <div class="col-md-8">
+          <button nbButton size="small" ghost routerLink="/pages/solicitacao-produto"><nb-icon icon="arrow-left"></nb-icon></button>
           Solicitação de produtos
         </div>
       </div>
@@ -14,7 +15,7 @@
             <label class="label">Data desejável:</label>
             <input  nbInput formControlName="dataEntrega" [nbDatepicker]="rangepicker"
             [status]="(form.controls.dataEntrega.invalid  ? 'danger' : 'success')">
-            <nb-datepicker #rangepicker [min]="min" format="DD/MM/YYYY"></nb-datepicker>
+            <nb-datepicker #rangepicker [min]="min" [filter]="filter" format="DD/MM/YYYY"></nb-datepicker>
             <ng-container *ngIf="form.controls.dataEntrega.invalid && form.controls.dataEntrega.touched">
               <p class="caption status-danger" *ngIf="form.controls.dataEntrega.errors?.required">
                 Favor digitar a data desejada!

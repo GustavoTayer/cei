@@ -2,7 +2,7 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Notícias',
+    title: 'Dashboard',
     icon: 'text-outline',
     link: '/pages/dashboard',
     home: true,
@@ -13,7 +13,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
   },
   {
-    title: 'Solicitação de produto',
+    title: 'Minhas solicitações',
     icon: 'cube-outline',
     link: '/pages/solicitacao-produto',
   },
@@ -35,6 +35,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Produtos',
         icon: 'cube-outline',
         link: '/pages/admin/produto',
+      },
+      {
+        title: 'Solicitações',
+        icon: 'list-outline',
+        link: '/pages/admin/solicitacoes',
+      },
+      {
+        title: 'Usuários',
+        icon: 'person-outline',
+        link: '/pages/admin/usuarios',
       },
     ],
   },

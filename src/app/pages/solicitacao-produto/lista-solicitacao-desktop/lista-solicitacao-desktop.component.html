@@ -1,17 +1,6 @@
 <nb-card>
   <nb-card-header>
-    <div class="row">
-      <div class="col-md-4">
-        <button nbButton (click)="buscar()" style="padding: 6px;">
-          buscar
-        </button>
-      </div>
-      <div class="col-md-4">
-        <button nbButton routerLink="/pages/solicitacao-produto/solicitar" style="padding: 6px;">
-          Nova solicitação
-        </button>
-      </div>
-    </div>
+    Minhas solicitações
   </nb-card-header>
   <nb-card-body>
     <form [formGroup]="filtro">
@@ -40,6 +29,14 @@
       </div>
     </form>
   </nb-card-body>
+  <nb-card-footer>
+        <button nbButton status="basic" (click)="buscar()" style="padding: 6px; margin-right: 8px;">
+          <fa-icon [icon]="faSearch" style="margin-right: 5px;"></fa-icon>buscar
+        </button>
+        <button nbButton status="primary" routerLink="/pages/solicitacao-produto/solicitar" style="padding: 6px;">
+          <fa-icon [icon]="faPlus" style="margin-right: 5px;"></fa-icon>solicitação
+        </button>
+  </nb-card-footer>
 </nb-card>
 
 <nb-card>
@@ -49,7 +46,7 @@
       <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
       <ng-container [nbTreeGridColumnDef]="customColumn">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('nome')" *nbTreeGridHeaderCellDef>
-          Usuário/Produto
+          Status/Produto
         </th>
         <td nbTreeGridCell *nbTreeGridCellDef="let row">
           {{row.data['nome']}}
@@ -58,7 +55,7 @@
 
       <ng-container nbTreeGridColumnDef="uq">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('uq')" *nbTreeGridHeaderCellDef>
-          Status/Qtd. Solicitada
+          Dt. Desejada/Qtd. Solicitada
         </th>
         <td nbTreeGridCell *nbTreeGridCellDef="let row">
           {{row.data['uq']}}
@@ -78,10 +75,10 @@
 
       <ng-container nbTreeGridColumnDef="dataDesejada">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('dataDesejada')" *nbTreeGridHeaderCellDef>
-          Data Desejada
+          Criado em
         </th>
         <td nbTreeGridCell *nbTreeGridCellDef="let row">
-          {{row.data['dataDesejada']}}
+          {{row.data['criadoEm']}}
         </td>
       </ng-container>
 

@@ -1,0 +1,50 @@
+<nb-card>
+  <nb-card-header>
+    <button nbButton size="small" ghost routerLink="/pages/admin/usuarios"><nb-icon icon="arrow-left"></nb-icon></button>
+    Convidar Usuários</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-10">
+          <input type="email" nbInput placeholder="Email" fullWidth id="Email" formControlName="email"
+            [status]="verificaValidacaoCampo('email') ? 'danger' : ''"/>
+        </div>
+        <div class="col-2">
+          <button type="submit" nbButton hero (click)="add()" status="danger"><nb-icon icon="plus"></nb-icon></button>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="col-2">
+      <button nbButton [disabled]="!convidados || !convidados.length" (click)="enviarConvites()"  status="primary"><nb-icon icon="email"></nb-icon> enviar convites</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
+<nb-card>
+  <nb-card-header>
+    Lista de convidados
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item *ngFor="let convidado of convidados">
+        <form [formGroup]="convidado">
+          <div style="display: flex; justify-content: space-around;">
+            <div class="form-group col" >
+              <input nbInput style="min-width: 200px;" formControlName="email" fullWidth/>
+            </div>
+
+            <div class="form-group col">
+              <nb-select placeholder="Comunidade" fullWidth formControlName="comunidade">
+                <nb-option *ngFor="let comunidade of comunidades" [value]="comunidade.k">{{comunidade.v}}</nb-option>
+              </nb-select>
+            </div>
+            <div class="form-group col">
+              <button nbButton hero (click)="remove(convidado)" size="small" status="danger"><nb-icon icon="minus"></nb-icon></button>
+            </div>
+          </div>
+        </form>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>

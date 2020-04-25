@@ -5,6 +5,7 @@ import { NbTreeGridModule, NbCardModule, NbButtonModule, NbInputModule, NbDatepi
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbMomentDateModule } from '@nebular/moment';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [ListaSolicitacaoDesktopComponent],
@@ -19,6 +20,7 @@ import { NbMomentDateModule } from '@nebular/moment';
     RouterModule,
     NbDatepickerModule,
     NbMomentDateModule,
+    FontAwesomeModule,
     NbSelectModule,
   ],
   exports: [ListaSolicitacaoDesktopComponent],

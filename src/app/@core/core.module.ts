@@ -5,10 +5,12 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
-import { AnalyticsService } from './utils';
-import { UserData } from './data/users';
-import { UserService } from './mock/users.service';
+import {
+  AnalyticsService, LayoutService,
+} from './utils';
 import { MockDataModule } from './mock/mock-data.module';
+import { TrafficChartData } from './data/traffic-chart';
+import { TrafficChartService } from './mock/traffic-chart.service';
 
 const socialLinks = [
   {
@@ -29,7 +31,8 @@ const socialLinks = [
 ];
 
 const DATA_SERVICES = [
-  { provide: UserData, useClass: UserService },
+
+  { provide: TrafficChartData, useClass: TrafficChartService },
 ];
 
 export class NbSimpleRoleProvider extends NbRoleProvider {
@@ -78,6 +81,7 @@ export const NB_CORE_PROVIDERS = [
     provide: NbRoleProvider, useClass: NbSimpleRoleProvider,
   },
   AnalyticsService,
+  LayoutService,
 ];
 
 @NgModule({
@@ -94,8 +98,8 @@ export class CoreModule {
     throwIfAlreadyLoaded(parentModule, 'CoreModule');
   }
 
-  static forRoot(): ModuleWithProviders {
-    return <ModuleWithProviders>{
+  static forRoot(): ModuleWithProviders<CoreModule> {
+    return {
       ngModule: CoreModule,
       providers: [
         ...NB_CORE_PROVIDERS,
