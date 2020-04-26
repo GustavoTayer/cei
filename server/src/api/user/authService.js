@@ -166,32 +166,34 @@ const validateToken = (req, res, next) => {
 };
 
 const signup = (req, res, next) => {
+  const name = req.body.name || '';
+  const email = req.body.email || '';
+  const password = req.body.password || '';
+  const confirmPassword = req.body.confirm_password || '';
+  const conviteId = req.body.conviteId;
+
+  if(!email.match(emailRegex)) {
+      return res.status(400).send({errors: ['O e-mail informado está inválido']})
+  }
+  if(!password.match(passwordRegex)) {
+      return res.status(400).send({errors: [
+              "Senha precisar ter: uma letra maiúscula, uma letra minúscula, um número, uma caractere especial(@#$%) e tamanho entre 6-20."
+          ]})
+  }
+
+  const salt = bcrypt.genSaltSync();
+  const passwordHash = bcrypt.hashSync(password, salt);
+  if(!bcrypt.compareSync(confirmPassword, passwordHash)) {
+      return res.status(400).send({errors: ['Senhas não conferem.']})
+  }
+  const newUser = new User({ name, email, password: passwordHash });
   User.find({}, (err, usr) => {
     if(err) {
       return sendErrorsFromDB(res, err)
     } else if(usr && usr.length) {
-      const name = req.body.name || '';
-    const email = req.body.email || '';
-    const password = req.body.password || '';
-    const confirmPassword = req.body.confirm_password || '';
-    const conviteId = req.body.conviteId;
-    if(!conviteId) {
-      return res.status(400).send({errors: ['O Id do convite é obrigatório']})
-    }
-    if(!email.match(emailRegex)) {
-        return res.status(400).send({errors: ['O e-mail informado está inválido']})
-    }
-    if(!password.match(passwordRegex)) {
-        return res.status(400).send({errors: [
-                "Senha precisar ter: uma letra maiúscula, uma letra minúscula, um número, uma caractere especial(@#$%) e tamanho entre 6-20."
-            ]})
-    }
-
-    const salt = bcrypt.genSaltSync();
-    const passwordHash = bcrypt.hashSync(password, salt);
-    if(!bcrypt.compareSync(confirmPassword, passwordHash)) {
-        return res.status(400).send({errors: ['Senhas não conferem.']})
-    }
+      if(!conviteId) {
+        return res.status(400).send({errors: ['O Id do convite é obrigatório']})
+      }
     User.findOne({email}, (err, user) => {
         if(err) {
             return sendErrorsFromDB(res, err)
@@ -204,7 +206,7 @@ const signup = (req, res, next) => {
               } else if(!convite) {
                 return res.status(400).send({errors: ['Convite não encontrado']})
               } else {
-                const newUser = new User({ name, email, password: passwordHash });
+
                 newUser.save(err => {
                     if(err) {
                         return sendErrorsFromDB(res, err)
@@ -223,17 +225,14 @@ const signup = (req, res, next) => {
         }
     })
     } else {
-      signUpAdmin(req,res,next)
+      signUpAdmin(newUser,res,next)
     }
   })
 
 };
 
 
-const signUpAdmin = (req, res, next) => {
-  const salt = bcrypt.genSaltSync();
-  const passwordHash = bcrypt.hashSync('admin', salt);
-  const newUser = new User({ name: 'admin', email: 'tayergustavo@hotmail.com', password: passwordHash });
+const signUpAdmin = (newUser, res, next) => {
   newUser.save(err => {
       if(err) {
         return sendErrorsFromDB(res, err)
