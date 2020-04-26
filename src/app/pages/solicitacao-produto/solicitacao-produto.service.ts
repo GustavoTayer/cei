@@ -19,6 +19,10 @@ export class SolicitacaoProdutoService {
     return this.http.post(`${this.url}/salvar`, solicitacao);
   }
 
+  buscarProdutos() {
+    return this.http.get(`${SECURED_URL}/produto`);
+  }
+
   buscarSolicitacoes(filtro) {
     return this.http.post(`${this.url}/buscar`, {filtro})
       .pipe(map(res => res),

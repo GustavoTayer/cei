@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProdutoService } from '../../produto.service';
+import { ProdutoService } from '../produto.service';
+import { SolicitacaoProdutoService } from '../../../solicitacao-produto/solicitacao-produto.service';
 
 
 @Component({
@@ -10,7 +11,8 @@ import { ProdutoService } from '../../produto.service';
 export class ListaProdutosComponent implements OnInit {
 
   produtos;
-  constructor(private produtoService: ProdutoService) { }
+  constructor(private produtoService: ProdutoService,
+    private solicitacaoService: SolicitacaoProdutoService) { }
 
   ngOnInit() {
     this.produtoService.buscarProdutos()

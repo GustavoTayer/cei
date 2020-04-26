@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {SECURED_URL} from '../../auth/urls';
-import { Produto } from '../../models/DbModels';
+import { Produto } from '../../../models/DbModels';
+import { SECURED_URL } from '../../../auth/urls';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class ProdutoService {
   constructor(private http: HttpClient) { }
 
   buscarProdutos() {
-    return this.http.get<Produto[]>(this.produtoUrl);
+    return this.http.get<Produto[]>(`${this.produtoUrl}/buscar`);
   }
 
   buscarProdutoPorId(id: string) {

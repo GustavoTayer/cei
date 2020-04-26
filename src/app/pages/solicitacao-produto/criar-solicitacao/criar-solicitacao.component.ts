@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ProdutoService } from '../../admin/produto.service';
+import { ProdutoService } from '../../admin/produto/produto.service';
 import { ProductSelectComponent } from '../../util/product-select/product-select.component';
 import { NbToastrService, NbDateService } from '@nebular/theme';
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';

@@ -11,7 +11,7 @@ server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 server.use(express.static(path.join(__dirname, '../dist/')))
 
-server.get('*', (req, res) => {
+server.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 server.use(allowCors)

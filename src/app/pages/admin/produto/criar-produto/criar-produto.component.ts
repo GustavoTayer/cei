@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { NbToastrService } from '@nebular/theme';
-import { ProdutoService } from '../../produto.service';
+import { ProdutoService } from '../produto.service';
 
 @Component({
   selector: 'ngx-criar-produto',
