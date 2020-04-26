@@ -169,7 +169,7 @@ const signup = (req, res, next) => {
   User.find({}, (err, usr) => {
     if(err) {
       return sendErrorsFromDB(res, err)
-    } else if(user && user.length) {
+    } else if(usr && usr.length) {
       const name = req.body.name || '';
     const email = req.body.email || '';
     const password = req.body.password || '';
