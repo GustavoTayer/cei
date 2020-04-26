@@ -11,8 +11,7 @@ import { SolicitacaoProdutoService } from '../../../solicitacao-produto/solicita
 export class ListaProdutosComponent implements OnInit {
 
   produtos;
-  constructor(private produtoService: ProdutoService,
-    private solicitacaoService: SolicitacaoProdutoService) { }
+  constructor(private produtoService: ProdutoService) { }
 
   ngOnInit() {
     this.produtoService.buscarProdutos()
