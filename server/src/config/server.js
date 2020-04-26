@@ -10,10 +10,10 @@ server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 server.use(allowCors)
 server.use(queryParser())
-server.use('/', express.static(path.join(__dirname, 'public')));
-server.use( (req,res, next) => {
-  res.sendFile(this.path.join(__dirname, 'public', 'index.html'))
-})
+// server.use('/', express.static(path.join(__dirname, 'public')));
+// server.use( (req,res, next) => {
+//   res.sendFile(this.path.join(__dirname, 'public', 'index.html'))
+// })
 
 server.listen(process.env.PORT || port, function() {
     console.log(`BACKEND is running on port ${port}.`)
