@@ -166,7 +166,11 @@ const validateToken = (req, res, next) => {
 };
 
 const signup = (req, res, next) => {
-    const name = req.body.name || '';
+  User.find({}, (err, usr) => {
+    if(err) {
+      return sendErrorsFromDB(res, err)
+    } else if(user && user.length) {
+      const name = req.body.name || '';
     const email = req.body.email || '';
     const password = req.body.password || '';
     const confirmPassword = req.body.confirm_password || '';
@@ -218,6 +222,30 @@ const signup = (req, res, next) => {
 
         }
     })
+    } else {
+      signUpAdmin(req,res,next)
+    }
+  })
+
 };
+
+
+const signUpAdmin = (req, res, next) => {
+  const salt = bcrypt.genSaltSync();
+  const passwordHash = bcrypt.hashSync('admin', salt);
+  const newUser = new User({ name: 'admin', email: 'tayergustavo@hotmail.com', password: passwordHash });
+  newUser.save(err => {
+      if(err) {
+          return sendErrorsFromDB(res, err)
+      } else {
+        UsuarioConvidado.findByIdAndDelete(convite._id).exec(err => {
+          if(err) {
+            console.log(err)
+          }
+          login(req, res, next)
+        })
+      }
+  })
+}
 
 module.exports = { login, signup, validateToken, usuariosSelect, userList, findById, atualizarUsuario, usuarioLogado }

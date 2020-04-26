@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-const url = process.env.MONGOLAB_URI ? process.env.MONGOLAB_URI : 'mongodb://localhost/cnv'
-module.exports = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+const url = 'mongodb://localhost/cnv'
+module.exports = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, err => console.log(err || 'Acesso realizado com sucesso'))
 
 mongoose.Error.messages.general.required = "O campo '{PATH}' é obrigatório."
 mongoose.Error.messages.Number.min =
