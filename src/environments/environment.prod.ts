@@ -5,5 +5,5 @@
  */
 export const environment = {
   production: true,
-  url: 'https://cei-be.herokuapp.com/',
+  url: 'http://52.202.132.143',
 };
