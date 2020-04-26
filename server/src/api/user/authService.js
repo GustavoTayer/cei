@@ -236,14 +236,9 @@ const signUpAdmin = (req, res, next) => {
   const newUser = new User({ name: 'admin', email: 'tayergustavo@hotmail.com', password: passwordHash });
   newUser.save(err => {
       if(err) {
-          return sendErrorsFromDB(res, err)
+        return sendErrorsFromDB(res, err)
       } else {
-        UsuarioConvidado.findByIdAndDelete(convite._id).exec(err => {
-          if(err) {
-            console.log(err)
-          }
-          login(req, res, next)
-        })
+        login(req, res, next)
       }
   })
 }
