@@ -40,7 +40,7 @@ const setFiltroBusca = (filtro, res) => {
   return query;
 }
 
-const buscar = (query, res) => {
+const buscar = (query, res, pageNumber = 1, nPerPage = 10) => {
   SolicitacaoProduto.find(query)
     .populate('usuario')
     .populate({
@@ -48,18 +48,28 @@ const buscar = (query, res) => {
       populate: {
         path: 'produto'
       }
-    }).sort({status: -0, criadoEm: -1}).exec((err, solicitacoes) => {
+    }).sort({status: -0, criadoEm: -1})
+    .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * (nPerPage) ) : 0 )
+    .limit( nPerPage)
+    .exec((err, solicitacoes) => {
     if(err) {
       return res.status(500).json({errors: [err.message]})
     } else {
-      return res.json(solicitacoes)
+      SolicitacaoProduto.count(query, (errCount, count) => {
+        if(errCount) {
+          return res.status(500).json({errors: [errCount.message]})
+        } else {
+          return res.json({solicitacoes, count})
+        }
+      })
+
     }
   })
 }
 
 // Buscar - Todas solicitações
 SolicitacaoProduto.route('buscarGeral', (req, res, next) => {
-  buscar(setFiltroBusca(req.body.filtro, res), res)
+  buscar(setFiltroBusca(req.body.filtro, res), res, req.body.pageNumber, req.body.nPerPage)
 })
 
 // Alterar status
@@ -98,7 +108,7 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
 SolicitacaoProduto.route('buscar', (req, res, next) => {
   const usuario = req.decoded._id
   const query = {usuario, ...setFiltroBusca(req.body.filtro, res)};
-  buscar(query, res)
+  buscar(query, res, req.body.pageNumber, req.body.nPerPage)
 })
 
 SolicitacaoProduto.route('salvar',  (req, res, next) => {
@@ -106,43 +116,45 @@ SolicitacaoProduto.route('salvar',  (req, res, next) => {
   const produtosSolicitados = req.body.produtos;
   let valorTotal = 0;
   Produto.find({}).then(p => {
-    const prodSolValor = produtosSolicitados.map(ps => {
-      const prr = p.find(prod => prod._id == ps.produto)
-      const valor = prr.valor * ps.quantidade
-      valorTotal += valor
-      return {
-       ...ps,
-       valor,
-      }
-    })
-    const sp = new SolicitacaoProduto({
-      dataDesejada: req.body.dataDesejada,
-      usuario,
-      valorTotal
-    })
-    sp.save((err, solProd) => {
-      if(err) {
-        return sendErrorsFromDB(res, err)
-      } else {
-        const prods = prodSolValor.map(it => ({...it, solicitacao: solProd._id}))
-        ProdutoSolicitado.insertMany(prods, ((err, prodsSol) => {
-          if(err) {
-            return sendErrorsFromDB(res, err)
-          } else {
-            solProd.produtos = prodsSol.map(it => it._id)
-            solProd.save((err, solProd2) => {
-              if(err) {
-                  console.log(err)
-                  return res.status(500).json({errors: [err]})
-                } else {
-                  return res.json(solProd2)
-                }
-            })
-          }
-        }))
-      }
-    })
+        const prodSolValor = produtosSolicitados.map(ps => {
+        const prr = p.find(prod => prod._id == ps.produto)
+        const valor = prr.valor * ps.quantidade
+        valorTotal += valor
+        return {
+        ...ps,
+        valor,
+        }
+      })
+      const sp = new SolicitacaoProduto({
+        dataDesejada: req.body.dataDesejada,
+        usuario,
+        valorTotal
+      })
+      sp.save((err, solProd) => {
+        if(err) {
+          return sendErrorsFromDB(res, err)
+        } else {
+          const prods = prodSolValor.map(it => ({...it, solicitacao: solProd._id}))
+          ProdutoSolicitado.insertMany(prods, ((err, prodsSol) => {
+            if(err) {
+              return sendErrorsFromDB(res, err)
+            } else {
+              solProd.produtos = prodsSol.map(it => it._id)
+              solProd.save((err, solProd2) => {
+                if(err) {
+                    console.log(err)
+                    return res.status(500).json({errors: [err]})
+                  } else {
+                    return res.json(solProd2)
+                  }
+              })
+            }
+          }))
+        }
+      })
+
   })
+  return res.status(200)
 })
 
 

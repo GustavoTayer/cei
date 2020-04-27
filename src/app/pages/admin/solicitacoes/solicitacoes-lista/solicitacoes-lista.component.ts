@@ -9,7 +9,11 @@ import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao, IProdutoCount } from '../../../../models/DbModels';
 import * as moment from 'moment';
 import { SolicitacaoProdutoService } from '../../../solicitacao-produto/solicitacao-produto.service';
-import { faExchangeAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faExchangeAlt, faSearch,
+  faAngleRight, faAngleLeft,
+  faAngleDoubleLeft, faAngleDoubleRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
 
 interface TreeNode<T> {
@@ -37,6 +41,16 @@ export class SolicitacoesListaComponent implements OnInit {
   data: TreeNode<any>[];
   sortColumn: string;
   faSearch = faSearch;
+
+  faAngleRight = faAngleRight;
+  faAngleLeft = faAngleLeft;
+  faAngleDoubleLeft = faAngleDoubleLeft;
+  faAngleDoubleRight = faAngleDoubleRight;
+  countSolicitacoes: number;
+  nPerPage = 10;
+  nOfPages: number;
+
+  pageNumber: number = 1;
   filtroStatus = EStatusSolicitacao.ABERTO;
   usuarios;
   faExchangeAlt = faExchangeAlt;
@@ -58,7 +72,11 @@ export class SolicitacoesListaComponent implements OnInit {
       dataDesejada: {start, end},
       usuario: '',
     });
-    this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value).subscribe(res => this.setData(res));
+    this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value, this.pageNumber, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+      });
     this.solicitacaoProdutoService.countProdutos(this.filtro.value).subscribe(res => this.produtosCount = res);
     this.solicitacaoProdutoService.usuariosSelect().subscribe(res => this.usuarios = res);
   }
@@ -101,13 +119,31 @@ export class SolicitacoesListaComponent implements OnInit {
   }
 
   buscar() {
-    this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value)
-      .subscribe(res => this.setData(res));
-      this.solicitacaoProdutoService.countProdutos(this.filtro.value)
-        .subscribe(res => this.produtosCount = res);
+    this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value, this.pageNumber, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+      });
+    this.solicitacaoProdutoService.countProdutos(this.filtro.value)
+      .subscribe(res => this.produtosCount = res);
     this.filtroStatus = this.filtro.value.status;
     this.checkeds.clear();
   }
+
+  mudarPagina(pagina: number) {
+    this.pageNumber = pagina;
+    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, this.pageNumber, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+      });
+  }
+
+  setLastPageAndCount(count: number) {
+    this.countSolicitacoes = count;
+    this.nOfPages = Math.ceil(count /  this.nPerPage);
+  }
+
 
   alterarStatusTodos() {
     this.alterarStatus(this.data.map(sol => sol.data._id));

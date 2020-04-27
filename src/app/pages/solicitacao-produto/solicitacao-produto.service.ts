@@ -19,8 +19,8 @@ export class SolicitacaoProdutoService {
     return this.http.post(`${this.url}/salvar`, solicitacao);
   }
 
-  buscarSolicitacoes(filtro) {
-    return this.http.post(`${this.url}/buscar`, {filtro})
+  buscarSolicitacoes(filtro, pageNumber: number, nPerPage: number) {
+    return this.http.post(`${this.url}/buscar`, {filtro, pageNumber, nPerPage})
       .pipe(map(res => res),
       catchError(err => {
         this.toastrService.danger(err.error.errors, 'ERRO!');
@@ -32,8 +32,8 @@ export class SolicitacaoProdutoService {
     return this.http.post<IProdutoCount[]>(`${this.urlProduto}/count`, {filtro});
   }
 
-  buscarSolicitacoesGeral(filtro) {
-     return this.http.post(`${this.url}/buscarGeral`, {filtro});
+  buscarSolicitacoesGeral(filtro, pageNumber: number, nPerPage: number) {
+     return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
   }
 
   alterarStatus(solicitacoes: string[], status: EStatusSolicitacao) {

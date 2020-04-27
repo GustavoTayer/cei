@@ -79,6 +79,7 @@
           </nb-list-item>
         </nb-list>
       </nb-card-body>
+
     </nb-card>
   </div>
 </div>
@@ -150,4 +151,30 @@
       </ng-container> -->
     </table>
   </nb-card-body>
+
+  <nb-card-footer>
+    <button nbButton ghost [disabled]="pageNumber === 1">
+      <fa-icon [icon]="faAngleDoubleLeft" (click)="mudarPagina(1)" ></fa-icon>
+    </button>
+
+    <button nbButton ghost (click)="mudarPagina(pageNumber - 2)" [disabled]="pageNumber <= 2">
+      <fa-icon [icon]="faAngleLeft"></fa-icon>
+    </button>
+    <button nbButton ghost *ngIf="pageNumber > 1" (click)="mudarPagina(pageNumber - 1)">
+      {{pageNumber - 1}}
+    </button>
+    <button nbButton ghost status="primary">
+      {{pageNumber}}
+    </button>
+    <button nbButton ghost (click)="mudarPagina(pageNumber + 1)" *ngIf="pageNumber < nOfPages">
+      {{pageNumber + 1}}
+    </button>
+    <button nbButton ghost (click)="mudarPagina(pageNumber + 2)" [disabled]="pageNumber >= (nOfPages - 2)">
+      <fa-icon [icon]="faAngleRight"></fa-icon>
+    </button>
+
+    <button nbButton ghost (click)="mudarPagina(nOfPages)" [disabled]="pageNumber === nOfPages">
+      <fa-icon [icon]="faAngleDoubleRight" ></fa-icon>
+    </button>
+  </nb-card-footer>
 </nb-card>

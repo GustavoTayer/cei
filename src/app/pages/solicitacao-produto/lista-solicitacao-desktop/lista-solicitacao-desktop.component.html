@@ -12,19 +12,15 @@
             <nb-option *ngFor="let s of status" [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase()}}</nb-option>
           </nb-select>
         </div>
-        <div class="col-md-4">
-          <div class="form-control-group">
+        <div class="col-md-4 form-group ">
             <label class="label">Data de criação:</label>
             <input  nbInput formControlName="dataCriacao" [nbDatepicker]="rangepicker">
             <nb-rangepicker #rangepicker format="DD/MM/YYYY"></nb-rangepicker>
-          </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-control-group">
+        <div class="col-md-4 form-group ">
             <label class="label">Data desejada:</label>
             <input  nbInput formControlName="dataDesejada" [nbDatepicker]="dataDesejada">
             <nb-rangepicker #dataDesejada format="DD/MM/YYYY"></nb-rangepicker>
-          </div>
         </div>
       </div>
     </form>
@@ -52,7 +48,6 @@
           {{row.data['nome']}}
         </td>
       </ng-container>
-
       <ng-container nbTreeGridColumnDef="uq">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('uq')" *nbTreeGridHeaderCellDef>
           Dt. Desejada/Qtd. Solicitada
@@ -61,7 +56,6 @@
           {{row.data['uq']}}
         </td>
       </ng-container>
-
       <ng-container nbTreeGridColumnDef="valor">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('valor')" *nbTreeGridHeaderCellDef>
           Valor
@@ -70,9 +64,6 @@
           {{row.data['valor']}}
         </td>
       </ng-container>
-
-
-
       <ng-container nbTreeGridColumnDef="dataDesejada">
         <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection('dataDesejada')" *nbTreeGridHeaderCellDef>
           Criado em
@@ -92,4 +83,29 @@
       </ng-container> -->
     </table>
   </nb-card-body>
+  <nb-card-footer>
+    <button nbButton ghost [disabled]="pageNumber === 1">
+      <fa-icon [icon]="faAngleDoubleLeft" (click)="mudarPagina(1)" ></fa-icon>
+    </button>
+
+    <button nbButton ghost (click)="mudarPagina(pageNumber - 2)" [disabled]="pageNumber <= 2">
+      <fa-icon [icon]="faAngleLeft"></fa-icon>
+    </button>
+    <button nbButton ghost *ngIf="pageNumber > 1" (click)="mudarPagina(pageNumber - 1)">
+      {{pageNumber - 1}}
+    </button>
+    <button nbButton ghost status="primary">
+      {{pageNumber}}
+    </button>
+    <button nbButton ghost (click)="mudarPagina(pageNumber + 1)" *ngIf="pageNumber < nOfPages">
+      {{pageNumber + 1}}
+    </button>
+    <button nbButton ghost (click)="mudarPagina(pageNumber + 2)" [disabled]="pageNumber >= (nOfPages - 2)">
+      <fa-icon [icon]="faAngleRight"></fa-icon>
+    </button>
+
+    <button nbButton ghost (click)="mudarPagina(nOfPages)" [disabled]="pageNumber === nOfPages">
+      <fa-icon [icon]="faAngleDoubleRight" ></fa-icon>
+    </button>
+  </nb-card-footer>
 </nb-card>

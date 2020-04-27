@@ -1,3 +1,99 @@
-<p>
-  lista-solicitacao-mobile works!
-</p>
+<nb-card>
+  <nb-card-header>
+    Minhas solicitações
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="filtro">
+      <div class="row form-group">
+        <div class="form-group col-md-4">
+          <label for="Nome" class="label" required>Status</label>
+          <nb-select placeholder="Status" formControlName="status" fullWidth>
+            <nb-option value="">Todos</nb-option>
+            <nb-option *ngFor="let s of status" [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase()}}</nb-option>
+          </nb-select>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="label">Data de criação:</label>
+            <input  nbInput formControlName="dataCriacao" [nbDatepicker]="rangepicker">
+            <nb-rangepicker #rangepicker format="DD/MM/YYYY"></nb-rangepicker>
+
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="label">Data desejada:</label>
+            <input  nbInput formControlName="dataDesejada" [nbDatepicker]="dataDesejada">
+            <nb-rangepicker #dataDesejada format="DD/MM/YYYY"></nb-rangepicker>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+        <button nbButton status="basic" (click)="buscar()" style="padding: 6px; margin-right: 8px;">
+          <fa-icon [icon]="faSearch" style="margin-right: 5px;"></fa-icon>buscar
+        </button>
+        <button nbButton status="primary" routerLink="/pages/solicitacao-produto/solicitar" style="padding: 6px;">
+          <fa-icon [icon]="faPlus" style="margin-right: 5px;"></fa-icon>solicitação
+        </button>
+  </nb-card-footer>
+</nb-card>
+<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="revealed">
+  <nb-card-front>
+    <nb-card>
+      <nb-card-header class="item" style="font-size: small;" >
+        <span>Status</span>
+        <span>Dt. Desejada</span>
+        <span>Valor Total</span>
+      </nb-card-header>
+      <nb-card-body>
+        <nb-list >
+          <nb-list-item class="item" style="font-size: small;" *ngFor="let solicitacao of data" (click)="toggleView(solicitacao)">
+            <span >{{solicitacao.status.charAt(0) + solicitacao.status.slice(1).toLowerCase()}}</span>
+            <span style="padding: 5px">{{formatarData(solicitacao.dataDesejada)}}</span>
+            <span >R${{ solicitacao.valorTotal.toFixed(2)}}</span>
+        </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton ghost [disabled]="pageNumber === 1" size='small'>
+          <fa-icon [icon]="faAngleDoubleLeft" (click)="mudarPagina(1)" ></fa-icon>
+        </button>
+        <button nbButton ghost size='small' (click)="mudarPagina(pageNumber - 2)" [disabled]="pageNumber <= 2">
+          <fa-icon [icon]="faAngleLeft"></fa-icon>
+        </button>
+        <button nbButton ghost size='small' *ngIf="pageNumber > 1" (click)="mudarPagina(pageNumber - 1)">
+          {{pageNumber - 1}}
+        </button>
+        <button nbButton ghost size='small' status="primary">
+          {{pageNumber}}
+        </button>
+        <button nbButton ghost size='small' (click)="mudarPagina(pageNumber + 1)" *ngIf="pageNumber < nOfPages">
+          {{pageNumber + 1}}
+        </button>
+        <button nbButton ghost size='small' (click)="mudarPagina(pageNumber + 2)" [disabled]="pageNumber >= (nOfPages - 2)">
+          <fa-icon [icon]="faAngleRight"></fa-icon>
+        </button>
+        <button nbButton ghost size='small' (click)="mudarPagina(nOfPages)" [disabled]="pageNumber === nOfPages">
+          <fa-icon [icon]="faAngleDoubleRight" ></fa-icon>
+        </button>
+      </nb-card-footer>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card>
+      <nb-card-header class="item" style="font-size: small;">
+        <span style="flex: 1"><fa-icon [icon]="faAngleLeft" (click)="toggleView()"></fa-icon></span>
+        <span style="flex: 2">{{solicitacaoFlipada && solicitacaoFlipada.status.charAt(0) + solicitacaoFlipada.status.slice(1).toLowerCase()}}</span>
+        <span style="flex: 2">{{solicitacaoFlipada && formatarData(solicitacaoFlipada.dataDesejada)}}</span>
+        <span style="flex: 2">R${{solicitacaoFlipada && solicitacaoFlipada.valorTotal.toFixed(2)}}</span>
+      </nb-card-header>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item *ngFor="let produto of solicitacaoFlipada && solicitacaoFlipada.produtos"  class="item" style="font-size: small;">
+            <span style="flex:2;">{{produto.produto.nome}}</span>
+            <span>{{produto.quantidade}} Und.</span>
+            <span>R$ {{produto.valor.toFixed(2)}}</span>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>

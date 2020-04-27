@@ -4,7 +4,7 @@ import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao } from '../../../models/DbModels';
 import * as moment from 'moment';
-import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlus, faAngleRight, faAngleLeft, faAngleDoubleLeft, faAngleDoubleRight  } from '@fortawesome/free-solid-svg-icons';
 
 interface TreeNode<T> {
   data: T;
@@ -40,7 +40,14 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   });
   faSearch = faSearch;
   faPlus = faPlus;
-
+  faAngleRight = faAngleRight;
+  faAngleLeft = faAngleLeft;
+  faAngleDoubleLeft = faAngleDoubleLeft;
+  faAngleDoubleRight = faAngleDoubleRight;
+  countSolicitacoes: number;
+  nPerPage = 10;
+  nOfPages: number;
+  pageNumber: number = 1;
   async ngOnInit() {
     const start = moment().startOf('month');
     const end = moment().endOf('month');
@@ -49,7 +56,16 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
       dataCriacao: {start, end},
       dataDesejada: {start, end},
     });
-    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value).subscribe(res => this.setData(res));
+    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+      });
+  }
+
+  setLastPageAndCount(count: number) {
+    this.countSolicitacoes = count;
+    this.nOfPages = Math.ceil(count /  this.nPerPage);
   }
 
   constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
@@ -87,8 +103,21 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   }
 
   buscar() {
-    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value)
-      .subscribe(res => this.setData(res));
+    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+        this.pageNumber = 1;
+      });
+  }
+
+  mudarPagina(pagina: number) {
+    this.pageNumber = pagina;
+    this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, this.pageNumber, this.nPerPage)
+      .subscribe(res => {
+        this.setData(res.solicitacoes);
+        this.setLastPageAndCount(res.count);
+      });
   }
 
   updateSort(sortRequest: NbSortRequest): void {
