@@ -99,7 +99,7 @@ const atualizarUsuarioLogado = (req, res, next) => {
         if(!dadosUsuario.password) {
           return res.status(400).send({errors: [
             "Senha é obrigatório"
-        ]})
+          ]})
         }
         if(!dadosUsuario.password_confirm) {
           return res.status(400).send({errors: ['Confirmação de senha é obrigatório']})
@@ -228,7 +228,6 @@ const signup = (req, res, next) => {
       signUpAdmin(newUser,res,next)
     }
   })
-
 };
 
 
@@ -242,4 +241,74 @@ const signUpAdmin = (newUser, res, next) => {
   })
 }
 
-module.exports = { login, signup, validateToken, usuariosSelect, userList, findById, atualizarUsuario, usuarioLogado }
+const menuAdmin = (req, res, next) => {
+  const usuario = req.decoded._id
+  const menu = {usuario: false, produtos: false, solicitacoes: false, partilha: false}
+  User.findById(usuario, (err, usr) => {
+    if(err) {
+    } else {
+      switch(usr.hierarquia) {
+        case 'REITOR':
+        case 'FORMADOR':
+          menu.usuario = true
+          menu.produtos = true
+          menu.solicitacoes = true
+          menu.partilha = true
+          break;
+        case 'SEMINARISTA':
+          switch(usr.equipe) {
+            case 'COMPRAS':
+            case 'JARDINAGEM':
+            case  'TIROCINIO':
+            case 'OUTROS':
+              break;
+            case 'REDES_SOCIAIS':
+              menu.suario = true
+              break;
+            case'PARTILHA_SOLIDARIA':
+              menu.partilha = true
+              break;
+            case 'PRODUTOS':
+              menu.solicitacoes = true
+              break;
+          }
+          break;
+      }
+      if((Object.values(menu).some(it => it))) {
+        const children = [];
+        if(menu.usuario) {
+          children.push({
+            title: 'Usuários',
+            icon: 'person-outline',
+            link: '/pages/admin/usuarios',
+          })
+        }
+        if(menu.produtos) {
+          children.push({
+            title: 'Produtos',
+            icon: 'cube-outline',
+            link: '/pages/admin/produto',
+          })
+        }
+        if(menu.solicitacoes) {
+          children.push({
+            title: 'Solicitações',
+            icon: 'list-outline',
+            link: '/pages/admin/solicitacoes',
+         })
+        }
+        return res.json({
+          menu: {
+            title: 'Administração',
+            icon: 'lock-outline',
+            children
+          }
+        })
+      } else {
+        return res.json({menu: undefined})
+      }
+    }
+  })
+}
+
+module.exports = { login, signup, validateToken, usuariosSelect, userList, findById, atualizarUsuario, usuarioLogado, menuAdmin }

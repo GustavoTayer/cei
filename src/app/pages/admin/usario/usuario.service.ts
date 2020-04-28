@@ -52,4 +52,8 @@ export class UsuarioService {
         return '';
       }));
   }
+
+  menuAdmin() {
+    return this.http.get(`${this.url}/menuAdmin`);
+  }
 }

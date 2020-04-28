@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { EStatusSolicitacao } from '../../../models/DbModels';
-import { faSearch, faPlus, faAngleRight, faAngleLeft, faAngleDoubleLeft, faAngleDoubleRight  } from '@fortawesome/free-solid-svg-icons';
+import { faTrash,
+  faSearch, faPlus, faAngleRight, faAngleLeft, faAngleDoubleLeft, faAngleDoubleRight  } from '@fortawesome/free-solid-svg-icons';
 import * as moment from 'moment';
+import { DialogShowSolMobileComponent } from './dialog-show-sol-mobile/dialog-show-sol-mobile.component';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-lista-solicitacao-mobile',
@@ -18,16 +21,19 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
   faAngleLeft = faAngleLeft;
   faAngleDoubleLeft = faAngleDoubleLeft;
   faAngleDoubleRight = faAngleDoubleRight;
-  status = Object.values(EStatusSolicitacao);
+  status = Object.keys(EStatusSolicitacao).map(it => ({k: it, v: EStatusSolicitacao[it]}));
   countSolicitacoes: number;
   nPerPage = 10;
   nOfPages: number;
   revealed = false;
   pageNumber: number = 1;
   solicitacaoFlipada;
+  faTrash = faTrash;
   constructor (
     private fb: FormBuilder,
     private solicitacaoProdutoService: SolicitacaoProdutoService,
+    private dialogService: NbDialogService,
+    private toastrService: NbToastrService,
   ) { }
 
   filtro = this.fb.group({
@@ -40,7 +46,7 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
     const start = moment().startOf('month');
     const end = moment().endOf('month');
     this.filtro.patchValue({
-      status: EStatusSolicitacao.ABERTO,
+      status: 'ABERTO',
       dataCriacao: {start, end},
       dataDesejada: {start, end},
     });
@@ -76,6 +82,28 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
       .subscribe(res => {
         this.data = res.solicitacoes;
         this.setLastPageAndCount(res.count);
+      });
+  }
+  obterValorStatusEnum(status) {
+    return EStatusSolicitacao[status];
+  }
+
+  alterarStatus(id) {
+      this.dialogService.open(DialogShowSolMobileComponent).onClose.subscribe(name => {
+        if (name) {
+          this.cancelar(id);
+        }
+      });
+  }
+  cancelar(id) {
+    this.solicitacaoProdutoService.cancelar(id)
+      .subscribe(res => {
+        this.toastrService.info( 'Favor, aguarde aprovação do responsável',
+        'Solicitação de cancelamento enviada',
+        {
+          duration: 6000,
+        });
+        this.buscar();
       });
   }
 }

@@ -5,7 +5,11 @@ const errorHandler = require('../common/errorHandler')
 SolicitacaoProduto.methods(['get', 'post', 'put'])
 SolicitacaoProduto.updateOptions({new: true, runValidators: true})
 SolicitacaoProduto.after('post', errorHandler).after('put', errorHandler)
-const eStatus = new Set(['ABERTO', 'PRODUZINDO' ,'ENTREGUE', 'PAGO'])
+const eStatus = new Set(['ABERTO', 'PRODUZINDO' ,'ENTREGUE', 'PAGO', 'SLC_CANCELAMENTO', 'CANCELADO'])
+const EmailService = require('../../config/emailService');
+const User = require('../user/user')
+const env = require('../../.env');
+const moment = require('moment')
 const setFiltroBusca = (filtro, res) => {
   const query = {}
   if(filtro) {
@@ -13,7 +17,8 @@ const setFiltroBusca = (filtro, res) => {
       if(eStatus.has(filtro.status)) {
         query['status'] = filtro.status
       } else {
-        return res.status(400).json({errors: [`Status ${filtro.status} não encontrado`]})
+        console.warn(new Date(), `Status ${filtro.status} não encontrado`)
+        // return res.status(200).json({errors: [`Status ${filtro.status} não encontrado`]})
       }
     }
 
@@ -55,26 +60,64 @@ const buscar = (query, res, pageNumber = 1, nPerPage = 10) => {
     if(err) {
       return res.status(500).json({errors: [err.message]})
     } else {
-      SolicitacaoProduto.count(query, (errCount, count) => {
+      SolicitacaoProduto.countDocuments(query, (errCount, count) => {
         if(errCount) {
           return res.status(500).json({errors: [errCount.message]})
         } else {
           return res.json({solicitacoes, count})
         }
       })
-
     }
   })
 }
 
 // Buscar - Todas solicitações
 SolicitacaoProduto.route('buscarGeral', (req, res, next) => {
-  buscar(setFiltroBusca(req.body.filtro, res), res, req.body.pageNumber, req.body.nPerPage)
+ return buscar(setFiltroBusca(req.body.filtro, res), res, req.body.pageNumber, req.body.nPerPage)
+})
+
+SolicitacaoProduto.route('solicitarCancelamento', (req, res, next) => {
+  const id = req.body.solicitacaoId
+  const usuario = req.decoded._id
+  User.findById(usuario, (err, usr) => {
+    SolicitacaoProduto.findById(id)
+    .populate({
+      path: 'produtos',
+      populate: {
+        path: 'produto'
+      }
+    }).exec((err, sol) => {
+      if(err) {
+        print(err)
+      } else {
+        if(sol.status !== 'ABERTO') {
+          return res.status(403).json({errors: ['Somente é possivel cancelar solicitações em aberto.']})
+        }
+        const dataDesejada = moment(sol.dataDesejada).format('DD/MM/YYYY')
+        const dataDesejadaQuery = moment(sol.dataDesejada).format('YYYY-MM-DD')
+        const href = `${env.url}/pages/admin/solicitacoes?status=${'SLC_CANCELAMENTO'}&dtDjEnd=${dataDesejadaQuery}&dtDjStart=${dataDesejadaQuery}&usuario=${usuario}`
+        const produtos = sol.produtos.map(element => `<li>${element.produto.nome} - ${element.quantidade}</li>`);
+        sol.status = 'SLC_CANCELAMENTO'
+        sol.save()
+        EmailService.enviarEmail({
+          subject: `${usr.name} solicitou um cancelamento - Dt. Desejada: ${dataDesejada}`,
+          html: `<p><b>Data Deseja:</b> ${dataDesejada}</p>
+          <p><b>produtos:</b>
+          <ul>
+            ${produtos.toString().replace(/,/g, '')}
+          </ul></p>
+          <p>Acesse a solicitação <a href="${href}">clicando aqui</a></p>`
+        })
+        return res.json(sol)
+      }
+    })
+  })
 })
 
 // Alterar status
 SolicitacaoProduto.route('alterar-status', (req, res, next) => {
   const solicitacoes = req.body.solicitacoes
+  const cancelamento = req.body.cancelamento
   const status = req.body.status
     let novoStatus; // Altera para o próximo status na cadeia
     switch(status) {
@@ -86,6 +129,27 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
         break;
       case 'ENTREGUE':
         novoStatus = 'PAGO'
+        break;
+      case 'SLC_CANCELAMENTO':
+        if(cancelamento.cancelado) {
+          novoStatus = 'CANCELADO'
+          EmailService.enviarEmail({
+            subject: `Sua solicitação de cancelamento foi aprovada`,
+            html: `
+              <p>Sua solicitação de cancelamento foi aprovada e seu status já foi aprovado</p>
+              <p>Veja sua solicitação <a>clicando aqui</a></p>
+            `
+          })
+        } else {
+          novoStatus = 'ABERTO'
+          EmailService.enviarEmail({
+            subject: `Sua solicitação de cancelamento não foi aprovada`,
+            html: `
+              <p>Sua solicitação de cancelamento não foi aprovada pelo seguinte motivo: </p>
+              <p>${cancelamento.justificativa}</p>
+            `
+          })
+        }
         break;
       case 'PAGO':
       case undefined:
@@ -107,8 +171,8 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
 // Buscar - Solicitações usuário
 SolicitacaoProduto.route('buscar', (req, res, next) => {
   const usuario = req.decoded._id
-  const query = {usuario, ...setFiltroBusca(req.body.filtro, res)};
-  buscar(query, res, req.body.pageNumber, req.body.nPerPage)
+  // const query = {usuario, ...setFiltroBusca(req.body.filtro, res)};
+  buscar({usuario, ...setFiltroBusca(req.body.filtro, res)}, res, req.body.pageNumber, req.body.nPerPage)
 })
 
 SolicitacaoProduto.route('salvar',  (req, res, next) => {
@@ -142,7 +206,6 @@ SolicitacaoProduto.route('salvar',  (req, res, next) => {
               solProd.produtos = prodsSol.map(it => it._id)
               solProd.save((err, solProd2) => {
                 if(err) {
-                    console.log(err)
                     return res.status(500).json({errors: [err]})
                   } else {
                     return res.json(solProd2)

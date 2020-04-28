@@ -6,10 +6,12 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NbMomentDateModule } from '@nebular/moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DialogShowSolMobileComponent } from './dialog-show-sol-mobile/dialog-show-sol-mobile.component';
 
 
 @NgModule({
-  declarations: [ListaSolicitacaoMobileComponent],
+  declarations: [ListaSolicitacaoMobileComponent, DialogShowSolMobileComponent],
+  entryComponents: [DialogShowSolMobileComponent],
   imports: [
     CommonModule,
     NbListModule,

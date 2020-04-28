@@ -33,10 +33,12 @@ export interface ISolicitacaoProduto {
 }
 
 export enum EStatusSolicitacao {
-  ABERTO = 'ABERTO',
-  PRODUZINDO = 'PRODUZINDO',
-  ENTREGUE = 'ENTREGUE',
-  PAGO = 'PAGO',
+  ABERTO = 'Aberto',
+  PRODUZINDO = 'Produzindo',
+  ENTREGUE = 'Entregue',
+  PAGO = 'Pago',
+  CANCELADO = 'Cancelado',
+  SLC_CANCELAMENTO = 'Slc. Canc.',
 }
 
 export enum EComunidadeUsuario {

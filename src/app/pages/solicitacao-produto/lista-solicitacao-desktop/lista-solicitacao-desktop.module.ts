@@ -6,9 +6,11 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbMomentDateModule } from '@nebular/moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DialogShowComponentComponent } from './dialog-show-component/dialog-show-component.component';
 
 @NgModule({
-  declarations: [ListaSolicitacaoDesktopComponent],
+  declarations: [ListaSolicitacaoDesktopComponent, DialogShowComponentComponent],
+  entryComponents: [DialogShowComponentComponent],
   imports: [
     CommonModule,
     NbTreeGridModule,

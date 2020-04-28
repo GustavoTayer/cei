@@ -5,6 +5,10 @@
 <nb-alert status="warning" *ngIf="filtroStatus === 'PAGO'">
   Não é possível alterar status de solicitações pagas!
 </nb-alert>
+
+<nb-alert status="warning" *ngIf="filtroStatus === 'CANCELADO'">
+  Não é possível alterar status de solicitações canceladas!
+</nb-alert>
 <div class="row">
   <div class='col-md-8'>
     <nb-card>
@@ -18,7 +22,7 @@
               <label for="Nome" class="label" required>Status</label>
               <nb-select placeholder="Status" formControlName="status" fullWidth>
                 <nb-option value="">Todos</nb-option>
-                <nb-option *ngFor="let s of status" [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase()}}</nb-option>
+                <nb-option *ngFor="let s of status" [value]="s.k">{{ s.v}}</nb-option>
               </nb-select>
             </div>
             <div class="form-group col-md-6">
@@ -57,7 +61,7 @@
           </div>
           <div>
             <button
-              [disabled]="!filtroStatus || filtroStatus === 'PAGO'"
+              [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
               nbTooltip="Alterar Status"
               nbTooltipStatus="primary" nbButton
               status="basic" size="tiny"
@@ -91,7 +95,7 @@
       <ng-container  nbTreeGridColumnDef="action">
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
           <button
-          [disabled]="!filtroStatus || filtroStatus === 'PAGO'"
+          [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
           nbTooltip="Alterar status das solicitações selecionadas"
           nbTooltipStatus="primary" nbButton
           status="basic" size="tiny"
@@ -105,8 +109,7 @@
                 *ngIf="row.children "
                 >
               </nb-tree-grid-row-toggle>
-
-          <nb-checkbox [disabled]="!filtroStatus || filtroStatus === 'PAGO'" *ngIf="row.children" [checked]="isChecked(row)" (checkedChange)="toggle($event, row)"></nb-checkbox>
+          <nb-checkbox [disabled]="!filtroStatus || filtroStatus === 'PAGO' ||  filtroStatus === 'CANCELADO'" *ngIf="row.children" [checked]="isChecked(row)" (checkedChange)="toggle($event, row)"></nb-checkbox>
         </td>
       </ng-container>
       <ng-container [nbTreeGridColumnDef]="customColumn">

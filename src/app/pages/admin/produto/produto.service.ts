@@ -25,4 +25,8 @@ export class ProdutoService {
   atualizarProduto(produto: Produto, id: string) {
     return this.http.put(`${this.produtoUrl}/${id}`, produto);
   }
+
+  validarTela() {
+    return this.http.get<{autorizado: boolean}>(`${this.produtoUrl}/validarTela`);
+  }
 }

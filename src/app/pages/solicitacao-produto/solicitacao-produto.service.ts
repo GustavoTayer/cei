@@ -36,11 +36,15 @@ export class SolicitacaoProdutoService {
      return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
   }
 
-  alterarStatus(solicitacoes: string[], status: EStatusSolicitacao) {
-    return this.http.post(`${this.url}/alterar-status`, {solicitacoes, status});
+  alterarStatus(solicitacoes: string[], status: EStatusSolicitacao, cancelamento: {cancelado: boolean, justificativa: string}) {
+    return this.http.post(`${this.url}/alterar-status`, {solicitacoes, status, cancelamento});
   }
 
   usuariosSelect() {
     return this.http.get(`${SECURED_URL}/user/select`);
+  }
+
+  cancelar(solicitacaoId) {
+    return this.http.post(`${this.url}/solicitarCancelamento`, {solicitacaoId});
   }
 }

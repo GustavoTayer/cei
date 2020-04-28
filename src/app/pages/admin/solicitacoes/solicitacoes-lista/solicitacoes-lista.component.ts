@@ -15,6 +15,7 @@ import {
   faAngleDoubleLeft, faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
+import { ActivatedRoute } from '@angular/router';
 
 interface TreeNode<T> {
   data: T;
@@ -41,7 +42,6 @@ export class SolicitacoesListaComponent implements OnInit {
   data: TreeNode<any>[];
   sortColumn: string;
   faSearch = faSearch;
-
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
   faAngleDoubleLeft = faAngleDoubleLeft;
@@ -49,12 +49,11 @@ export class SolicitacoesListaComponent implements OnInit {
   countSolicitacoes: number;
   nPerPage = 10;
   nOfPages: number;
-
   pageNumber: number = 1;
-  filtroStatus = EStatusSolicitacao.ABERTO;
+  filtroStatus = 'ABERTO';
   usuarios;
   faExchangeAlt = faExchangeAlt;
-  status = Object.values(EStatusSolicitacao);
+  status = Object.keys(EStatusSolicitacao).map(it => ({k: it, v: EStatusSolicitacao[it]}));
   sortDirection: NbSortDirection = NbSortDirection.NONE;
   filtro = this.fb.group({
     dataCriacao: null,
@@ -65,27 +64,43 @@ export class SolicitacoesListaComponent implements OnInit {
   produtosCount: IProdutoCount[];
 
   async ngOnInit() {
-    const start = moment().startOf('week');
-    const end = moment().endOf('week');
-    this.filtro.patchValue({
-      status: EStatusSolicitacao.ABERTO,
-      dataDesejada: {start, end},
-      usuario: '',
-    });
-    this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value, this.pageNumber, this.nPerPage)
-      .subscribe(res => {
-        this.setData(res.solicitacoes);
-        this.setLastPageAndCount(res.count);
+    this.route.queryParams
+      .subscribe(params => {
+        const start = moment().startOf('week');
+        const end = moment().endOf('week');
+        if (params && Object.keys(params).length) {
+          const {dtDjEnd, dtDjStart, status, usuario} = params;
+          this.filtro.patchValue({
+            status: status,
+            dataDesejada: {start: moment(dtDjStart), end:  moment(dtDjEnd)},
+            usuario,
+          });
+          this.filtroStatus = status;
+        } else {
+          this.filtro.patchValue({
+            status: 'ABERTO',
+            dataDesejada: {start, end},
+            usuario: '',
+          });
+        }
+        this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value, this.pageNumber, this.nPerPage)
+            .subscribe(res => {
+              this.setData(res.solicitacoes);
+              this.setLastPageAndCount(res.count);
+            });
+          this.solicitacaoProdutoService.countProdutos(this.filtro.value).subscribe(res => this.produtosCount = res);
       });
-    this.solicitacaoProdutoService.countProdutos(this.filtro.value).subscribe(res => this.produtosCount = res);
+
     this.solicitacaoProdutoService.usuariosSelect().subscribe(res => this.usuarios = res);
+
   }
 
   constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
     private solicitacaoProdutoService: SolicitacaoProdutoService,
     private fb: FormBuilder,
     private toastrservice: NbToastrService,
-    private dialogService: NbDialogService) {}
+    private dialogService: NbDialogService,
+    private route: ActivatedRoute) {}
 
 
   // TODO: pensar em uma solução melhor
@@ -108,7 +123,7 @@ export class SolicitacoesListaComponent implements OnInit {
         data: {
           _id: sol._id,
           nome: sol.usuario.name,
-          uq: sol.status.toLowerCase(),
+          uq: EStatusSolicitacao[sol.status],
           valor: `R$ ${sol.valorTotal.toFixed(2)}`,
           dataDesejada,
         },
@@ -155,17 +170,19 @@ export class SolicitacoesListaComponent implements OnInit {
 
   private alterarStatus(ids: any[]) {
 
-      this.dialogService.open(DialogShowcaseComponent)
-        .onClose.subscribe(name => {
-          if (name) {
-            this.solicitacaoProdutoService.alterarStatus(ids, this.filtro.value.status)
+      this.dialogService.open(DialogShowcaseComponent, {
+       context: {
+         status: EStatusSolicitacao[this.filtroStatus],
+       },
+     }).onClose.subscribe(name => {
+          if (name.submit) {
+            this.solicitacaoProdutoService.alterarStatus(ids, this.filtro.value.status, name.cancelamento)
               .subscribe(res => {
                 this.toastrservice.success('', 'Status das solicitações foram alterados com sucesso');
                 this.buscar();
               });
           }
         });
-
   }
 
   updateSort(sortRequest: NbSortRequest): void {

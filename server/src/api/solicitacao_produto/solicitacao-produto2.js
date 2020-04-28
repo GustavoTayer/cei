@@ -8,7 +8,7 @@ const solicitacaoProduto = new mongoose.Schema({
     dataDesejada: {type: Date, required: true},
     usuario: { type: Schema.Types.ObjectId, ref: 'User' },
     status: { type: String, uppercase: true, default: 'ABERTO',
-      enum: ['ABERTO', 'PRODUZINDO' ,'ENTREGUE', 'PAGO'] },
+      enum: ['ABERTO', 'PRODUZINDO' ,'ENTREGUE', 'PAGO', 'SLC_CANCELAMENTO', 'CANCELADO'] },
     produtos: [{type: Schema.Types.ObjectId, ref: 'ProdutoSolicitado'}]
 })
 

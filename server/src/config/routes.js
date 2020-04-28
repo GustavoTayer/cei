@@ -26,6 +26,7 @@ module.exports = function(server) {
     protectedApi.post('/user/atualizarUsuario', AuthService.atualizarUsuario)
     protectedApi.post('/user/criarConvite', ConviteService.criarConvite)
     protectedApi.get('/user/usuarioLogado', AuthService.usuarioLogado)
+    protectedApi.get('/user/menuAdmin', AuthService.menuAdmin)
     /*
     * Rotas abertas
     */

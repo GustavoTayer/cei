@@ -14,6 +14,10 @@ server.use(express.static(path.join(__dirname, '../dist/')))
 server.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
+server.get('/pages|auth', (req, res) => {
+  return res.sendFile(path.join(__dirname, '../dist/index.html'))
+})
+
 server.use(allowCors)
 server.use(queryParser())
 // server.use('/', express.static(path.join(__dirname, 'public')));

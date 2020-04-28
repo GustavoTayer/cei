@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ProdutoGuard } from './produto.guard';
 
 @NgModule({
   declarations: [],
@@ -9,6 +10,7 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: '',
+        canActivate: [ProdutoGuard],
         children: [
           {
             path: '',

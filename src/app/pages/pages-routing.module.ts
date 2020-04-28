@@ -12,6 +12,7 @@ const routes: Routes = [{
       path: 'dashboard',
       component: DashboardComponent,
     },
+    { path: '403', loadChildren: () => import('./erro403/erro403.module').then(m => m.Erro403Module) },
     {
       path: 'solicitacao-produto',
       loadChildren: () => import('./solicitacao-produto/solicitacao-produto.module')

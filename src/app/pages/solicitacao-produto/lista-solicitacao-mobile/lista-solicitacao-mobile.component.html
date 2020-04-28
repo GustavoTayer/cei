@@ -9,7 +9,7 @@
           <label for="Nome" class="label" required>Status</label>
           <nb-select placeholder="Status" formControlName="status" fullWidth>
             <nb-option value="">Todos</nb-option>
-            <nb-option *ngFor="let s of status" [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase()}}</nb-option>
+            <nb-option *ngFor="let s of status" [value]="s.k">{{ s.v}}</nb-option>
           </nb-select>
         </div>
         <div class="col-md-4 form-group">
@@ -46,7 +46,7 @@
       <nb-card-body>
         <nb-list >
           <nb-list-item class="item" style="font-size: small;" *ngFor="let solicitacao of data" (click)="toggleView(solicitacao)">
-            <span >{{solicitacao.status.charAt(0) + solicitacao.status.slice(1).toLowerCase()}}</span>
+            <span >{{obterValorStatusEnum(solicitacao.status)}}</span>
             <span style="padding: 5px">{{formatarData(solicitacao.dataDesejada)}}</span>
             <span >R${{ solicitacao.valorTotal.toFixed(2)}}</span>
         </nb-list-item>
@@ -80,10 +80,10 @@
   <nb-card-back>
     <nb-card>
       <nb-card-header class="item" style="font-size: small;">
-        <span style="flex: 1"><fa-icon [icon]="faAngleLeft" (click)="toggleView()"></fa-icon></span>
-        <span style="flex: 2">{{solicitacaoFlipada && solicitacaoFlipada.status.charAt(0) + solicitacaoFlipada.status.slice(1).toLowerCase()}}</span>
-        <span style="flex: 2">{{solicitacaoFlipada && formatarData(solicitacaoFlipada.dataDesejada)}}</span>
-        <span style="flex: 2">R${{solicitacaoFlipada && solicitacaoFlipada.valorTotal.toFixed(2)}}</span>
+        <span style="flex: 1; padding: 3px"><fa-icon [icon]="faAngleLeft" (click)="toggleView()"></fa-icon></span>
+        <span style="flex: 2; padding: 3px">{{solicitacaoFlipada && obterValorStatusEnum(solicitacaoFlipada.status)}}</span>
+        <span style="flex: 2; padding: 3px">{{solicitacaoFlipada && formatarData(solicitacaoFlipada.dataDesejada)}}</span>
+        <span style="flex: 2; padding: 3px">R${{solicitacaoFlipada && solicitacaoFlipada.valorTotal.toFixed(2)}}</span>
       </nb-card-header>
       <nb-card-body>
         <nb-list>
@@ -94,6 +94,11 @@
           </nb-list-item>
         </nb-list>
       </nb-card-body>
+      <nb-card-footer>
+        <button ghost nbButton size="small" (click)="alterarStatus(solicitacaoFlipada._id)" [disabled]="solicitacaoFlipada && solicitacaoFlipada.status !== 'ABERTO'">
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
+      </nb-card-footer>
     </nb-card>
   </nb-card-back>
 </nb-flip-card>

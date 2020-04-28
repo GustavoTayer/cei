@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { NbSortDirection, NbTreeGridDataSource, NbSortRequest, NbTreeGridDataSourceBuilder } from '@nebular/theme';
+import { NbSortDirection, NbTreeGridDataSource,
+  NbSortRequest, NbTreeGridDataSourceBuilder,
+   NbToastrService, NbDialogService,
+  } from '@nebular/theme';
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao } from '../../../models/DbModels';
 import * as moment from 'moment';
-import { faSearch, faPlus, faAngleRight, faAngleLeft, faAngleDoubleLeft, faAngleDoubleRight  } from '@fortawesome/free-solid-svg-icons';
+import {
+    faSearch, faPlus,
+    faAngleRight, faAngleLeft,
+    faAngleDoubleLeft, faAngleDoubleRight,
+    faTrash,
+  } from '@fortawesome/free-solid-svg-icons';
+import { DialogShowComponentComponent } from './dialog-show-component/dialog-show-component.component';
 
 interface TreeNode<T> {
   data: T;
@@ -27,11 +36,12 @@ interface FSEntry {
 export class ListaSolicitacaoDesktopComponent implements OnInit {
   customColumn = 'nome';
   defaultColumns = [];
-  allColumns = [ 'nome', 'uq', 'valor', 'dataDesejada' ];
+  allColumns = [ 'nome', 'uq', 'valor', 'dataDesejada', 'cancelar' ];
   dataSource: NbTreeGridDataSource<any>;
   data: TreeNode<any>[];
   sortColumn: string;
-  status = Object.values(EStatusSolicitacao);
+  status = Object.keys(EStatusSolicitacao).map(it => ({k: it, v: EStatusSolicitacao[it]}));
+
   sortDirection: NbSortDirection = NbSortDirection.NONE;
   filtro = this.fb.group({
     dataCriacao: null,
@@ -40,6 +50,7 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   });
   faSearch = faSearch;
   faPlus = faPlus;
+  faTrash = faTrash;
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
   faAngleDoubleLeft = faAngleDoubleLeft;
@@ -52,7 +63,7 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
     const start = moment().startOf('month');
     const end = moment().endOf('month');
     this.filtro.patchValue({
-      status: EStatusSolicitacao.ABERTO,
+      status: 'ABERTO',
       dataCriacao: {start, end},
       dataDesejada: {start, end},
     });
@@ -70,7 +81,10 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
 
   constructor(private dataSourceBuilder: NbTreeGridDataSourceBuilder<FSEntry>,
     private solicitacaoProdutoService: SolicitacaoProdutoService,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private toastrService: NbToastrService,
+    private dialogService: NbDialogService,
+   ) {}
 
   // TODO: pensar em uma solução melhor
   setData(solicitacoes) {
@@ -91,7 +105,8 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
       const criadoEm = moment(sol.criadoEm).format('DD/MM/YYYY');
       return {
         data: {
-          nome: sol.status.charAt(0) + sol.status.slice(1).toLowerCase(),
+          _id: sol._id,
+          nome: EStatusSolicitacao[sol.status],
           uq: dataDesejada,
           valor: `R$ ${sol.valorTotal.toFixed(2)}`,
           criadoEm,
@@ -108,6 +123,16 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
         this.setData(res.solicitacoes);
         this.setLastPageAndCount(res.count);
         this.pageNumber = 1;
+      });
+  }
+
+  cancelar(id) {
+    this.solicitacaoProdutoService.cancelar(id)
+      .subscribe(res => {
+        this.toastrService.info( 'Favor, aguarde aprovação do responsável', 'Solicitação de cancelamento enviada', {
+          duration: 6000,
+        });
+        this.buscar();
       });
   }
 
@@ -136,5 +161,13 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
     const minWithForMultipleColumns = 400;
     const nextColumnStep = 100;
     return minWithForMultipleColumns + (nextColumnStep * index);
+  }
+
+  alterarStatus(id) {
+    this.dialogService.open(DialogShowComponentComponent).onClose.subscribe(name => {
+      if (name) {
+        this.cancelar(id);
+      }
+    });
   }
 }
