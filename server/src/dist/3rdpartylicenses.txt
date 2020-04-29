@@ -1254,6 +1254,9 @@ MIT
 ng2-smart-table
 MIT
 
+ngx-color-picker
+MIT
+
 ngx-currency
 MIT
 MIT License
