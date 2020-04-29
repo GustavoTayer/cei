@@ -1,0 +1,26 @@
+<div>
+  <nb-select placeholder="Usuário" [formControl]="frequencia" >
+    <nb-option  value="semana">Semana</nb-option>
+    <nb-option value="mes">Mês</nb-option>
+    <nb-option  value="ano">Ano</nb-option>
+  </nb-select>
+</div>
+<ngx-charts-line-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [timeline]="timeline"
+  [results]="multi"
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+  legendTitle="Legenda"
+  legendPosition="below"
+  >
+</ngx-charts-line-chart>

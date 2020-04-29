@@ -20,6 +20,7 @@ export class CriarProdutoComponent implements OnInit {
   });
   id: string;
   headerMessage: 'Criar' | 'Editar';
+  color = '#fff';
   constructor(private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class CriarProdutoComponent implements OnInit {
           this.form.patchValue({
             ...res,
           });
+          this.color = res.cor || '#fff';
         });
       } else {
         this.headerMessage = 'Criar';
@@ -47,13 +49,13 @@ export class CriarProdutoComponent implements OnInit {
   salvar() {
     if (this.form.valid) {
       if (this.id === 'novo') {
-        this.produtoService.criarProduto({...this.form.value}).subscribe(res => {
+        this.produtoService.criarProduto({...this.form.value, cor: this.color}).subscribe(res => {
           this.router.navigate(['/pages/admin/produto']);
           this.toastrService.success('Produto criado com sucesso!', 'Sucesso!');
         },
         err => this.toastrService.danger('Erro!', err.errors));
       } else {
-        this.produtoService.atualizarProduto({...this.form.value}, this.id)
+        this.produtoService.atualizarProduto({...this.form.value, cor: this.color}, this.id)
           .subscribe(res => {
             this.router.navigate(['/pages/admin/produto']);
             this.toastrService.success('Produto atualizado com sucesso!');

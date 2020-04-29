@@ -17,6 +17,11 @@ import { RouterModule } from '@angular/router';
             loadChildren: () => import('./solicitacoes-lista/solicitacoes-lista.module')
             .then(m => m.SolicitacoesListaModule),
           },
+          {
+            path: 'relatorio',
+            loadChildren: () => import('./solicitacoes-relatorio/solicitacoes-relatorio.module')
+            .then(m => m.SolicitacoesRelatorioModule),
+          },
         ],
       },
     ]),

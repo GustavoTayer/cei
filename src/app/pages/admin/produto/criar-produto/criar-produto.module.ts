@@ -5,6 +5,7 @@ import { NbCardModule, NbInputModule, NbButtonModule, NbIconModule } from '@nebu
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxCurrencyModule } from 'ngx-currency';
+import { ColorPickerModule } from 'ngx-color-picker';
 export const customCurrencyMaskConfig = {
   align: 'right',
   allowNegative: true,
@@ -27,6 +28,7 @@ export const customCurrencyMaskConfig = {
     ReactiveFormsModule,
     FormsModule,
     NbIconModule,
+    ColorPickerModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     RouterModule.forChild([
       {

@@ -221,4 +221,42 @@ SolicitacaoProduto.route('salvar',  (req, res, next) => {
 })
 
 
+SolicitacaoProduto.route('relatorio',  (req, res, next) => {
+  SolicitacaoProduto.aggregate([
+    {
+      $project: {
+        month: {
+          $month: '$dataDesejada'
+        },
+        valorTotal: 1,
+        usuario: 1
+      }
+    },
+    {
+      $group: {
+        _id: {'month': '$month', 'usuario': '$usuario' },
+        count: {$sum: '$valorTotal'}
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id.usuario',
+        foreignField: "_id",
+        as: "user"
+      }
+    },
+    {
+       $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$user", 0 ] }, "$$ROOT" ] } }
+    },
+    { $project: {  name: 1, count: 1, comunidade: 1, month: '$_id.month'} }
+  ], (err, result) => {
+    if(err) {
+      console.log(err)
+      return res.status(400).json(err)
+    } else {
+      return res.json(result)
+    }
+  })
+})
 module.exports = SolicitacaoProduto

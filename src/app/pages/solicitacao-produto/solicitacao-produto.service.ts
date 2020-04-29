@@ -32,6 +32,10 @@ export class SolicitacaoProdutoService {
     return this.http.post<IProdutoCount[]>(`${this.urlProduto}/count`, {filtro});
   }
 
+  relProd(frequencia) {
+    return this.http.post<IProdutoCount[]>(`${this.urlProduto}/relProd`, {frequencia});
+  }
+
   buscarSolicitacoesGeral(filtro, pageNumber: number, nPerPage: number) {
      return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
   }
@@ -46,5 +50,9 @@ export class SolicitacaoProdutoService {
 
   cancelar(solicitacaoId) {
     return this.http.post(`${this.url}/solicitarCancelamento`, {solicitacaoId});
+  }
+
+  relatorio() {
+    return this.http.get(`${this.url}/relatorio`);
   }
 }

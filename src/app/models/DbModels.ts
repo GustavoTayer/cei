@@ -9,6 +9,7 @@ export interface Produto {
   ativo?: boolean;
   descricao?: string;
   valor: number;
+  cor: string;
 }
 
 export interface IProdutoCount {

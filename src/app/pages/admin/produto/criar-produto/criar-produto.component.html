@@ -25,6 +25,10 @@
       </div>
     </div>
     <div class="row">
+      <div class="form-group col-md-3">
+        <label for="valor" class="label">Cor</label>
+        <input [(colorPicker)]="color" [style.background]="color" cpHeight="50px"/>
+      </div>
       <div class="form-group col-md-9">
         <label for="Nome" class="label" required>Descrição</label>
         <textarea nbInput placeholder="Descrição" fullWidth id="descricao"
