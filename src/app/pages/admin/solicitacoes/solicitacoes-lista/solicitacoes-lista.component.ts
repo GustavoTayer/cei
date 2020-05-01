@@ -7,15 +7,16 @@ import {
   NbToastrService, NbDialogService } from '@nebular/theme';
 import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao, IProdutoCount } from '../../../../models/DbModels';
-import * as moment from 'moment';
 import { SolicitacaoProdutoService } from '../../../solicitacao-produto/solicitacao-produto.service';
 import {
   faExchangeAlt, faSearch,
   faAngleRight, faAngleLeft,
   faAngleDoubleLeft, faAngleDoubleRight,
+  faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
 import { ActivatedRoute } from '@angular/router';
+import { startOfWeek, endOfWeek, format } from 'date-fns';
 
 interface TreeNode<T> {
   data: T;
@@ -42,6 +43,7 @@ export class SolicitacoesListaComponent implements OnInit {
   data: TreeNode<any>[];
   sortColumn: string;
   faSearch = faSearch;
+  faChartLine = faChartLine;
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
   faAngleDoubleLeft = faAngleDoubleLeft;
@@ -66,13 +68,13 @@ export class SolicitacoesListaComponent implements OnInit {
   async ngOnInit() {
     this.route.queryParams
       .subscribe(params => {
-        const start = moment().startOf('week');
-        const end = moment().endOf('week');
+        const start = startOfWeek(new Date());
+        const end = endOfWeek(new Date());
         if (params && Object.keys(params).length) {
           const {dtDjEnd, dtDjStart, status, usuario} = params;
           this.filtro.patchValue({
             status: status,
-            dataDesejada: {start: moment(dtDjStart), end:  moment(dtDjEnd)},
+            dataDesejada: {start: new Date(dtDjStart), end:  new Date(dtDjEnd)},
             usuario,
           });
           this.filtroStatus = status;
@@ -118,7 +120,7 @@ export class SolicitacoesListaComponent implements OnInit {
           },
         };
        });
-      const dataDesejada = moment(sol.dataDesejada).format('DD/MM/YYYY');
+      const dataDesejada = format(new Date(sol.dataDesejada), 'dd/MM/yyyy');
       return {
         data: {
           _id: sol._id,

@@ -13,7 +13,21 @@
   <div class='col-md-8'>
     <nb-card>
       <nb-card-header>
-        Filtro de Solicitações
+        <div style="display: flex; justify-content: space-between;">
+          <div>
+            Filtro de Solicitações
+          </div>
+          <div>
+            <button
+              [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
+              nbTooltip="Ver relatórios"
+              nbTooltipStatus="primary" nbButton
+              status="basic" size="tiny"
+              [routerLink]="['/pages/admin/solicitacoes/relatorio']">
+              <fa-icon [icon]="faChartLine"></fa-icon>
+            </button>
+          </div>
+        </div>
       </nb-card-header>
       <nb-card-body>
         <form [formGroup]="filtro">
@@ -37,12 +51,12 @@
           <div class="col-md-6">
                 <label class="label">Data de criação:</label>
                 <input fullWidth  nbInput formControlName="dataCriacao" [nbDatepicker]="rangepicker">
-                <nb-rangepicker #rangepicker format="DD/MM/YYYY"></nb-rangepicker>
+                <nb-rangepicker #rangepicker></nb-rangepicker>
             </div>
             <div class="col-md-6">
                 <label class="label">Data desejada:</label>
                 <input fullWidth nbInput formControlName="dataDesejada" [nbDatepicker]="dataDesejada">
-                <nb-rangepicker #dataDesejada format="DD/MM/YYYY"></nb-rangepicker>
+                <nb-rangepicker #dataDesejada></nb-rangepicker>
             </div>
           </div>
         </form>

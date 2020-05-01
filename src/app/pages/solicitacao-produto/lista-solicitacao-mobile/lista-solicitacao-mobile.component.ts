@@ -4,9 +4,9 @@ import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { EStatusSolicitacao } from '../../../models/DbModels';
 import { faTrash,
   faSearch, faPlus, faAngleRight, faAngleLeft, faAngleDoubleLeft, faAngleDoubleRight  } from '@fortawesome/free-solid-svg-icons';
-import * as moment from 'moment';
 import { DialogShowSolMobileComponent } from './dialog-show-sol-mobile/dialog-show-sol-mobile.component';
 import { NbDialogService, NbToastrService } from '@nebular/theme';
+import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 @Component({
   selector: 'ngx-lista-solicitacao-mobile',
@@ -43,8 +43,8 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
   });
 
   ngOnInit() {
-    const start = moment().startOf('month');
-    const end = moment().endOf('month');
+    const start = startOfMonth(new Date());
+    const end = endOfMonth(new Date());
     this.filtro.patchValue({
       status: 'ABERTO',
       dataCriacao: {start, end},
@@ -68,7 +68,7 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
       });
   }
   formatarData(data) {
-    return moment(data).format('DD/MM/YYYY');
+    return format(new Date(data), 'dd/MM/yyyy');
   }
   loading = false;
 

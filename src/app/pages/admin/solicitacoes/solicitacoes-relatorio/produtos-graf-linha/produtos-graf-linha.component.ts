@@ -1,17 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { SolicitacaoProdutoService } from '../../../../solicitacao-produto/solicitacao-produto.service';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {getYear, format} from 'date-fns';
+import { EStatusSolicitacao } from '../../../../../models/DbModels';
+
+export enum EFrequencia {
+  diario = 'diario',
+  semanal = 'semanal',
+  mensal = 'mensal',
+  anual = 'anual',
+}
 
 @Component({
   selector: 'ngx-produtos-graf-linha',
   templateUrl: './produtos-graf-linha.component.html',
   styleUrls: ['./produtos-graf-linha.component.scss'],
 })
-export class ProdutosGrafLinhaComponent implements OnInit {
+export class ProdutosGrafLinhaComponent implements OnInit, OnChanges {
+  @Input() values: any[];
+  @Input() infosFiltro: {frequencia: EFrequencia, start: Date, end: Date};
+  @Input() color: string[] | undefined;
+  @Input() status: boolean;
+  @Input() yAxisLabel: string;
   valores;
   multi: any[];
   view: any[] = [700, 300];
-  frequencia = new FormControl('semana');
 
   // options
   legend: boolean = true;
@@ -22,55 +33,139 @@ export class ProdutosGrafLinhaComponent implements OnInit {
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Ano';
-  yAxisLabel: string = 'Quantidade';
+
   timeline: boolean = false;
 
   colorScheme = {
     domain: [],
   };
 
-  constructor(private solicitacaoService: SolicitacaoProdutoService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.solicitacaoService.relProd('semana')
-      .subscribe(res => this.setData(res, 'semana'));
-
-    this.frequencia.valueChanges.subscribe( value =>
-      this.solicitacaoService.relProd(value)
-        .subscribe(res => {
-          this.colorScheme.domain = [];
-          this.setData(res, value);
-        }),
-    );
+    const {frequencia, start, end} = this.infosFiltro;
+    if (this.values) {
+      this.setData(this.values, frequencia, start, end);
+    }
+    this.setXAxisLabel(frequencia);
   }
 
-  setData(res, frequencia) {
-    const x = {};
+  setXAxisLabel(frequencia: EFrequencia ) {
+    if (frequencia) {
+      switch (frequencia) {
+        case EFrequencia.anual:
+          this.xAxisLabel = 'ano';
+          break;
+        case EFrequencia.diario:
+          this.xAxisLabel = 'Dia da Semana';
+          break;
+        case EFrequencia.mensal:
+          this.xAxisLabel = 'Mês';
+          break;
+        case EFrequencia.semanal:
+          this.xAxisLabel = 'Dia';
+          break;
+      }
+    }
+  }
 
-    res.forEach(element => {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.values) {
+      const {frequencia, start, end} = changes.infosFiltro ? changes.infosFiltro.currentValue : this.infosFiltro;
+      this.setXAxisLabel(frequencia);
+      this.setData(changes.values.currentValue, frequencia, start, end);
+    }
+  }
+
+
+  setData(res = [], frequencia: EFrequencia, start: Date, end: Date) {
+    // console.log(res)
+    let x = {};
+    if (this.color && this.color.length) {
+      this.colorScheme = {
+        domain: this.color,
+      };
+    } else {
+      this.colorScheme = {
+        domain: [],
+      };
+    }
+
+    if (frequencia === EFrequencia.semanal) {
+      x = this.getFrequenciaMensal(res);
+    } else {
+      res.forEach(element => {
       if (!x[element.produtoId]) {
-        this.colorScheme.domain.push(element.cor);
+        if (!(this.color && this.color.length)) {
+          this.colorScheme.domain.push(element.cor);
+        }
          x[element.produtoId] = {
-           name: element.nome,
-           series: this.getSeries(frequencia),
+           name: this.status ? EStatusSolicitacao[element.nome] :  element.nome,
+           series: this.getSeries(frequencia, start, end),
          };
       }
-      if (frequencia === 'mes') {
-        x[element.produtoId].series.push({
-          name: element.dia,
-          value: element.count,
-        });
+      if (frequencia === EFrequencia.anual) {
+        const startYear = getYear(start);
+        const index = element.dia - startYear;
+        x[element.produtoId].series[index].value = element.count;
       } else {
         x[element.produtoId].series[element.dia].value = element.count;
       }
-    });
-    this.multi = Object.keys(x).map(it => x[it]);
+     });
+    }
+    const multi = Object.keys(x).map(it => x[it]);
+    this.multi = this.status ? this.statusData(multi) : multi;
   }
 
-  getSeries(frequencia) {
+  statusData(multi) {
+    Object.keys(EStatusSolicitacao).forEach(it => {
+      if (it !== 'PAGO' && !multi.some(m => m.name === EStatusSolicitacao[it])) {
+        multi.push({name: EStatusSolicitacao[it], series: []});
+      }
+    });
+    return multi.sort((a, b) => {
+      return (a.name).localeCompare(b.name);
+    });
+  }
+
+  getFrequenciaMensal(res) {
+    const x = new Set();
+    res.forEach(it => x.add(format(new Date(it.dataDesejada), 'dd/MM')));
+    const y = {};
+
+    res.forEach(element => {
+      if (!y[element.produtoId]) {
+        this.colorScheme.domain.push(element.cor);
+         y[element.produtoId] = {
+           name: this.status ? EStatusSolicitacao[element.nome] :  element.nome,
+           series: this.getFrequenciaMes(Array.from(x)),
+         };
+      }
+      y[element.produtoId].series[
+          Array.from(x)
+          .findIndex(it => it === format(new Date(element.dataDesejada), 'dd/MM'))
+        ].value = element.count;
+    });
+    return y;
+  }
+
+  getFrequenciaMes(dias: any[]) {
+    return dias.sort((a, b) => {
+      const a1 = a.split('/');
+      const a2 = a1[1] + a1[0];
+      const b1 = b.split('/');
+      const b2 = b1[1] + b1[0];
+      return Number(a2) - Number(b2);
+    }).map(dia => ({
+      name: `${dia}`,
+      value: 0,
+    }));
+  }
+
+  getSeries(frequencia: EFrequencia, start: Date, end: Date) {
     switch (frequencia) {
-      case 'semana':
+      case EFrequencia.diario:
         return [{
           name: 'Dom',
           value: 0,
@@ -100,9 +195,21 @@ export class ProdutosGrafLinhaComponent implements OnInit {
          value: 0,
         },
      ];
-     case 'mes':
-       return [];
-     case 'ano':
+     case EFrequencia.semanal:
+      return [];
+     case EFrequencia.anual:
+      let startYear = getYear(start);
+      const endYear = getYear(end);
+      const s = [];
+      for (startYear; startYear <= endYear; startYear++) {
+
+        s.push({
+          name: `${startYear}`,
+          value: 0,
+        });
+      }
+      return s;
+     case EFrequencia.mensal:
        return [{
         name: 'Jan',
         value: 0,

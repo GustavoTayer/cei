@@ -19,9 +19,9 @@ import { NbCardModule,
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NbMomentDateModule } from '@nebular/moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
 
 @NgModule({
   declarations: [SolicitacoesListaComponent, DialogShowcaseComponent],
@@ -44,7 +44,9 @@ import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.compo
     NbListModule,
     NbIconModule,
     FontAwesomeModule,
-    NbMomentDateModule,
+    NbDateFnsDateModule.forChild({
+      format: 'dd/MM/yyyy',
+    }),
     NbTooltipModule,
     NbCheckboxModule,
     NbDialogModule.forChild(),

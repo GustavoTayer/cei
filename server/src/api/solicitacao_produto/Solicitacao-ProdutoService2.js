@@ -10,6 +10,9 @@ const EmailService = require('../../config/emailService');
 const User = require('../user/user')
 const env = require('../../.env');
 const moment = require('moment')
+const dateFns = require('date-fns')
+const metaVenda = 300;
+
 const setFiltroBusca = (filtro, res) => {
   const query = {}
   if(filtro) {
@@ -119,6 +122,7 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
   const solicitacoes = req.body.solicitacoes
   const cancelamento = req.body.cancelamento
   const status = req.body.status
+  const set = {}
     let novoStatus; // Altera para o próximo status na cadeia
     switch(status) {
       case 'ABERTO':
@@ -128,6 +132,7 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
         novoStatus = 'ENTREGUE'
         break;
       case 'ENTREGUE':
+        set.pagoEm = new Date();
         novoStatus = 'PAGO'
         break;
       case 'SLC_CANCELAMENTO':
@@ -152,13 +157,17 @@ SolicitacaoProduto.route('alterar-status', (req, res, next) => {
         }
         break;
       case 'PAGO':
+
+        break;
       case undefined:
         return res.status(403)
     }
+    set.status = novoStatus
+
   SolicitacaoProduto.updateMany({
     _id: { $in: solicitacoes}
   }, {
-    $set: {status: novoStatus}
+    $set: set
   }, (err, rs) => {
     if(err) {
       return res.status(500).json({errors: [err]})
@@ -220,37 +229,148 @@ SolicitacaoProduto.route('salvar',  (req, res, next) => {
   return res.status(200)
 })
 
+const randomNumber = (n1) => {
+  return Math.floor(Math.random() * n1) + 1
+}
+const randomDate = (d1, d2) => {
+  const start = new Date(d1)
+  const end = new Date(d2)
+  const x = []
+  return new Date(+start + Math.random() * (end - start));
+}
 
-SolicitacaoProduto.route('relatorio',  (req, res, next) => {
-  SolicitacaoProduto.aggregate([
-    {
-      $project: {
-        month: {
-          $month: '$dataDesejada'
-        },
-        valorTotal: 1,
-        usuario: 1
+SolicitacaoProduto.route('criarAleatorio',  (req, res, next) => {
+  const usuario = req.decoded._id
+  // const produtosSolicitados = req.body.produtos;
+  const {quantidade, d1, d2, status} = req.body;
+  const solicitacoes = []
+  let valorTotal = 0;
+  Produto.find({}).then(p => {
+      for(let i = 0; i < quantidade; i++) {
+        valorTotal = 0
+        const produtosSolicitados = [{
+          quantidade: randomNumber(10),
+          produto: p[randomNumber(p.length) - 1]._id
+        },{
+          quantidade: randomNumber(10),
+          produto: p[randomNumber(p.length) - 1]._id
+        }]
+        const prodSolValor = produtosSolicitados.map(ps => {
+          const prr = p.find(prod => prod._id == ps.produto)
+          const valor = prr.valor * ps.quantidade
+          valorTotal += valor
+          return {
+          ...ps,
+          valor,
+          }
+        })
+        let pagoEm;
+        if(status === 'PAGO') {
+          pagoEm = randomDate(d1, d2)
+        }
+        const sp = new SolicitacaoProduto({
+          dataDesejada: randomDate(d1,d2),
+          usuario,
+          valorTotal,
+          status,
+          pagoEm
+        })
+        sp.save((err, solProd) => {
+          if(err) {
+            return sendErrorsFromDB(res, err)
+          } else {
+            solicitacoes.push(solProd)
+            const prods = prodSolValor.map(it => ({...it, solicitacao: solProd._id}))
+            ProdutoSolicitado.insertMany(prods, ((err, prodsSol) => {
+              if(err) {
+                return sendErrorsFromDB(res, err)
+              } else {
+                solProd.produtos = prodsSol.map(it => it._id)
+                solProd.save((err, solProd2) => {
+                  if(err) {
+                      return res.status(500).json({errors: [err]})
+                    }
+                })
+              }
+            }))
+          }
+        })
       }
-    },
-    {
-      $group: {
-        _id: {'month': '$month', 'usuario': '$usuario' },
-        count: {$sum: '$valorTotal'}
+  })
+  return res.json(solicitacoes)
+})
+
+SolicitacaoProduto.route('solicitacoesPagasRel', (req, res, next) => {
+  const filtroSolicitacao= [{$eq: ['$_id', '$$solicitacaoId']}]
+  let dayQuery;
+  const {frequencia, start, end} = req.body;
+  if(!controleDeFrequenciaPeriodo(frequencia, start, end)) {
+    return res.status(400).json({errors: ['Frequência não está de acordo com o período selecinado']})
+  }
+    filtroSolicitacao.push({$gte: ['$pagoEm', new Date(start)]})
+    filtroSolicitacao.push({$lte: ['$pagoEm', new Date(end)]})
+    switch(frequencia) {
+      case 'diario':
+        dayQuery = {$dayOfWeek: '$pagoEm'}
+        break
+      case 'semanal':
+      default:
+        dayQuery = {$dayOfMonth: '$pagoEm'}
+        break;
+      case 'mensal':
+        dayQuery = {$month: '$pagoEm'}
+        break;
+      case 'anual':
+        dayQuery = {$year: '$pagoEm'}
+        break;
+    }
+    const query = [
+      {
+        $match: {
+          status: 'PAGO'
+        }
       },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: '_id.usuario',
-        foreignField: "_id",
-        as: "user"
+      {
+        $project: {
+          day: dayQuery,
+          valorTotal: 1,
+          pagoEm: 1,
+          status: 1
+        },
+      },
+      {
+        $group: {
+          _id: {dia: '$day'},
+          count: {$sum: '$valorTotal'},
+          data: {$first: '$pagoEm'},
+          status: {$first: '$status'}
+        },
+      },
+      {
+        $set: {
+          cor: '#e32b3a',
+          nome: 'Pago',
+        }
+      },
+      {
+        $project: {
+          count: 1,
+          cor: 1,
+          nome: 1,
+          dataDesejada: '$data',
+          dia: '$_id.dia',
+          _id: 0
+        }
       }
-    },
-    {
-       $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$user", 0 ] }, "$$ROOT" ] } }
-    },
-    { $project: {  name: 1, count: 1, comunidade: 1, month: '$_id.month'} }
-  ], (err, result) => {
+    ]
+    if(frequencia === 'diario' || frequencia ===  'mensal') {
+      query.push({
+        $set: {
+          dia: {$subtract: ['$dia', 1]}
+        }
+      })
+    }
+  SolicitacaoProduto.aggregate(query, (err, result) => {
     if(err) {
       console.log(err)
       return res.status(400).json(err)
@@ -259,4 +379,208 @@ SolicitacaoProduto.route('relatorio',  (req, res, next) => {
     }
   })
 })
+
+SolicitacaoProduto.route('relatorio',  (req, res, next) => {
+    let dias = [];
+    let dayQuery;
+    const {frequencia} = req.body;
+    const date = new Date()
+    let start
+    let end;
+    let data1
+    let data2
+    switch(frequencia) {
+      case 'mes':
+      default:
+        data1 = dateFns.getMonth(new Date()) + 1
+        data2 = data1 - 1;
+        start = dateFns.startOfYear(date)
+        end = dateFns.endOfYear(date)
+        dayQuery = {$month: '$pagoEm'}
+        break;
+      case 'ano':
+        data1 = dateFns.getYear(new Date()) - 1
+        data2 = data1 - 1;
+        start = dateFns.startOfYear(dateFns.subYears(date, 1))
+        end = dateFns.endOfYear(date)
+        // dias = [nYear, nYear2]
+        dayQuery = {$year: '$pagoEm'}
+        break;
+    }
+  SolicitacaoProduto.aggregate([
+    {
+      $project: {
+        data: dayQuery,
+        valorTotal: 1,
+        usuario: 1,
+        status: 1,
+        pagoEm: 1
+      }
+    },
+    {
+      $match: {
+        status: 'PAGO',
+        // data: {$in: dias},
+        pagoEm: {
+          $gte: start,
+          $lte: end
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        let: { usuarioId: '$usuario'},
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ['$_id', '$$usuarioId']
+                  },
+                  {
+                    $eq: ['$hierarquia', 'SEMINARISTA']
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        as: "user"
+      }
+    },
+    {
+      $match: {
+        user: {$not: {$size: 0}}
+      }
+    },
+    {
+       $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$user", 0 ] }, "$$ROOT" ] } }
+    },
+    {
+      $group: {
+        _id: {'data': '$data', 'usuario': '$usuario' },
+        count: {$sum: '$valorTotal'},
+        pagoEm: {$first: '$pagoEm'},
+        name: {$first: '$name'}
+      },
+    },
+    {
+      $project: {
+        porcentagem: {
+          $multiply: [
+            {
+              $divide: ['$count', {'$literal': metaVenda}]
+            }, 100]
+        },
+        count: 1,
+        name: 1,
+        pagoEm: 1,
+        data: '$_id.data',
+        usuario: '$_id.usuario',
+        _id: 0
+      }
+    }
+  ], (err, result) => {
+    if(err) {
+      console.log(err)
+      return res.status(400).json(err)
+    } else {
+      return res.json({result, data1, data2})
+    }
+  })
+})
+
+SolicitacaoProduto.route('solicitacoesOutrasRel', (req, res, next) => {
+  const filtroSolicitacao= [{$eq: ['$_id', '$$solicitacaoId']}]
+  let dayQuery;
+  const {frequencia, start, end} = req.body;
+  if(!controleDeFrequenciaPeriodo(frequencia, start, end)) {
+    return res.status(400).json({errors: ['Frequência não está de acordo com o período selecinado']})
+  }
+    filtroSolicitacao.push({$gte: ['$dataDesejada', new Date(start)]})
+    filtroSolicitacao.push({$lte: ['$dataDesejada', new Date(end)]})
+    switch(frequencia) {
+      case 'diario':
+        dayQuery = {$dayOfWeek: '$dataDesejada'}
+        break
+      case 'semanal':
+      default:
+        dayQuery = {$dayOfMonth: '$dataDesejada'}
+        break;
+      case 'mensal':
+        dayQuery = {$month: '$dataDesejada'}
+        break;
+      case 'anual':
+        dayQuery = {$year: '$dataDesejada'}
+        break;
+    }
+    const query = [
+      {
+        $match: {
+          status: {
+           $ne: 'PAGO'
+          }
+        }
+      },
+      {
+        $project: {
+          day: dayQuery,
+          valorTotal: 1,
+          pagoEm: 1,
+          status: 1
+        },
+      },
+      {
+        $group: {
+          _id: {dia: '$day', status: '$status'},
+          count: {$sum: '$valorTotal'},
+          dataDesejada: {$first: '$dataDesejada'},
+        },
+      },
+      {
+        $project: {
+          count: 1,
+          nome: '$_id.status',
+          dataDesejada: 1,
+          dia: '$_id.dia',
+          produtoId: '$_id.status',
+          _id: 0
+        }
+      }
+    ]
+    if(frequencia === 'diario' || frequencia ===  'mensal') {
+      query.push({
+        $set: {
+          dia: {$subtract: ['$dia', 1]}
+        }
+      })
+    }
+  SolicitacaoProduto.aggregate(query, (err, result) => {
+    if(err) {
+      console.log(err)
+      return res.status(400).json(err)
+    } else {
+      return res.json(result)
+    }
+  })
+})
+
+const controleDeFrequenciaPeriodo = (frequencia, start, end) => {
+  if (start && end) {
+    const days2 = dateFns.differenceInDays(new Date(end), new Date(start))
+    if (days2 < 15) {
+      return frequencia === 'diario';
+    } else if (days2 < 60) {
+      return frequencia ===  'semanal';
+    } else if (days2 > 60 && days2 < 366) {
+      return frequencia ===  'mensal';
+    } else if (days2 > 366) {
+      return frequencia === 'anual';
+    }
+  }
+  return null;
+}
+
 module.exports = SolicitacaoProduto

@@ -4,7 +4,7 @@ import { ListaSolicitacaoMobileComponent } from './lista-solicitacao-mobile.comp
 import { NbListModule, NbCardModule, NbButtonModule, NbInputModule, NbDatepickerModule, NbSelectModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NbMomentDateModule } from '@nebular/moment';
+import {NbDateFnsDateModule} from '@nebular/date-fns';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DialogShowSolMobileComponent } from './dialog-show-sol-mobile/dialog-show-sol-mobile.component';
 
@@ -24,7 +24,7 @@ import { DialogShowSolMobileComponent } from './dialog-show-sol-mobile/dialog-sh
     NbInputModule,
     RouterModule,
     NbDatepickerModule,
-    NbMomentDateModule,
+    NbDateFnsDateModule,
     FontAwesomeModule,
     NbSelectModule,
   ],

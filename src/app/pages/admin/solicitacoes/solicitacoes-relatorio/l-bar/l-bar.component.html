@@ -1,0 +1,9 @@
+<span class="value-prev caption">{{ item.dataP }}</span>
+<div class="progress-line-container" [style.height.%]="getPerBar(item.porcP)">
+  <div class="progress-line-now" [class.success]="item.porcP >= 0" [class.failure]="item.porcP < 0"></div>
+</div>
+<div class="progress-line-container" [style.height.%]="getPerBar(item.porcA)">
+  <div class="progress-line-now" [class.success]="item.porcA >= 0" [class.failure]="item.porcA < 0">
+  </div>
+</div>
+<span class="value-now caption">{{ item.dataA }}</span>

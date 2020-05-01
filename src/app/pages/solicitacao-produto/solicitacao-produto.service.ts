@@ -32,12 +32,20 @@ export class SolicitacaoProdutoService {
     return this.http.post<IProdutoCount[]>(`${this.urlProduto}/count`, {filtro});
   }
 
-  relProd(frequencia) {
-    return this.http.post<IProdutoCount[]>(`${this.urlProduto}/relProd`, {frequencia});
+  relProd(frequencia: string, start, end) {
+    return this.http.post(`${this.urlProduto}/relProd`, {frequencia, start, end});
+  }
+
+  solicitacoesPagasRel(frequencia: string, start, end) {
+    return this.http.post(`${this.url}/solicitacoesPagasRel`, {frequencia, start, end});
+  }
+
+  solicitacoesOutrasRel(frequencia: string, start, end) {
+    return this.http.post(`${this.url}/solicitacoesOutrasRel`, {frequencia, start, end});
   }
 
   buscarSolicitacoesGeral(filtro, pageNumber: number, nPerPage: number) {
-     return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
+    return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
   }
 
   alterarStatus(solicitacoes: string[], status: EStatusSolicitacao, cancelamento: {cancelado: boolean, justificativa: string}) {
@@ -52,7 +60,7 @@ export class SolicitacaoProdutoService {
     return this.http.post(`${this.url}/solicitarCancelamento`, {solicitacaoId});
   }
 
-  relatorio() {
-    return this.http.get(`${this.url}/relatorio`);
+  relatorio(frequencia: 'mes' | 'semana' | 'ano') {
+    return this.http.post(`${this.url}/relatorio`, {frequencia});
   }
 }

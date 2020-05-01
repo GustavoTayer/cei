@@ -5,13 +5,32 @@ import { SolicitacoesRelatorioRoutingModule } from './solicitacoes-relatorio-rou
 import { SolicitacoesRelatorioComponent } from './solicitacoes-relatorio.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { NbCardModule, NbSelectModule } from '@nebular/theme';
-import { HorizontalBarComponent } from './horizontal-bar/horizontal-bar.component';
+import {
+  NbCardModule,
+  NbSelectModule,
+  NbDatepickerModule,
+  NbInputModule,
+  NbButtonModule,
+  NbIconModule,
+  NbAccordionModule,
+  NbTooltipModule,
+  NbListModule,
+} from '@nebular/theme';
 import { ProdutosGrafLinhaComponent } from './produtos-graf-linha/produtos-graf-linha.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { ListVendaSeminaristaComponent } from './list-venda-seminarista/list-venda-seminarista.component';
+import { LBarComponent } from './l-bar/l-bar.component';
+import { LBarBacksideComponent } from './l-bar-backside/l-bar-backside.component';
 
 @NgModule({
-  declarations: [SolicitacoesRelatorioComponent, HorizontalBarComponent, ProdutosGrafLinhaComponent],
+  declarations: [
+    SolicitacoesRelatorioComponent,
+    ProdutosGrafLinhaComponent,
+    ListVendaSeminaristaComponent,
+    LBarComponent,
+    LBarBacksideComponent,
+  ],
   imports: [
     CommonModule,
     SolicitacoesRelatorioRoutingModule,
@@ -21,6 +40,16 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     NbSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    NbInputModule,
+    NbDatepickerModule,
+    NbButtonModule,
+    NbIconModule,
+    NbTooltipModule,
+    NbListModule,
+    NbDateFnsDateModule.forChild({
+      format: 'dd/MM/yyyy',
+    }),
+    NbAccordionModule,
   ],
 })
 export class SolicitacoesRelatorioModule { }

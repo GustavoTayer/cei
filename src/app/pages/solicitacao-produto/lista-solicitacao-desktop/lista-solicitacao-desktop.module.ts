@@ -4,9 +4,9 @@ import { ListaSolicitacaoDesktopComponent } from './lista-solicitacao-desktop.co
 import { NbTreeGridModule, NbCardModule, NbButtonModule, NbInputModule, NbDatepickerModule, NbSelectModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbMomentDateModule } from '@nebular/moment';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DialogShowComponentComponent } from './dialog-show-component/dialog-show-component.component';
+import {NbDateFnsDateModule} from '@nebular/date-fns';
 
 @NgModule({
   declarations: [ListaSolicitacaoDesktopComponent, DialogShowComponentComponent],
@@ -21,9 +21,9 @@ import { DialogShowComponentComponent } from './dialog-show-component/dialog-sho
     NbInputModule,
     RouterModule,
     NbDatepickerModule,
-    NbMomentDateModule,
     FontAwesomeModule,
     NbSelectModule,
+    NbDateFnsDateModule,
   ],
   exports: [ListaSolicitacaoDesktopComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

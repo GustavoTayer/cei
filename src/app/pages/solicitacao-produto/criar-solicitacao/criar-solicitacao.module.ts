@@ -8,8 +8,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ProductSelectComponent } from '../../util/product-select/product-select.component';
 import { ProductSelectModule } from '../../util/product-select/product-select.module';
-import { NbMomentDateModule } from '@nebular/moment';
-
+import {NbDateFnsDateModule} from '@nebular/date-fns';
 
 @NgModule({
   declarations: [CriarSolicitacaoComponent],
@@ -26,7 +25,9 @@ import { NbMomentDateModule } from '@nebular/moment';
     Ng2SmartTableModule,
     ProductSelectModule,
     NbDatepickerModule,
-    NbMomentDateModule,
+    NbDateFnsDateModule.forChild({
+      format: 'dd/MM/yyyy',
+    }),
     RouterModule.forChild([
       {
         path: '',

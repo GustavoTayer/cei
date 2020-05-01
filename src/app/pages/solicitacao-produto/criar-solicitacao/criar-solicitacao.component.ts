@@ -6,6 +6,7 @@ import { NbToastrService, NbDateService } from '@nebular/theme';
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { Router } from '@angular/router';
 import { Produto } from '../../../models/DbModels';
+import { getDay } from 'date-fns';
 
 @Component({
   selector: 'ngx-criar-solicitacao',
@@ -18,7 +19,7 @@ export class CriarSolicitacaoComponent implements OnInit {
   });
 
   date = new Date();
-  filter = date => date.day() === 4;
+  filter = date => getDay(date) === 4;
 
   produtosSolicitados: any[] = [];
 

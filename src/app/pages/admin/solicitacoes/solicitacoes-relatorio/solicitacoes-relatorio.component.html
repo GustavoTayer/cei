@@ -1,23 +1,79 @@
-<!-- <nb-card>
-  <nb-card-body>
-    <div echarts
-    [options]="option"
-    [merge]="option"
-    class="echart"
-    (chartInit)="onChartInit($event)">
-    </div>
-  </nb-card-body>
-</nb-card> -->
-<nb-card>
-  <nb-card-body>
-    <ngx-horizontal-bar></ngx-horizontal-bar>
-  </nb-card-body>
-</nb-card>
 <nb-card>
   <nb-card-header>
-    Produtos Vendidos
+    Relatório de vendas de produtos e solicitações
   </nb-card-header>
   <nb-card-body>
-    <ngx-produtos-graf-linha></ngx-produtos-graf-linha>
+      <div class="row form-group">
+        <div class="form-group col-md-4">
+          <label class="label">Frequência</label>
+          <nb-select placeholder="Usuário" [formControl]="frequencia" fullWidth>
+            <nb-option value="diario">Diário</nb-option>
+            <nb-option  value="semanal">Semanal</nb-option>
+            <nb-option value="mensal">Mensal</nb-option>
+            <nb-option  value="anual">Anual</nb-option>
+          </nb-select>
+        </div>
+        <div class="form-group col-md-4 col-6">
+          <label class="label">De</label>
+            <input  nbInput [formControl]="periodo" [nbDatepicker]="rangepicker" fullWidth>
+            <nb-datepicker #rangepicker ></nb-datepicker>
+        </div>
+        <div class="form-group col-md-4 col-6">
+            <label class="label">Até</label>
+            <input  nbInput [formControl]="end" [nbDatepicker]="date2" fullWidth>
+            <nb-datepicker #date2 ></nb-datepicker>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <button nbButton (click)="buscar()" size="small">
+            <nb-icon icon="search-outline"  style="margin-right: 5px;"></nb-icon>
+            Buscar
+          </button>
+        </div>
+      </div>
   </nb-card-body>
 </nb-card>
+
+<nb-accordion>
+  <nb-accordion-item>
+    <nb-accordion-item-header>
+      Seminaristas
+      <nb-icon nbTooltip="Lista com valores vendidos no mês atual para cada seminarista (não considera valores do filtro). Para mais informações clique na linha do seminarista." nbTooltipStatus="info" icon="info-outline"> </nb-icon>
+    </nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <ngx-list-venda-seminarista [frontCardData]="relSeminaristas" [frequencia]="relSeminaristasFreq"></ngx-list-venda-seminarista>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+
+  <nb-accordion-item>
+    <nb-accordion-item-header>Produtos Vendidos
+       <nb-icon nbTooltip="Gráfico de produtos vendidos (Qtd. Vendida / Data de pagamento)" nbTooltipStatus="info" icon="info-outline"> </nb-icon></nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <ngx-produtos-graf-linha yAxisLabel="Quantidade" [values]="relProd" [infosFiltro]="infosFiltro"></ngx-produtos-graf-linha>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+
+  <nb-accordion-item>
+    <nb-accordion-item-header>Solicitações Pagas
+       <nb-icon nbTooltip="Gráfico de solicitações pagas (Valor Vendido / Data de pagamento)" nbTooltipStatus="info" icon="info-outline"> </nb-icon></nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <ngx-produtos-graf-linha yAxisLabel="Valor vendido" [values]="solicitacoesPagasRel" [infosFiltro]="infosFiltro"></ngx-produtos-graf-linha>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+
+  <nb-accordion-item>
+    <nb-accordion-item-header>Outras Solicitações
+       <nb-icon nbTooltip="Gráfico de outros Status de solicitações (Valor Vendido / Data desejada)" nbTooltipStatus="info" icon="info-outline"> </nb-icon></nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <ngx-produtos-graf-linha
+        yAxisLabel="Valor solicitado"
+        [values]="solicitacoesOutrasRel"
+        [infosFiltro]="infosFiltro"
+        [status]="true"
+        [color]="['#14cf11', '#c2192a', '#26c0eb', '#c2199d', '#d1c113']"
+        ></ngx-produtos-graf-linha>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>
+

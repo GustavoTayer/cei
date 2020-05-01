@@ -6,7 +6,6 @@ import { NbSortDirection, NbTreeGridDataSource,
 import { SolicitacaoProdutoService } from '../solicitacao-produto.service';
 import { FormBuilder } from '@angular/forms';
 import { EStatusSolicitacao } from '../../../models/DbModels';
-import * as moment from 'moment';
 import {
     faSearch, faPlus,
     faAngleRight, faAngleLeft,
@@ -14,6 +13,7 @@ import {
     faTrash,
   } from '@fortawesome/free-solid-svg-icons';
 import { DialogShowComponentComponent } from './dialog-show-component/dialog-show-component.component';
+import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 interface TreeNode<T> {
   data: T;
@@ -60,8 +60,8 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   nOfPages: number;
   pageNumber: number = 1;
   async ngOnInit() {
-    const start = moment().startOf('month');
-    const end = moment().endOf('month');
+    const start = startOfMonth(new Date());
+    const end = endOfMonth(new Date());
     this.filtro.patchValue({
       status: 'ABERTO',
       dataCriacao: {start, end},
@@ -101,8 +101,8 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
           },
         };
        });
-      const dataDesejada = moment(sol.dataDesejada).format('DD/MM/YYYY');
-      const criadoEm = moment(sol.criadoEm).format('DD/MM/YYYY');
+      const dataDesejada = format(new Date(sol.dataDesejada), 'dd/MM/yyyy');
+      const criadoEm = format(new Date(sol.criadoEm), 'dd/MM/yyyy');
       return {
         data: {
           _id: sol._id,

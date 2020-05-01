@@ -20,7 +20,6 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import {NbMomentDateModule} from '@nebular/moment';
 import { AuthGuard } from './auth/auth.guard';
 import { TokenInterceptorService } from './auth/token-interceptor.service';
 import { LogoutComponent } from './auth/auth/logout/logout.component';
@@ -28,26 +27,7 @@ import localePT from '@angular/common/locales/pt';
 import localeExtraPT from '@angular/common/locales/extra/pt';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(localePT, 'pt', localeExtraPT);
-
-/*
-BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    ThemeModule.forRoot(),
-    NbSidebarModule.forRoot(),
-    NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
-    NbDialogModule.forRoot(),
-    NbWindowModule.forRoot(),
-    NbToastrModule.forRoot(),
-    NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
-    }),
-    CoreModule.forRoot(), // cortado
-    NbMomentDateModule,
-    */
-
+import {NbDateFnsDateModule} from '@nebular/date-fns';
 
 @NgModule({
   declarations: [AppComponent, LogoutComponent],
@@ -65,10 +45,14 @@ BrowserModule,
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
-    NbMomentDateModule,
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
     NbDialogModule.forRoot(),
+    NbDateFnsDateModule.forRoot({
+      format: 'dd/MM/yyyy',
+      parseOptions: { useAdditionalWeekYearTokens: true, useAdditionalDayOfYearTokens: true },
+      formatOptions: { useAdditionalWeekYearTokens: true, useAdditionalDayOfYearTokens: true },
+    }),
   ],
   bootstrap: [AppComponent],
   providers: [

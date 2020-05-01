@@ -1,0 +1,31 @@
+<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="revealed">
+  <nb-card-front>
+    <nb-card>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item class="item" *ngFor="let item of data; trackBy: trackByDate" (click)="revealBack(item)">
+            <span>{{item.name}}</span>
+            <span>R$ {{item.countA.toFixed(2)}}</span>
+            <span class="delta" [class.up]="item.porcA >= 100" [class.down]="item.porcA < 100">
+              <nb-icon [icon]="item.porcA >= 0 ? 'arrow-up' : 'arrow-down'" pack="eva"></nb-icon>
+              {{item.porcA}}%
+            </span>
+           <ngx-l-bar [item]="item"></ngx-l-bar>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card>
+      <nb-card-header>
+        <nb-icon icon="arrow-left-outline" style="margin-right: 5px;" (click)="revealFront()"></nb-icon>
+        {{selectedItem && selectedItem.name || ''}}
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-l-bar-backside [frequencia]="frequencia" [data]="selectedItem && selectedItem.series"></ngx-l-bar-backside>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>
+
