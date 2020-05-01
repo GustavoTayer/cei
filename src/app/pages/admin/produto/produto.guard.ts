@@ -15,14 +15,12 @@ export class ProdutoGuard implements CanActivate {
 
    canActivate(): Observable<boolean> {
     return this.produtoService.validarTela().pipe(map(res => {
-      console.log(res)
       if (!res.autorizado) {
         this.router.navigate(['/pages/403']);
         return false;
       }
       return true;
     }), catchError(err => {
-      console.log(err)
       this.router.navigate(['/pages/403']);
       return of(false);
     }));
