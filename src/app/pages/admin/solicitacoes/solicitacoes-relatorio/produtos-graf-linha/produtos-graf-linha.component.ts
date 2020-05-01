@@ -71,9 +71,11 @@ export class ProdutosGrafLinhaComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes.frequencia) {
+      this.setXAxisLabel(changes.frequencia.currentValue);
+    }
     if (changes.values) {
       const {frequencia, start, end} = changes.infosFiltro ? changes.infosFiltro.currentValue : this.infosFiltro;
-      this.setXAxisLabel(frequencia);
       this.setData(changes.values.currentValue, frequencia, start, end);
     }
   }

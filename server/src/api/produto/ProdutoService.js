@@ -13,7 +13,7 @@ Produto.route('validarTela', (req, res, next) => {
     } else {
       return usr.hierarquia === 'REITOR' ?
         res.status(200).json({autorizado: true}) :
-        res.status(403).json({autorizado: true})
+        res.status(403).json({autorizado: false})
     }
   })
 })
