@@ -14,10 +14,10 @@ server.use(express.static(path.join(__dirname, '../dist/')))
 server.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
-server.get('/pages|', (req, res) => {
+server.get('/pages|a', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
-server.get('/auth|', (req, res) => {
+server.get('/auth|a', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
