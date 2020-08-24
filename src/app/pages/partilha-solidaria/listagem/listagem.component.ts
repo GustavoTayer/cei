@@ -8,7 +8,7 @@ import { UnsubscribeOnDestroyAdapter } from '../../util/UnsubscribeOnDestroyAdap
 @Component({
   selector: 'ngx-listagem',
   templateUrl: './listagem.component.html',
-  styleUrls: ['./listagem.component.scss']
+  styleUrls: ['./listagem.component.scss'],
 })
 export class ListagemComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   comprovantes;

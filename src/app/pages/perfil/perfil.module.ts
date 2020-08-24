@@ -11,7 +11,6 @@ import {
   NbToggleModule,
   NbButtonModule, NbDatepickerModule, NbCheckboxModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NbMomentDateModule } from '@nebular/moment';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { DndDirective } from './dnd.directive';
 

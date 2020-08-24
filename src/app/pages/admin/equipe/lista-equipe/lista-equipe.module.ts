@@ -15,6 +15,6 @@ import { NbCardModule, NbListModule, NbIconModule, NbButtonModule } from '@nebul
     NbListModule,
     NbIconModule,
     NbButtonModule,
-  ]
+  ],
 })
 export class ListaEquipeModule { }

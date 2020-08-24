@@ -20,7 +20,6 @@ export class PagesComponent implements OnInit {
   constructor(private http: HttpClient) {}
   ngOnInit() {
     this.http.get<{menu: NbMenuItem[]}>(`${SECURED_URL}/user/menuAdmin`).subscribe((res) => {
-      console.log(res)
       if (res.menu) {
         this.menu = res.menu;
       }

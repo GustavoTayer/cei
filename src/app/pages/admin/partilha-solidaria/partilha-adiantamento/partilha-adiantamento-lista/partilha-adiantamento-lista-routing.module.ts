@@ -7,6 +7,6 @@ const routes: Routes = [{ path: '', component: PartilhaAdiantamentoListaComponen
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PartilhaAdiantamentoListaRoutingModule { }

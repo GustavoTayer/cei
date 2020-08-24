@@ -8,12 +8,12 @@ const routes: Routes = [{
     {
       path: 'lista',
       loadChildren: () => import('./partilha-adiantamento-lista/partilha-adiantamento-lista.module')
-        .then(m => m.PartilhaAdiantamentoListaModule)
+        .then(m => m.PartilhaAdiantamentoListaModule),
     },
     {
       path: 'editar',
       loadChildren: () => import('./partilha-adiantamento-editar/partilha-adiantamento-editar.module')
-        .then(m => m.PartilhaAdiantamentoEditarModule)
+        .then(m => m.PartilhaAdiantamentoEditarModule),
     },
   ],
  }];

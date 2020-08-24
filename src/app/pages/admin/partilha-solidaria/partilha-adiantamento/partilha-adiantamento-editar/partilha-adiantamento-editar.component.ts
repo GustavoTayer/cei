@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UsuarioService } from '../../../usario/usuario.service';
-import { startWith, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { PartilhaSolidariaService } from '../../../../partilha-solidaria/partilha-solidaria.service';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'ngx-partilha-adiantamento-editar',
   templateUrl: './partilha-adiantamento-editar.component.html',
-  styleUrls: ['./partilha-adiantamento-editar.component.scss']
+  styleUrls: ['./partilha-adiantamento-editar.component.scss'],
 })
 export class PartilhaAdiantamentoEditarComponent implements OnInit {
   filteredOptions$: Observable<{_id: string, name: string}[]>;
@@ -33,7 +33,7 @@ export class PartilhaAdiantamentoEditarComponent implements OnInit {
      this.filteredOptions$ = of(this.usuarios.slice(0, 5));
     });
     this.form.controls.usuario.valueChanges.subscribe(
-      value => this.filteredOptions$ = this.getFilteredOptions(value)
+      value => this.filteredOptions$ = this.getFilteredOptions(value),
     );
   }
 
@@ -99,7 +99,7 @@ export class PartilhaAdiantamentoEditarComponent implements OnInit {
     if (this.form.valid) {
       this.partilhaService.adiantamentoCriar(this.form.value)
         .subscribe(res => {
-          this.router.navigate(['/pages/admin/partilha/adiantamento/lista'])
+          this.router.navigate(['/pages/admin/partilha/adiantamento/lista']);
         });
     }
   }

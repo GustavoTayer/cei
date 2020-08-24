@@ -8,7 +8,7 @@ import { Equipe, Cargo } from '../../../models/DbModels';
 import { of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EquipeService {
 

@@ -37,6 +37,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     FontAwesomeModule,
     NbTooltipModule,
-  ]
+  ],
 })
 export class PartilhaListaModule { }

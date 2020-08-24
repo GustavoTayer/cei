@@ -8,7 +8,7 @@ describe('EditarEquipeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditarEquipeComponent ]
+      declarations: [ EditarEquipeComponent ],
     })
     .compileComponents();
   }));

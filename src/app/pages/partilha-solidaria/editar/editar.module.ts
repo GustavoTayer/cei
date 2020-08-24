@@ -27,6 +27,6 @@ import { PerfilModule } from '../../perfil/perfil.module';
     PerfilModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     NbIconModule,
-  ]
+  ],
 })
 export class EditarModule { }

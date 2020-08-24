@@ -3,7 +3,7 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { SECURED_URL, BASE_URL } from '../../../auth/urls';
+import { SECURED_URL } from '../../../auth/urls';
 import { UsuarioService } from '../../../pages/admin/usario/usuario.service';
 
 @Component({
@@ -76,7 +76,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   imageToShow: any ;
   createImageFromBlob(image: Blob) {
    const reader = new FileReader();
-   reader.addEventListener("load", () => {
+   reader.addEventListener('load', () => {
       this.imageToShow = reader.result;
    }, false);
 
@@ -94,7 +94,6 @@ getImageFromService() {
     this.isImageLoading = false;
   }, error => {
     this.isImageLoading = false;
-    console.log(error);
   });
 }
 

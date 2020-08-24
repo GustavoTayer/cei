@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { EStatusSolicitacao, EStatusPartilha } from '../../../../../models/DbModels';
+import { EStatusPartilha } from '../../../../../models/DbModels';
 import { FormControl } from '@angular/forms';
 
 @Component({

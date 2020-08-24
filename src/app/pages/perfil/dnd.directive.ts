@@ -1,7 +1,8 @@
 import { Directive, HostListener, HostBinding, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-  selector: '[dnd]'
+  // tslint:disable-next-line: directive-selector
+  selector: '[dnd]',
 })
 export class DndDirective {
 

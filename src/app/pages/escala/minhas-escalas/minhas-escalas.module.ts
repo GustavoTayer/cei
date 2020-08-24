@@ -9,9 +9,7 @@ import { NbInputModule, NbIconModule, NbButtonModule, NbCardModule, NbDatepicker
 import { ProductSelectModule } from '../../util/product-select/product-select.module';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
-import interactionPlugin from '@fullcalendar/interaction'; // a plugin
-import timeGridPlugin from '@fullcalendar/timegrid';
+
 
 // FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 //   dayGridPlugin,
@@ -42,6 +40,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
     NbDateFnsDateModule.forChild({
       format: 'dd/MM/yyyy',
     }),
-  ]
+  ],
 })
 export class MinhasEscalasModule { }

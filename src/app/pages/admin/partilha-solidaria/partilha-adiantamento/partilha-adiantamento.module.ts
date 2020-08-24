@@ -9,6 +9,6 @@ import { PartilhaAdiantamentoRoutingModule } from './partilha-adiantamento-routi
   imports: [
      CommonModule,
     PartilhaAdiantamentoRoutingModule,
-  ]
+  ],
 })
 export class PartilhaAdiantamentoModule { }

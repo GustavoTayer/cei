@@ -3,7 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { PartilhaAdiantamentoEditarRoutingModule } from './partilha-adiantamento-editar-routing.module';
 import { PartilhaAdiantamentoEditarComponent } from './partilha-adiantamento-editar.component';
-import { NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDatepickerModule, NbAutocompleteModule, NbIconModule } from '@nebular/theme';
+import { NbCardModule,
+  NbInputModule,
+  NbSelectModule,
+  NbButtonModule,
+  NbDatepickerModule,
+  NbAutocompleteModule,
+  NbIconModule,
+} from '@nebular/theme';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyModule } from 'ngx-currency';
@@ -27,6 +34,6 @@ import { customCurrencyMaskConfig } from '../../../produto/criar-produto/criar-p
     NbAutocompleteModule,
     NbIconModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-  ]
+  ],
 })
 export class PartilhaAdiantamentoEditarModule { }

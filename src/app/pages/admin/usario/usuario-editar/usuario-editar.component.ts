@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../usuario.service';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { EHierarquiaUsuario, EComunidadeUsuario, EEquipeUsuario } from '../../../../models/DbModels';
+import { EHierarquiaUsuario, EComunidadeUsuario } from '../../../../models/DbModels';
 import { EquipeService } from '../../equipe/equipe.service';
 import { subYears } from 'date-fns';
 import { UnsubscribeOnDestroyAdapter } from '../../../util/UnsubscribeOnDestroyAdapter';

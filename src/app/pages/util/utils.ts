@@ -97,7 +97,7 @@ export const diasDaSemana = [
     extenso: 'Sábado',
     abv: 'Sáb.',
   },
-]
+];
 
 export function obterMes(mes: number) {
   return todosMeses.find(it => it.n === mes);

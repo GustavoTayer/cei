@@ -147,6 +147,6 @@ export class PartilhaListaComponent implements OnInit {
   }
 
   downloadComprovante(comprovante) {
-    this.partilhaService.obterArquivoComprovante(comprovante)
+    this.partilhaService.obterArquivoComprovante(comprovante);
   }
 }

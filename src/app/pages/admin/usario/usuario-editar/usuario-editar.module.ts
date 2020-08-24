@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbCardModule, NbInputModule,
   NbSelectModule, NbToggleModule, NbDatepickerModule,
   NbButtonModule, NbIconModule } from '@nebular/theme';
-import { NbMomentDateModule } from '@nebular/moment';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { customCurrencyMaskConfig } from '../../produto/criar-produto/criar-produto.module';
 import { NgxCurrencyModule } from 'ngx-currency';

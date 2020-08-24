@@ -8,7 +8,7 @@ describe('PartilhaListaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PartilhaListaComponent ]
+      declarations: [ PartilhaListaComponent ],
     })
     .compileComponents();
   }));

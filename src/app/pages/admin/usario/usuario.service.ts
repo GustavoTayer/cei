@@ -94,7 +94,6 @@ export class UsuarioService {
     this.http.get(`${SECURED_URL}/user/obterAvatar`, { responseType: 'blob' }).subscribe(data => {
       this.createImageFromBlob(data);
     }, error => {
-      console.log(error);
     });
   }
   private _image = new BehaviorSubject<any>(null);

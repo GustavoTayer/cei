@@ -4,7 +4,7 @@ import { EquipeService } from '../equipe.service';
 @Component({
   selector: 'ngx-lista-equipe',
   templateUrl: './lista-equipe.component.html',
-  styleUrls: ['./lista-equipe.component.scss']
+  styleUrls: ['./lista-equipe.component.scss'],
 })
 export class ListaEquipeComponent implements OnInit {
   equipes;

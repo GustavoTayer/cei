@@ -7,7 +7,7 @@ import { NbToastrService } from '@nebular/theme';
 import { FileUploader } from 'ng2-file-upload';
 import { SECURED_URL } from '../../../auth/urls';
 import { AuthService } from '../../../auth/auth.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'ngx-editar',
@@ -30,7 +30,7 @@ export class EditarComponent implements OnInit {
     this.uploader = new FileUploader({
       url:
         `${SECURED_URL}/partilha/enviarDoc`,
-      authToken: `${this.authService.getToken()}`, removeAfterUpload: false, autoUpload: true
+      authToken: `${this.authService.getToken()}`, removeAfterUpload: false, autoUpload: true,
     });
 
     // this.uploader = new FileUploader({
@@ -79,7 +79,7 @@ export class EditarComponent implements OnInit {
   imageurl = `${SECURED_URL}/partilha/obterDoc/f4b5164f-1993-4903-8867-2bad19fd8221-1596485555705.jpeg`;
 
   enviarDoc(id: string) {
-    const formData = new FormData()
+    const formData = new FormData();
     formData.append('file', this.image, this.image.name);
     this.http.post(`${SECURED_URL}/partilha/enviarDoc`, formData, {
       params: {
@@ -154,7 +154,7 @@ export class EditarComponent implements OnInit {
   }
 
   justificativaValidator(mes: number, ano: number) {
-    const mesAtual = getMonth(new Date())
+    const mesAtual = getMonth(new Date());
     if (this.anoAtual === ano && mesAtual === mes) {
       this.form.controls.justificativaAtraso.setValidators(null);
     } else {

@@ -8,7 +8,7 @@ describe('PartilhaPassagemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PartilhaPassagemComponent ]
+      declarations: [ PartilhaPassagemComponent ],
     })
     .compileComponents();
   }));

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UnsubscribeOnDestroyAdapter } from '../../../util/UnsubscribeOnDestroyAdapter';
-import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { UsuarioService } from '../../usario/usuario.service';
 import { EComunidadeUsuario } from '../../../../models/DbModels';
 import { NbToastrService } from '@nebular/theme';
@@ -8,7 +8,7 @@ import { NbToastrService } from '@nebular/theme';
 @Component({
   selector: 'ngx-partilha-passagem',
   templateUrl: './partilha-passagem.component.html',
-  styleUrls: ['./partilha-passagem.component.scss']
+  styleUrls: ['./partilha-passagem.component.scss'],
 })
 export class PartilhaPassagemComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   seminaristas: any[];
@@ -32,7 +32,7 @@ export class PartilhaPassagemComponent extends UnsubscribeOnDestroyAdapter imple
       this.seminaristas = res;
     });
     this.subs.sink = this.seminarista.valueChanges.subscribe(res => {
-      this.subs.sink = this.usuarioService.semPassListagem(res).subscribe(seminaristas => this.seminaristas = seminaristas)
+      this.subs.sink = this.usuarioService.semPassListagem(res).subscribe(seminaristas => this.seminaristas = seminaristas);
     });
   }
 

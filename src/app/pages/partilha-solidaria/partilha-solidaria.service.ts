@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getYear, endOfMonth, addMonths, setDate, endOfDay, format, isBefore } from 'date-fns';
+import { getYear, endOfMonth, addMonths, setDate, endOfDay, isBefore } from 'date-fns';
 import { HttpClient } from '@angular/common/http';
 import { SECURED_URL } from '../../auth/urls';
 import { NbToastrService } from '@nebular/theme';
@@ -18,7 +18,7 @@ export class PartilhaSolidariaService {
   enviarComprovante(comprovante) {
     return this.http.post<any>(`${this.URL}/criar`, comprovante).pipe(
       map(res => {
-        this.toastrService.success('Aguarde aprovação', 'Comprovante enviado com sucesso!')
+        this.toastrService.success('Aguarde aprovação', 'Comprovante enviado com sucesso!');
         return res;
       }),
       catchError(err => {
@@ -31,7 +31,7 @@ export class PartilhaSolidariaService {
   editarComprovante(comprovante) {
     return this.http.post(`${this.URL}/editar`, comprovante).pipe(
       map(res => {
-        this.toastrService.success('Aguarde aprovação', 'Comprovante enviado com sucesso!')
+        this.toastrService.success('Aguarde aprovação', 'Comprovante enviado com sucesso!');
         return res;
       }),
       catchError(err => {
@@ -74,10 +74,10 @@ export class PartilhaSolidariaService {
       const downloadURL = window.URL.createObjectURL(data);
       const link = document.createElement('a');
       link.href = downloadURL;
-      link.download = `${comprovante.usuario.name}_${comprovante.ano}${comprovante.mes + 1}`
+      link.download = `${comprovante.usuario.name}_${comprovante.ano}${comprovante.mes + 1}`;
       link.click();
     }, error => {
-      this.toastrService.danger('', 'Arquivo não encontrado')
+      this.toastrService.danger('', 'Arquivo não encontrado');
     });
 }
 
@@ -126,6 +126,6 @@ export class PartilhaSolidariaService {
   }
 
   obterPartilha(id: string) {
-    return this.http.post<any>(`${this.URL}/buscarPorId`, {id})
+    return this.http.post<any>(`${this.URL}/buscarPorId`, {id});
   }
 }

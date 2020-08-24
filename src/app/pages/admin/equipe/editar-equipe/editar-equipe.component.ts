@@ -12,7 +12,7 @@ import { DialogShowComponentComponent } from './dialog-show-component/dialog-sho
 @Component({
   selector: 'ngx-editar-equipe',
   templateUrl: './editar-equipe.component.html',
-  styleUrls: ['./editar-equipe.component.scss']
+  styleUrls: ['./editar-equipe.component.scss'],
 })
 export class EditarEquipeComponent implements OnInit {
   editarMembro = false;
@@ -51,7 +51,7 @@ export class EditarEquipeComponent implements OnInit {
         this.editar = true;
         this.headerMessage = 'Nova mensagem';
       } else if (this.id === 'minha-equipe') {
-        this.equipeService.buscarMinhaEquipe()
+        this.equipeService.buscarMinhaEquipe();
       } else {
         this.equipeService.buscarPorId(this.id)
           .subscribe(res => {
@@ -148,7 +148,7 @@ export class EditarEquipeComponent implements OnInit {
     this.dialogService.open(DialogShowComponentComponent, {
       context: {
         header: 'Remover membro da equipe',
-        body: `Você tem certeza que deseja remover ${nome} da sua equipe?`
+        body: `Você tem certeza que deseja remover ${nome} da sua equipe?`,
       },
     }).onClose.subscribe(name => {
       if (name) {
@@ -163,7 +163,7 @@ export class EditarEquipeComponent implements OnInit {
     this.dialogService.open(DialogShowComponentComponent, {
       context: {
         header: `Remover função ${nome}`,
-        body: 'Essa ação irá remover a função de todos membro que a possuirem. Remover mesmo assim?'
+        body: 'Essa ação irá remover a função de todos membro que a possuirem. Remover mesmo assim?',
       },
     }).onClose.subscribe(name => {
       if (name) {

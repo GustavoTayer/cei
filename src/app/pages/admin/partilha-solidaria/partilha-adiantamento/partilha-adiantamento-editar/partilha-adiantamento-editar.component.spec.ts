@@ -8,7 +8,7 @@ describe('PartilhaAdiantamentoEditarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PartilhaAdiantamentoEditarComponent ]
+      declarations: [ PartilhaAdiantamentoEditarComponent ],
     })
     .compileComponents();
   }));

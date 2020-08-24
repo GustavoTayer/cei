@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EEquipeUsuario, EComunidadeUsuario, EHierarquiaUsuario } from '../../models/DbModels';
+import { EComunidadeUsuario, EHierarquiaUsuario } from '../../models/DbModels';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { UsuarioService } from '../admin/usario/usuario.service';
@@ -99,11 +99,11 @@ export class PerfilComponent implements OnInit {
         });
     }
   }
-  image
+  image;
   uploadFiles(file) {
     if (file.length > 0) {
       this.image = file[0];
-      this.enviarDoc()
+      this.enviarDoc();
     }
   }
 
@@ -115,7 +115,9 @@ export class PerfilComponent implements OnInit {
        this.toastrService.success('Doc enviado com sucesso');
        this.usuarioService.getAvatarFromService();
       }, err => this.toastrService.danger('erro ao enviar o arquivo, favor tentar novamente'));
-    // return this.http.post(`${SECURED_URL}/partilha/obterDoc2`, {file: 'f4b5164f-1993-4903-8867-2bad19fd8221-1596485555705.jpeg'}, {responseType: 'blob'})
+    // return this.http.post(`${SECURED_URL}/partilha/obterDoc2`,
+    // {file: 'f4b5164f-1993-4903-8867-2bad19fd8221-1596485555705.jpeg'},
+    // {responseType: 'blob'})
   }
 
   validateEqualPassword() {
