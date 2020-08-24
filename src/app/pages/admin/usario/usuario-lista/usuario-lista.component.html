@@ -21,7 +21,7 @@
 <nb-card >
   <nb-list>
     <nb-list-item *ngFor="let user of users" [routerLink]="['/pages/admin/usuarios/editar/', user._id]">
-      <nb-user [name]="user.name" [title]="user.comunidade">
+      <nb-user showInitials [name]="user.name" [title]="user.comunidade" [picture]="getPicture(user._id)">
       </nb-user>
     </nb-list-item>
   </nb-list>

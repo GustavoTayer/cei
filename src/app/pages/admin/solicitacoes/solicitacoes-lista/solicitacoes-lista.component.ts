@@ -49,6 +49,7 @@ export class SolicitacoesListaComponent implements OnInit {
   faAngleDoubleLeft = faAngleDoubleLeft;
   faAngleDoubleRight = faAngleDoubleRight;
   countSolicitacoes: number;
+  permissoes: Set<string>;
   nPerPage = 10;
   nOfPages: number;
   pageNumber: number = 1;
@@ -64,7 +65,7 @@ export class SolicitacoesListaComponent implements OnInit {
     usuario: null,
   });
   produtosCount: IProdutoCount[];
-
+  permissaoRelatorio = false;
   async ngOnInit() {
     this.route.queryParams
       .subscribe(params => {
@@ -89,11 +90,37 @@ export class SolicitacoesListaComponent implements OnInit {
             .subscribe(res => {
               this.setData(res.solicitacoes);
               this.setLastPageAndCount(res.count);
+              this.permissoes = new Set(res.permissoes);
+              this.permissoesBotoes();
+              this.permissaoRelatorio = this.permissoes.has('RELATORIO');
             });
           this.solicitacaoProdutoService.countProdutos(this.filtro.value).subscribe(res => this.produtosCount = res);
       });
 
     this.solicitacaoProdutoService.usuariosSelect().subscribe(res => this.usuarios = res);
+  }
+
+  alterarStatusPermissao = false;
+
+  permissoesBotoes() {
+    switch (this.filtroStatus) {
+      case 'ABERTO':
+        this.alterarStatusPermissao = this.permissoes.has('ABERTO');
+        break;
+      case 'SLC_CANCELAMENTO':
+        this.alterarStatusPermissao = this.permissoes.has('SLC_CANCELAMENTO');
+        break;
+      case 'ENTREGUE':
+        this.alterarStatusPermissao = this.permissoes.has('ENTREGUE');
+        break;
+      case 'PRODUZINDO':
+        this.alterarStatusPermissao = this.permissoes.has('PRODUZINDO');
+        break;
+      default:
+        this.alterarStatusPermissao = false;
+        break;
+    }
+
 
   }
 
@@ -144,6 +171,7 @@ export class SolicitacoesListaComponent implements OnInit {
     this.solicitacaoProdutoService.countProdutos(this.filtro.value)
       .subscribe(res => this.produtosCount = res);
     this.filtroStatus = this.filtro.value.status;
+    this.permissoesBotoes();
     this.checkeds.clear();
   }
 
@@ -182,6 +210,8 @@ export class SolicitacoesListaComponent implements OnInit {
               .subscribe(res => {
                 this.toastrservice.success('', 'Status das solicitações foram alterados com sucesso');
                 this.buscar();
+              }, err => {
+                this.toastrservice.danger(err.error.errors, 'Erro!');
               });
           }
         });

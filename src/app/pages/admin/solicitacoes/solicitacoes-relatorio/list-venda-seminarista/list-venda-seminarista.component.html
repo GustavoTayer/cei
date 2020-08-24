@@ -5,7 +5,7 @@
         <nb-list>
           <nb-list-item class="item" *ngFor="let item of data; trackBy: trackByDate" (click)="revealBack(item)">
             <span>{{item.name}}</span>
-            <span>R$ {{item.countA.toFixed(2)}}</span>
+            <span>R$ {{item.countA && item.countA.toFixed(2) || '0,00'}}</span>
             <span class="delta" [class.up]="item.porcA >= 100" [class.down]="item.porcA < 100">
               <nb-icon [icon]="item.porcA >= 0 ? 'arrow-up' : 'arrow-down'" pack="eva"></nb-icon>
               {{item.porcA}}%

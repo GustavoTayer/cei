@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { SECURED_URL, BASE_URL } from '../../../auth/urls';
+import { UsuarioService } from '../../../pages/admin/usario/usuario.service';
 
 @Component({
   selector: 'ngx-header',
@@ -40,14 +43,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private http: HttpClient,
+              private usuarioService: UsuarioService) {
   }
-
+  picture;
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-
+    this.usuarioService.getAvatarFromService();
     this.user = localStorage.getItem('usuarioNome');
-
+    this.usuarioService.image.subscribe(res => this.imageToShow = res);
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
@@ -68,6 +73,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  imageToShow: any ;
+  createImageFromBlob(image: Blob) {
+   const reader = new FileReader();
+   reader.addEventListener("load", () => {
+      this.imageToShow = reader.result;
+   }, false);
+
+   if (image) {
+      reader.readAsDataURL(image);
+   }
+}
+
+isImageLoading = false;
+
+getImageFromService() {
+  this.isImageLoading = true;
+  this.http.get(`${SECURED_URL}/user/obterAvatar`, {responseType: 'blob'}).subscribe(data => {
+    this.createImageFromBlob(data);
+    this.isImageLoading = false;
+  }, error => {
+    this.isImageLoading = false;
+    console.log(error);
+  });
+}
 
   changeTheme(themeName: string) {
     this.themeService.changeTheme(themeName);

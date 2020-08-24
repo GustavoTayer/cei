@@ -1,0 +1,183 @@
+<div *ngIf="id !== 'novo'">
+  <nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="editar" >
+    <nb-card-front>
+      <nb-card size="large">
+        <nb-card-header>
+          {{equipe && equipe.nome}} <button nbButton ghost (click)="editarNomeDesc()"><nb-icon icon="edit-outline"></nb-icon></button>
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-10">
+              <input
+              [formControl]="adicionarMembro"
+              nbInput
+              type="text"
+              placeholder="Usuário"
+              [nbAutocomplete]="auto" fullWidth/>
+              <nb-autocomplete #auto [handleDisplayFn]="viewHandle">
+                <nb-option *ngFor="let option of usuariosParaAdd | async" [value]="option">
+                  {{ option.name }}
+                </nb-option>
+              </nb-autocomplete>
+            </div>
+            <div class="col-2">
+              <button type="submit" nbButton hero (click)="add()" status="danger"><nb-icon icon="plus"></nb-icon></button>
+            </div>
+
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-md-12">
+              <nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="editarMembro">
+                <nb-card-front>
+                  <nb-card size="small">
+                  <nb-card-body>
+                    <nb-list>
+                      <nb-list-item *ngFor="let sem of (equipe && equipe.membros || [])" class="item">
+                        <span>{{sem.name}}</span>
+                        <span>{{formatarComunidade(sem.comunidade)}}</span>
+                        <span>{{(sem.cargo && sem.cargo.nome) || 'Não definido'}}</span>
+                        <span>
+                          <button nbButton ghost status="info" (click)="editarMembroAct(sem)"><nb-icon icon="edit-outline"></nb-icon></button>
+                          <button nbButton ghost status="danger" (click)="removerMembro(sem._id, sem.name)"><nb-icon icon="minus-outline"></nb-icon></button>
+                        </span>
+                      </nb-list-item>
+                    </nb-list>
+                  </nb-card-body>
+                  </nb-card>
+                </nb-card-front>
+                <nb-card-back>
+                  <nb-card size="small">
+                    <nb-card-header>
+                      <nb-icon icon='arrow-left-outline' (click)="editarMembro = false"></nb-icon> {{membroSelecionado && membroSelecionado.name}}
+                    </nb-card-header>
+                    <nb-card-body>
+                      <div class="row form-group">
+                        <div class="col-md-4 form-group">
+                          <span><b>Comunidade:</b> {{formatarComunidade(membroSelecionado && membroSelecionado.comunidade)}}</span>
+                        </div>
+                        <div class="col-md-4 form-group">
+                          <span><b>Email:</b> {{membroSelecionado && membroSelecionado.email}}</span>
+                        </div>
+                        <div class="col-md-4 form-group">
+                          <span><b>Aniversário:</b> {{(membroSelecionado && membroSelecionado.db) || 'não definido'}}</span>
+                        </div>
+                      </div>
+                      <div class="row form-group">
+                        <div class="col-md-4">
+                          <label for="Nome" class="label" required>Função</label>
+                            <nb-select [formControl]="cargoMembro" *ngIf="equipe && equipe.cargos && equipe.cargos.length" placeholder="Função"  fullWidth>
+                              <nb-option *ngFor="let s of (equipe && equipe.cargos) || []" [value]="s._id">{{ s.nome}}</nb-option>
+                            </nb-select>
+                            <span  *ngIf="!equipe || !equipe.cargos || !equipe.cargos.length" fullWidth>Defina funções para sua equipe</span>
+                        </div>
+                      </div>
+                    </nb-card-body>
+                    <nb-card-footer>
+                      <button nbButton (click)="adicionarCargoMembro()">Salvar</button>
+                    </nb-card-footer>
+                  </nb-card>
+                </nb-card-back>
+              </nb-flip-card>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-front>
+
+    <nb-card-back>
+      <nb-card size="large">
+        <nb-card-header>
+          Editar {{form.value.nome}}
+        </nb-card-header>
+        <nb-card-body>
+          <form [formGroup]="form">
+          <div class="row">
+            <div class="col-md-4">
+              <label for="Nome" class="label" required>Nome </label>
+              <input type="text" nbInput placeholder="Nome" fullWidth id="nome"
+                 formControlName="nome" />
+              <p class="caption status-danger" *ngIf="verificaValidacaoCampo('nome', 'required')">
+                Campo obrigatório!
+              </p>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group col-md-9">
+                <label for="Nome" class="label" required>Descrição</label>
+                <textarea nbInput placeholder="Descrição" fullWidth id="descricao"
+                   formControlName="descricao" ></textarea>
+              </div>
+            </div>
+          </div>
+        </form>
+        </nb-card-body>
+        <nb-card-footer>
+          <button nbButton (click)="salvar()">Salvar</button>
+        </nb-card-footer>
+      </nb-card>
+    </nb-card-back>
+  </nb-flip-card>
+
+  <nb-flip-card  class="own-scroll" [showToggleButton]="false" [flipped]="editarFuncao">
+    <nb-card-front>
+      <nb-card>
+        <nb-card-header>
+          Funções <button nbButton ghost (click)="editarFuncaoAct()"><nb-icon icon="plus-outline"></nb-icon></button>
+        </nb-card-header>
+        <nb-card-body>
+          <nb-list>
+            <nb-list-item *ngFor="let cargo of (equipe && equipe.cargos || [])" class="item">
+              <span>{{cargo.nome}}</span>
+              <span>{{cargo.descricao}}</span>
+              <span>
+                <button nbButton ghost status="info" (click)="editarFuncaoAct(cargo)"><nb-icon icon="edit-outline"></nb-icon></button>
+                <button nbButton ghost status="danger" (click)="removerFuncao(cargo._id, cargo.nome)"><nb-icon icon="minus-outline"></nb-icon></button>
+              </span>
+            </nb-list-item>
+          </nb-list>
+        </nb-card-body>
+      </nb-card>
+    </nb-card-front>
+    <nb-card-back>
+      <nb-card>
+        <nb-card-header>
+          <nb-icon icon='arrow-left-outline' (click)="editarFuncao = false"></nb-icon> Editar {{funcaoForm.value.nome}}
+        </nb-card-header>
+        <nb-card-body>
+          <form [formGroup]="funcaoForm">
+          <div class="row form-group">
+            <div class="col-md-4 form-group">
+              <label for="Nome" class="label" required>Nome </label>
+              <input type="text" nbInput placeholder="Nome" fullWidth
+                 formControlName="nome" />
+              <p class="caption status-danger" *ngIf="verificaValidacaoCampo('nome', 'required')">
+                Campo obrigatório!
+              </p>
+            </div>
+              <div class="form-group col-md-9">
+                <label for="Nome" class="label" required>Descrição</label>
+                <textarea nbInput placeholder="Descrição" fullWidth
+                   formControlName="descricao" ></textarea>
+              </div>
+          </div>
+          <div class="form-group row">
+            <div class="form-group col-md-10">
+              <label class="label" required>Permissões</label>
+              <div fullWidth>
+                <nb-select formControlName="permissoes" multiple *ngIf="equipe && equipe.permissoes && equipe.permissoes.length">
+                  <nb-option *ngFor="let permissao of equipe.permissoes" [value]="permissao._id">{{permissao.descricao}}</nb-option>
+                </nb-select>
+              </div>
+              <div *ngIf="!equipe || !equipe.permissoes || !equipe.permissoes.length">
+                Sua equipe não possui permissões definidas no sistema.
+              </div>
+            </div>
+          </div>
+        </form>
+        </nb-card-body>
+        <nb-card-footer>
+          <button nbButton (click)="salvarFuncao()">Salvar</button>
+        </nb-card-footer>
+      </nb-card>
+    </nb-card-back>
+  </nb-flip-card>
+</div>

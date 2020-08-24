@@ -35,8 +35,8 @@
             </div>
 
             <div class="form-group col">
-              <nb-select placeholder="Comunidade" fullWidth formControlName="comunidade">
-                <nb-option *ngFor="let comunidade of comunidades" [value]="comunidade.k">{{comunidade.v}}</nb-option>
+              <nb-select placeholder="Posição" fullWidth formControlName="hierarquia">
+                <nb-option *ngFor="let h of hierarquia" [value]="h.k">{{h.v}}</nb-option>
               </nb-select>
             </div>
             <div class="form-group col">

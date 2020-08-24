@@ -1,0 +1,52 @@
+<nb-card>
+  <nb-card-header>Confirme a alteração de status</nb-card-header>
+  <nb-card-body>
+    <div *ngIf="aprovar">
+      <nb-checkbox fullWidth [formControl]="aprovado"
+        >Aprovar comprovante(s)</nb-checkbox
+      >
+      <textarea
+        fullWidth
+        [formControl]="justificativa"
+        *ngIf="!aprovado.value"
+        nbInput
+        placeholder="Justificativa"
+      ></textarea>
+    </div>
+    <div *ngIf="deposito">
+      <div class="row">
+        <div class="col">
+          <label for="valor" class="label">Valor depositado</label>
+          <input
+            shape="round"
+            type="tel"
+            nbInput
+            currencyMask
+            placeholder="Valor depositado"
+
+            id="valor"
+            [formControl]="valorDepositado"
+            maxlength="15"
+          />
+        </div>
+        <div class="col">
+          <label class="label">Data do depósito</label>
+              <input
+
+                nbInput
+
+                [formControl]="dataDeposito"
+                [nbDatepicker]="dp"
+              />
+              <nb-datepicker #dp></nb-datepicker>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <button class="cancel" nbButton status="danger" (click)="cancel()">
+      Cancelar
+    </button>
+    <button nbButton status="success" (click)="submit()">Alterar</button>
+  </nb-card-footer>
+</nb-card>

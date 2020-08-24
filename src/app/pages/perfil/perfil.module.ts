@@ -12,10 +12,12 @@ import {
   NbButtonModule, NbDatepickerModule, NbCheckboxModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NbMomentDateModule } from '@nebular/moment';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
+import { DndDirective } from './dnd.directive';
 
 
 @NgModule({
-  declarations: [PerfilComponent],
+  declarations: [PerfilComponent, DndDirective],
   imports: [
     CommonModule,
     PerfilRoutingModule,
@@ -28,8 +30,9 @@ import { NbMomentDateModule } from '@nebular/moment';
     NbToggleModule,
     NbButtonModule,
     NbDatepickerModule,
-    NbMomentDateModule,
+    NbDateFnsDateModule,
     NbCheckboxModule,
   ],
+  exports: [DndDirective],
 })
 export class PerfilModule { }

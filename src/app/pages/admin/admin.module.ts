@@ -25,6 +25,16 @@ import { RouterModule } from '@angular/router';
             loadChildren: () => import('./usario/usario.module')
               .then(m => m.UsarioModule),
           },
+          {
+            path: 'equipe',
+            loadChildren: () => import('./equipe/equipe.module')
+              .then(m => m.EquipeModule),
+          },
+          {
+            path: 'partilha',
+            loadChildren: () => import('./partilha-solidaria/partilha-solidaria.module')
+              .then(m => m.PartilhaSolidariaModule),
+          },
         ],
       },
     ]),

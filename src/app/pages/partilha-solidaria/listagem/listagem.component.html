@@ -1,0 +1,98 @@
+<nb-card>
+  <nb-card-header
+    >Partilha solidária
+    <button
+      style="margin-left: 10px;"
+      nbButton
+      status="primary"
+      routerLink="/pages/partilha-solidaria/editar/novo"
+      nbTooltip="Enviar comprovante"
+      nbTooltipStatus="success"
+    >
+      <nb-icon icon="plus-outline"></nb-icon>
+    </button>
+  </nb-card-header>
+</nb-card>
+<nb-card *ngIf="!comprovantes || !comprovantes.length; else list">
+  <nb-card-header>Você ainda não enviou comprovante esse ano</nb-card-header>
+</nb-card>
+<ng-template #list>
+  <nb-card
+    *ngFor="let comprovante of comprovantes"
+    [accent]="obterStatusCard(comprovante.status)"
+  >
+    <nb-card-header>
+      <span style="margin-right: 5px;">
+        {{ mes(comprovante.mes) }}
+      </span>
+      <span style="margin-right: 5px;">
+        -
+      </span>
+      <span>
+        {{ obterStatus(comprovante.status) }}
+      </span>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="form-group row">
+        <div class="form-group col-md-3 col-6">
+          <label style="margin-right: 5px;" class="label"
+            >Data prevista de deposito:</label
+          >
+          <div style="width: 100%;">
+            <b>{{ formataData(comprovante.dataPrevistaRecebimento) }}</b>
+          </div>
+        </div>
+        <div class="form-group col-md-3 col-6">
+          <label class="label">Data deposito:</label>
+          <div style="width: 100%;">
+            <b>{{
+              comprovante.dataDeposito
+                ? formataData(comprovante.dataDeposito)
+                : "-"
+            }}</b>
+          </div>
+        </div>
+        <div class="form-group col-md-3 col-6">
+          <label class="label">Valor comprovante:</label>
+          <div style="width: 100%;">
+            <b>{{ comprovante.valorComprovante | currency: "BRL" }}</b>
+          </div>
+        </div>
+        <div class="form-group col-md-3 col-6">
+          <label class="label">Valor depositado: </label>
+          <div style="width: 100%;">
+            <b>{{
+              comprovante.valorDepositado
+                ? (comprovante.valorDepositado | currency: "BRL")
+                : "-"
+            }}</b>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button
+        nbButton
+        status="info"
+        hero
+        style="margin-right: 5px;"
+        nbTooltip="Ver documento"
+        nbTooltipStatus="info"
+        (click)="downloadComprovante(comprovante)"
+      >
+        <nb-icon icon="eye-outline"></nb-icon>
+      </button>
+      <button
+        *ngIf="correcao(comprovante.status)"
+        nbButton
+        status="danger"
+        hero
+        nbTooltip="Corrigir comprovante"
+        nbTooltipStatus="primary"
+        [routerLink]="['/pages/partilha-solidaria/editar/', comprovante._id]"
+      >
+        <nb-icon icon="edit-2-outline"></nb-icon>
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

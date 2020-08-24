@@ -10,20 +10,26 @@ export class ProdutoService {
   produtoUrl = `${SECURED_URL}/produto`;
   constructor(private http: HttpClient) { }
 
+  // Busca somente produtos ativos
+  lista() {
+    return this.http.get<Produto[]>(`${this.produtoUrl}/lista`);
+  }
+
+  // Qualquer produto
   buscarProdutos() {
     return this.http.get<Produto[]>(`${this.produtoUrl}/buscar`);
   }
 
   buscarProdutoPorId(id: string) {
-    return this.http.get<Produto>(`${this.produtoUrl}/${id}`);
+    return this.http.post<Produto>(`${this.produtoUrl}/buscarPorId`, {id});
   }
 
   criarProduto(produto: Produto) {
-    return this.http.post(this.produtoUrl, produto);
+    return this.http.post(`${this.produtoUrl}/criar`, produto);
   }
 
   atualizarProduto(produto: Produto, id: string) {
-    return this.http.put(`${this.produtoUrl}/${id}`, produto);
+    return this.http.put(`${this.produtoUrl}/atualizar`, {...produto, id});
   }
 
   validarTela() {

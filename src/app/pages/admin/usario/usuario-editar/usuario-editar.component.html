@@ -10,7 +10,7 @@
         <div class="form-group col-md-4">
           <label for="Nome" class="label" required>Nome </label>
           <input type="text" nbInput placeholder="Nome" fullWidth id="nome"
-          [status]="verificaValidacaoCampo('name') ? 'danger' : ''" formControlName="name" />
+          [status]="verificaValidacaoCampo('name') ? 'danger' : 'basic'" formControlName="name" />
           <p class="caption status-danger" *ngIf="verificaValidacaoCampo('name', 'required')">
            Campo obrigatório!
           </p>
@@ -18,7 +18,7 @@
         <div class="form-group col-md-4">
           <label for="Email" class="label" required>Email </label>
           <input type="email" nbInput placeholder="Email" fullWidth id="Email"
-          [status]="verificaValidacaoCampo('email') ? 'danger' : ''" formControlName="email" />
+          [status]="verificaValidacaoCampo('email') ? 'danger' : 'basic'" formControlName="email" />
           <p class="caption status-danger" *ngIf="verificaValidacaoCampo('email', 'required')">
            Campo obrigatório!
           </p>
@@ -30,36 +30,63 @@
       <div class="row">
         <div class="form-group col-md-4">
           <label class="label">Aniversário:</label>
-          <input [status]="verificaValidacaoCampo('bd') ? 'danger' : ''" fullWidth  nbInput formControlName="bd" [nbDatepicker]="dp">
-          <nb-datepicker #dp format="DD/MM/YYYY"></nb-datepicker>
+          <input [status]="verificaValidacaoCampo('bd') ? 'danger' : 'basic'" fullWidth  nbInput formControlName="bd" [nbDatepicker]="dp">
+          <nb-datepicker #dp></nb-datepicker>
           <p class="caption status-danger" *ngIf="verificaValidacaoCampo('bd', 'dataInvalida')">
             Favor digitar uma data válida!
-           </p>
-      </div>
-        <div class="form-group col-md-4">
-          <label for="equipe" class="label" required>Equipe </label>
-          <nb-select placeholder="Equipe" fullWidth formControlName="equipe">
-            <nb-option *ngFor="let equipe of equipes"  [value]="equipe.k">{{equipe.v}}</nb-option>
-          </nb-select>
+          </p>
         </div>
-
-        <div class="form-group col-md-4">
-          <nb-toggle labelPosition="start" formControlName="coordenaEquipe" >Coordena Equipe?</nb-toggle>
-        </div>
-      </div>
-      <div class="form-group row">
         <div class="form-group col-md-4">
           <label for="hierarquia" class="label" required>Posição </label>
           <nb-select placeholder="Posição" fullWidth formControlName="hierarquia">
             <nb-option *ngFor="let h of hierarquia" [value]="h.k">{{h.v}}</nb-option>
           </nb-select>
         </div>
-
-        <div class="form-group col-md-4">
-          <label for="comunidade" class="label" required>Comunidade </label>
-          <nb-select placeholder="Comunidade" fullWidth formControlName="comunidade">
-            <nb-option *ngFor="let comunidade of comunidades" [value]="comunidade.k">{{comunidade.v}}</nb-option>
-          </nb-select>
+      </div>
+      <div *ngIf="dados.value.hierarquia === 'SEMINARISTA'">
+        <div class="form-group row">
+          <div class="form-group col-md-4">
+            <label for="equipe" class="label" required>Equipe </label>
+            <nb-select placeholder="Equipe" fullWidth formControlName="equipe">
+              <nb-option *ngFor="let equipe of equipes"  [value]="equipe._id">{{equipe.nome}}</nb-option>
+            </nb-select>
+          </div>
+          <div class="form-group col-md-4">
+            <nb-toggle labelPosition="start" formControlName="coordenaEquipe" >Coordena Equipe?</nb-toggle>
+          </div>
+        </div>
+        <div class="form-group row" >
+          <div class="form-group col-md-4">
+            <label for="comunidade" class="label" required>Comunidade </label>
+            <nb-select placeholder="Comunidade" fullWidth formControlName="comunidade">
+              <nb-option *ngFor="let comunidade of comunidades" [value]="comunidade.k">{{comunidade.v}}</nb-option>
+            </nb-select>
+          </div>
+          <div class="col-md-4 form-group">
+            <label class="label">
+              Paróquia
+            </label>
+            <input
+            nbInput
+            placeholder="Paróquia"
+            formControlName="paroquia"
+            fullWidth
+            />
+          </div>
+          <div class="col-md-4 form-group">
+            <label class="label">
+               Passagem
+            </label>
+            <input
+              shape="round"
+              type="tel"
+              nbInput
+              currencyMask
+              formControlName="passagem"
+              maxlength="15"
+              fullWidth
+            />
+          </div>
         </div>
       </div>
     </nb-card-body>

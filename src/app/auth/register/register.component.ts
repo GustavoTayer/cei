@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
   form = this.fb.group({
     name: [null, Validators.required],
     email: null,
-    comunidade: null,
+    hierarquia: null,
     password: [null, [Validators.required, this.validatePassword]],
     confirm_password: [null, Validators.required],
     bd: null,

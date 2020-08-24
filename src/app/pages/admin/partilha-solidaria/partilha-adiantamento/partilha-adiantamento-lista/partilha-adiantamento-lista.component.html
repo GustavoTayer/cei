@@ -1,0 +1,78 @@
+<nb-card>
+  <nb-card-header>
+    Adiantamentos
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col-md-4">
+          <label class="label">Usuário:</label>
+          <input nbInput formControlName="usuario" fullWidth />
+        </div>
+        <div class="col-md-4" form-group>
+          <label class="label">De:</label>
+          <input
+            nbInput
+            formControlName="dataDe"
+            [nbDatepicker]="dataDe"
+            fullWidth
+          />
+          <nb-datepicker #dataDe></nb-datepicker>
+        </div>
+        <div class="col-md-4" form-group>
+          <label class="label">Até:</label>
+          <input
+            nbInput
+            formControlName="dataAte"
+            [nbDatepicker]="dataAte"
+            fullWidth
+          />
+          <nb-datepicker #dataAte></nb-datepicker>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton  style="margin-right: 5px;" (click)="buscar()">Buscar</button>
+    <button nbButton status='primary' routerLink="/pages/admin/partilha/adiantamento/editar">Criar adiantamento</button>
+  </nb-card-footer>
+</nb-card>
+
+<nb-card
+  *ngFor="let adiantamento of adiantamentos"
+  [accent]="obterStatusCard(adiantamento.descontado)"
+>
+  <nb-card-header>
+    {{ adiantamento.usuario.name }} - {{ adiantamento.valor | currency: "BRL" }}
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row form-group">
+      <div class="col-md-4 form-group">
+        <label class="label">Criado por:</label>
+        <div style="width: 100%;">
+          <b>{{ adiantamento.criadoPor.name }}</b>
+        </div>
+      </div>
+      <div class="col-md-4 form-group">
+        <label class="label"> Data adiantamento:</label>
+        <div style="width: 100%;">
+          <b>{{ formataData(adiantamento.data) }}</b>
+        </div>
+      </div>
+      <div class="col-md-4 form-group">
+        <label class="label"> Data Descontado:</label>
+        <div style="width: 100%;">
+          <b>{{ formataData(adiantamento.dataDescontado) }}</b>
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-12 form-group">
+        <label class="label">Justificativa:</label>
+        <div style="width: 100%;">
+          <b>{{ adiantamento.justificativa }}</b>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

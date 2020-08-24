@@ -19,10 +19,19 @@ const routes: Routes = [{
         .then(m => m.SolicitacaoProdutoModule),
     },
     {
+      path: 'partilha-solidaria',
+      loadChildren: () => import('./partilha-solidaria/partilha-solidaria.module')
+        .then(m => m.PartilhaSolidariaModule),
+    },
+    {
+      path: 'escalas',
+      loadChildren: () => import('./escala/escala.module')
+        .then(m => m.EscalaModule),
+    },
+    {
       path: 'perfil',
       loadChildren: () => import('./perfil/perfil.module')
         .then(m => m.PerfilModule) },
-
     {
       path: 'admin',
       loadChildren: () => import('./admin/admin.module')

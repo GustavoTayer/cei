@@ -3,7 +3,11 @@ import { EEquipeUsuario, EComunidadeUsuario, EHierarquiaUsuario } from '../../mo
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { UsuarioService } from '../admin/usario/usuario.service';
-import * as moment from 'moment';
+import { subYears } from 'date-fns';
+import { EquipeService } from '../admin/equipe/equipe.service';
+import { HttpClient } from '@angular/common/http';
+import { SECURED_URL } from '../../auth/urls';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-perfil',
@@ -15,38 +19,45 @@ export class PerfilComponent implements OnInit {
   id: string;
   dados = this.fb.group({
     ativo: null,
-    comunidade: null,
-    email: null,
-    equipe: null,
-    hierarquia: null,
+    comunidade: new FormControl({value: null, disabled: true}),
+    email: new FormControl({value: null, disabled: true}),
+    equipe: new FormControl({value: null, disabled: true}),
+    hierarquia: new FormControl({value: null, disabled: true}),
     name: [null, Validators.required],
     bd: [null, this.validarDataAniversario],
-    coordenaEquipe: null,
+    coordenaEquipe: new FormControl({value: null, disabled: true}),
     mudarSenha: null,
     password: null,
     password_confirm: null,
   });
 
-  equipes = Object.keys(EEquipeUsuario).map(it => ({k: it, v: EEquipeUsuario[it]}));
+  equipes: {_id: string, nome: string}[];
   comunidades = Object.keys(EComunidadeUsuario).map(it => ({k: it, v: EComunidadeUsuario[it]}));
   hierarquia = Object.keys(EHierarquiaUsuario).map(it => ({k: it, v: EHierarquiaUsuario[it]}));
   mudarSenha = false;
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private usuarioService: UsuarioService) { }
+    private usuarioService: UsuarioService,
+    private equipeService: EquipeService,
+    private http: HttpClient,
+    private toastrService: NbToastrService) { }
 
+
+    avatar;
   ngOnInit(): void {
     this.usuarioService.usuarioLogado().subscribe(res => {
-      this.dados.patchValue({
-        ...res,
-        bd: res.bd && moment(res.bd),
+      this.equipeService.select().subscribe(eqps => {
+        this.equipes = eqps;
+        this.dados.patchValue({
+          ...res,
+          bd: res.bd && new Date(res.bd),
+        });
       });
-      this.dados.controls.email.disable();
-      // this.dados.controls.comunidade.disable();
-      this.dados.controls.hierarquia.disable();
-      this.dados.controls.coordenaEquipe.disable();
-      this.dados.controls.equipe.disable();
+    });
+
+    this.usuarioService.image.subscribe(res => {
+      this.avatar = res;
     });
     this.dados.controls.mudarSenha.valueChanges.subscribe(valor => {
       if (valor) {
@@ -70,7 +81,7 @@ export class PerfilComponent implements OnInit {
     };
   }
   validarDataAniversario(control: FormControl) {
-    if (control.value && moment().subtract(10, 'years') <= control.value) {
+    if (control.value && subYears(new Date(), 10) <= control.value) {
       return {
         dataInvalida: true,
       };
@@ -80,13 +91,31 @@ export class PerfilComponent implements OnInit {
 
   salvar() {
     if (this.dados.valid) {
-      this.usuarioService.atualizarUsuario(this.dados.value)
+      this.usuarioService.atualizarUsuarioLogado(this.dados.value)
         .subscribe(res =>  {
           if (res) {
-            this.router.navigate(['/pages/admin/usuarios']);
+            this.router.navigate(['/pages/dashboard']);
           }
         });
     }
+  }
+  image
+  uploadFiles(file) {
+    if (file.length > 0) {
+      this.image = file[0];
+      this.enviarDoc()
+    }
+  }
+
+  enviarDoc() {
+    const formData = new FormData();
+    formData.append('file', this.image, this.image.name);
+    this.http.post(`${SECURED_URL}/user/atualizarAvatar`, formData)
+      .subscribe((res) => {
+       this.toastrService.success('Doc enviado com sucesso');
+       this.usuarioService.getAvatarFromService();
+      }, err => this.toastrService.danger('erro ao enviar o arquivo, favor tentar novamente'));
+    // return this.http.post(`${SECURED_URL}/partilha/obterDoc2`, {file: 'f4b5164f-1993-4903-8867-2bad19fd8221-1596485555705.jpeg'}, {responseType: 'blob'})
   }
 
   validateEqualPassword() {

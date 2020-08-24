@@ -1,0 +1,86 @@
+<nb-card>
+  <nb-card-header>
+    Novo adiantamento
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form">
+      <div class="row form-group">
+        <div class="col-md-4 form-group">
+          <label class="label">Seminarista</label>
+              <input
+                formControlName="usuario"
+                nbInput
+                type="text"
+                placeholder="Usuário"
+                [nbAutocomplete]="auto"
+                fullWidth
+                isClosed
+                [status]=" form.controls.usuario.touched ? (verificaValidacaoCampo('usuario') ? 'danger' : 'success') : 'basic'"
+              />
+              <nb-autocomplete #auto [handleDisplayFn]="viewHandle">
+                <nb-option
+                  *ngFor="let option of filteredOptions$ | async"
+                  [value]="option"
+                >
+                  {{ option.name }}
+                </nb-option>
+              </nb-autocomplete>
+              <ng-container *ngIf="form.controls.usuario.invalid && form.controls.usuario.touched">
+                <p class="caption status-danger" *ngIf="!form.controls.usuario.errors?.required && form.controls.usuario.errors?.selecionado">
+                  Favor escolher o seminarista após pesquisar
+                </p>
+                <p class="caption status-danger" *ngIf="form.controls.usuario.errors?.required">
+                  Campo obrigatório
+                </p>
+              </ng-container>
+        </div>
+        <div class="col-md-4 form-group">
+          <label class="label">Data:</label>
+          <input  nbInput formControlName="data" [nbDatepicker]="dataDe" fullWidth [status]="verificaValidacaoCampo('data') ? 'danger' : 'success'">
+          <nb-datepicker #dataDe ></nb-datepicker>
+
+          <ng-container *ngIf="form.controls.data.invalid && form.controls.data.touched">
+            <p class="caption status-danger" *ngIf="form.controls.data.errors?.required">
+              Campo obrigatório
+            </p>
+          </ng-container>
+        </div>
+        <div class="col-md-4 form-group">
+          <label class="label">Valor:</label>
+          <input
+          fullWidth
+          shape="round"
+          type="tel"
+          nbInput
+          currencyMask
+          formControlName="valor"
+          maxlength="15"
+          [status]="form.controls.valor.touched ?(verificaValidacaoCampo('valor') ? 'danger' : 'success') : 'basic'"
+        />
+        <ng-container *ngIf="form.controls.valor.invalid && form.controls.valor.touched">
+          <p class="caption status-danger" *ngIf="form.controls.valor.errors?.required">
+            Campo obrigatório
+          </p>
+          <p class="caption status-danger" *ngIf="form.controls.valor.errors?.min">
+            Valor precisa ser maior do que zero
+          </p>
+        </ng-container>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-12 form-group">
+          <label class="label">Justificativa</label>
+          <textarea nbInput fullWidth formControlName="justificativa"></textarea>
+          <ng-container *ngIf="form.controls.justificativa.invalid && form.controls.justificativa.touched">
+            <p class="caption status-danger" *ngIf="form.controls.justificativa.errors?.required">
+              Campo obrigatório
+            </p>
+          </ng-container>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="criar()">Criar</button>
+  </nb-card-footer>
+</nb-card>

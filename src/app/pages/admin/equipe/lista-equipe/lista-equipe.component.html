@@ -1,0 +1,15 @@
+<nb-card>
+  <nb-card-header>
+    Lista de equipes
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item *ngFor="let equipe of equipes" class="item">
+        <span>{{equipe.nome}}</span>
+        <span>{{equipe.descricao}}</span>
+        <span>{{equipe.membros.length}} membros</span>
+        <span><button nbButton ghost status="info" [routerLink]="['/pages/admin/equipe/editar/', equipe._id]"> <nb-icon icon="edit-outline"></nb-icon> </button></span>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>

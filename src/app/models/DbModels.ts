@@ -3,6 +3,35 @@ export interface User {
   nome: string;
 }
 
+export interface IUsuario {
+  name: string;
+  _id: string;
+  email: string;
+  paroquia?: string;
+  passagem?: number;
+}
+
+export interface Equipe {
+  _id?: string;
+  nome: string;
+  descricao?: string;
+  membros?: User[];
+  cargos?: Cargo[];
+  permissoes?: PermissoesEquipe[];
+}
+export interface PermissoesEquipe {
+  _id: string;
+  nome: string;
+  descricao: string;
+}
+
+export interface Cargo {
+  nome: string;
+  descricao?: string;
+  permissoes?: string[];
+  equipe: string;
+}
+
 export interface Produto {
   _id?: string;
   nome: string;
@@ -16,6 +45,16 @@ export interface IProdutoCount {
   _id: string;
   produto: Produto[];
   count: number;
+}
+
+export interface IAdiantamento {
+  usuario: IUsuario;
+  criadoPor?: IUsuario;
+  data: Date;
+  justificativa: string;
+  valor: number;
+  descontado: boolean;
+  dataDescontado?: boolean;
 }
 
 export interface IProdutosSolicitados {
@@ -46,12 +85,21 @@ export enum EComunidadeUsuario {
   PROPEDEUTICO = 'Propedêutico',
   FILOSOFIA = 'Filosofia',
   TEOLOGIA = 'Teologia',
-  TIROCINIO = 'Tirocinio',
+  TIROCINIO = 'Tirocínio',
 }
 export enum EHierarquiaUsuario {
   SEMINARISTA = 'Seminarista',
   FORMADOR = 'Formador',
   REITOR = 'Reitor',
+  CONSELHO_GESTOR = 'Conselho Gestor',
+  OUTROS = 'Outros',
+}
+
+export enum EStatusPartilha {
+  EM_ANALISE = 'Em análise',
+  CORRECAO = 'Solicitado correção',
+  APROVADO = 'Aprovado',
+  DEPOSITADO = 'Depositado',
 }
 
 export enum EEquipeUsuario {

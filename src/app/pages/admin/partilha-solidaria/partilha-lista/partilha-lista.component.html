@@ -1,0 +1,185 @@
+<div class="row">
+  <div class="col-md-8">
+    <nb-card>
+      <nb-card-header>Gestão Partilha solidária</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="form">
+          <div class="form-group row">
+            <div class="form-group col-md-4">
+              <label class="label">Status</label>
+              <nb-select formControlName="status" fullWidth>
+                <nb-option *ngFor="let s of statuss" [value]="s.k">{{
+                  s.v
+                }}</nb-option>
+              </nb-select>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label class="label">Mês</label>
+              <nb-select formControlName="mes" fullWidth>
+                <nb-option *ngFor="let mes of meses" [value]="mes.n">{{
+                  mes.mes
+                }}</nb-option>
+              </nb-select>
+            </div>
+
+            <div class="form-group col-md-4">
+              <label class="label">Ano</label>
+              <nb-select formControlName="ano" fullWidth>
+                <nb-option [value]="anoAtual - 1">{{ anoAtual - 1 }}</nb-option>
+                <nb-option [value]="anoAtual">{{ anoAtual }}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <label class="label">Seminarista</label>
+              <input
+                formControlName="usuario"
+                nbInput
+                type="text"
+                placeholder="Usuário"
+                [nbAutocomplete]="auto"
+                fullWidth
+              />
+              <nb-autocomplete #auto [handleDisplayFn]="viewHandle">
+                <nb-option
+                  *ngFor="let option of usuarios | async"
+                  [value]="option"
+                >
+                  {{ option.name }}
+                </nb-option>
+              </nb-autocomplete>
+            </div>
+            <div class="col-md-4">
+              <label class="label">Data Prevista Recebimento</label>
+              <input
+                fullWidth
+                nbInput
+                formControlName="dataPrevistaRecebimento"
+                [nbDatepicker]="dp"
+              />
+              <nb-datepicker #dp></nb-datepicker>
+            </div>
+          </div>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="buscar()">Buscar</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+  <div class="col-md-4">
+    <nb-card>
+      <nb-card-header
+        >Valor em caixa: {{ caixa | currency: "R$" }}</nb-card-header
+      >
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item>
+            <div class="col-md-7">
+              Valor total doado:
+            </div>
+            <div class="col-md-5">
+              {{ doado | currency: "R$" }}
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col-md-7">
+              Valor total depositado:
+            </div>
+            <div class="col-md-5">
+              {{ depositado | currency: "R$" }}
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col-md-7">
+              Quantidade seminaristas:
+            </div>
+            <div class="col-md-5">
+              {{ enviaram }}
+            </div>
+          </nb-list-item>
+
+          <nb-list-item>
+            <div class="col-md-7">
+              faltam enviar:
+            </div>
+            <div class="col-md-5">
+              {{ faltam  }}
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="verAtividade">
+      <nb-card-front>
+        <nb-card>
+          <nb-card-header
+            >Lista
+            <button
+              [disabled]="!podeAlterar()"
+              nbTooltip="Alterar status dos envios de comprovantes selecionados"
+              nbTooltipStatus="primary"
+              nbButton
+              status="basic"
+              size="tiny"
+              (click)="alterarStatus()"
+            >
+              <fa-icon [icon]="faExchangeAlt"></fa-icon></button
+          ></nb-card-header>
+          <nb-card-body>
+            <nb-list-item *ngFor="let comprovante of comprovantes">
+              <div class="col" *ngIf="podeAlterar()">
+                <nb-checkbox
+                  [checked]="isChecked(comprovante._id)"
+                  (checkedChange)="toggle($event, comprovante._id)"
+                ></nb-checkbox>
+              </div>
+              <div class="col">{{ comprovante.usuario.name }}</div>
+              <div class="col">{{ mes(comprovante.mes).abv }}</div>
+              <div class="col">{{ obterStatus(comprovante.status) }}</div>
+              <div class="col">
+                {{ comprovante.valorComprovante | currency: "R$" }}
+              </div>
+              <div class="col">
+                {{ (comprovante.valorDepositado | currency: "R$") || "-" }}
+              </div>
+              <div class="col">
+                <button nbButton ghost status="info" (click)="downloadComprovante(comprovante)">
+                  <nb-icon icon="download-outline"></nb-icon>
+                </button>
+                <button nbButton ghost status="primary" (click)="mostrarAtividade(comprovante)">
+                  <nb-icon icon="arrow-forward-outline"></nb-icon>
+                </button>
+              </div>
+            </nb-list-item>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-front>
+      <nb-card-back>
+        <nb-card>
+          <nb-card-header>
+            <nb-icon icon='arrow-left-outline' (click)="verAtividade = false"></nb-icon>{{comprovanteEscolhido && comprovanteEscolhido.usuario.name}} - {{comprovanteEscolhido && mes(comprovanteEscolhido.mes).mes}}
+          </nb-card-header>
+          <nb-card-body>
+            <div *ngIf="!comprovanteEscolhido || !comprovanteEscolhido.atividades || !comprovanteEscolhido.atividades.length">
+              Não ha nenhuma atividade para este comprovante.
+            </div>
+            <nb-list>
+              <nb-list-item *ngFor="let atividade of ((comprovanteEscolhido && comprovanteEscolhido.atividades))">
+                <div class="col">{{formataData(atividade.criadoEm)}}</div>
+                <div class="col">{{atividade.atividade}}</div>
+                <div class="col">{{atividade.descricao}}</div>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-back>
+    </nb-flip-card>
+  </div>
+</div>

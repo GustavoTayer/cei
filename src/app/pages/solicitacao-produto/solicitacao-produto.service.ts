@@ -45,7 +45,11 @@ export class SolicitacaoProdutoService {
   }
 
   buscarSolicitacoesGeral(filtro, pageNumber: number, nPerPage: number) {
-    return this.http.post<{solicitacoes: any[], count: number}>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
+    return this.http.post<{
+        solicitacoes: any[],
+        count: number,
+        permissoes: string[],
+      }>(`${this.url}/buscarGeral`, {filtro, pageNumber, nPerPage});
   }
 
   alterarStatus(solicitacoes: string[], status: EStatusSolicitacao, cancelamento: {cancelado: boolean, justificativa: string}) {
@@ -62,5 +66,12 @@ export class SolicitacaoProdutoService {
 
   relatorio(frequencia: 'mes' | 'semana' | 'ano') {
     return this.http.post(`${this.url}/relatorio`, {frequencia});
+  }
+
+  validarTelaAdmin() {
+    return this.http.get<{autorizado: boolean}>(`${this.url}/validarTela`);
+  }
+  validarTelaRelatorio() {
+    return this.http.get<{autorizado: boolean}>(`${this.url}/validarTelaRelatorio`);
   }
 }

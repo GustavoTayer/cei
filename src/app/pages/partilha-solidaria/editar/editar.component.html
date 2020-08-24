@@ -1,0 +1,91 @@
+<nb-alert [status]="dataPrevistaRecebimento.success ? 'success' : 'warning'"
+  >Data prevista para recebimento:
+  {{ formataData(dataPrevistaRecebimento.data) }}</nb-alert
+>
+<nb-alert status="warning" *ngIf="justicativaCorrecao"
+  >Solicitado correção por: {{ justicativaCorrecao }}</nb-alert
+>
+
+<nb-card>
+  <nb-card-header>{{ headerMessage }}</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form">
+      <div class="form-group row">
+        <div class="form-group col-md-4">
+          <label class="label">Mês</label>
+          <nb-select formControlName="mes" fullWidth>
+            <nb-option *ngFor="let mes of meses" [value]="mes.n">{{
+              mes.mes
+            }}</nb-option>
+          </nb-select>
+        </div>
+        <div class="form-group col-md-4">
+          <label class="label">Ano</label>
+          <nb-select formControlName="ano" fullWidth>
+            <nb-option [value]="anoAtual - 1">{{ anoAtual - 1 }}</nb-option>
+            <nb-option [value]="anoAtual">{{ anoAtual }}</nb-option>
+          </nb-select>
+        </div>
+        <div class="form-group col-md-3">
+          <label for="valor" class="label">Valor do comprovante</label>
+          <input
+            shape="round"
+            type="tel"
+            nbInput
+            currencyMask
+            placeholder="Valor do comprovante"
+            fullWidth
+            id="valor"
+            formControlName="valorComprovante"
+            maxlength="15"
+          />
+        </div>
+        <div class="form-group col">
+          <div class="container" dnd (fileDropped)="uploadFiles($event)">
+            <input
+              type="file"
+              #fileDropRef
+              id="fileDropRef"
+              (change)="uploadFiles($event.target.files)"
+            />
+            <h3 *ngIf="!form.value.file ">Escolha ou coloque o arquivo/img do comprovante</h3>
+            <div *ngIf="form.value.file ">
+              <nb-icon icon="file-outline"></nb-icon>
+              <label class="label">{{ form.value.file }}</label>
+            </div>
+            <!-- <img [src]="avatar"/> -->
+            <!-- <h3><nb-icon icon="upload-outline" style="font-size:15px;"></nb-icon></h3> -->
+          </div>
+          <!-- <div ng2FileDrop
+                 [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
+                 (fileOver)="fileOverAnother($event)"
+                 [uploader]="uploader"
+                 class="well my-drop-zone" enctype="multipart/form-data">
+                Another drop zone
+            </div> -->
+        </div>
+      </div>
+
+      <div class="form-group row" *ngIf="!dataPrevistaRecebimento.success">
+        <div class="form-group col-md-6">
+          <label class="label">Justificativa do atraso</label>
+          <textarea
+            nbInput
+            formControlName="justificativaAtraso"
+            fullWidth
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </nb-card-body>
+  <nb-card-footer
+    ><button
+      [disabled]="form.invalid"
+      nbButton
+      status="primary"
+      (click)="enviar()"
+    >
+      Enviar
+    </button>
+  </nb-card-footer>
+</nb-card>

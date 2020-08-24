@@ -15,7 +15,7 @@ export class UsuarioConvidarComponent implements OnInit {
   });
 
   comunidades = Object.keys(EComunidadeUsuario).map(it => ({k: it, v: EComunidadeUsuario[it]}));
-  hierarquia = Object.keys(EHierarquiaUsuario).map(it => ({k: it, v: EHierarquiaUsuario[it]}));
+  hierarquia = Object.keys(EHierarquiaUsuario).filter(it => it !== 'REITOR').map(it => ({k: it, v: EHierarquiaUsuario[it]}));
   convidados: FormGroup[] = [];
   constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService,
@@ -32,16 +32,16 @@ export class UsuarioConvidarComponent implements OnInit {
     if (this.form.valid) {
       const form = this.fb.group({
         email: null,
-        comunidade: null,
+        hierarquia: null,
       });
-      form.patchValue({email: this.form.value.email, comunidade: 'PROPEDEUTICO'});
+      form.patchValue({email: this.form.value.email, hierarquia: 'SEMINARISTA'});
       this.convidados.push(form);
       this.form.patchValue({email: null});
     }
   }
 
   enviarConvites() {
-    const convites = this.convidados.map(it => ({email: it.value.email, comunidade: it.value.comunidade}));
+    const convites = this.convidados.map(it => ({email: it.value.email, hierarquia: it.value.hierarquia}));
     this.usuarioService.criarConvite(convites).subscribe(res => {
       this.convidados = [];
     });

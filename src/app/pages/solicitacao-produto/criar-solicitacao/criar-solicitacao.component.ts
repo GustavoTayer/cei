@@ -98,7 +98,7 @@ export class CriarSolicitacaoComponent implements OnInit {
 
    ngOnInit() {
     this.dateService.addDay(this.dateService.today(), -1);
-     this.produtoService.buscarProdutos()
+     this.produtoService.lista()
       .subscribe(res => {
         this.tiposProduto = res;
         this.listaProdutos(res);

@@ -21,6 +21,8 @@ server.get('/auth/*', (req, res) => {
   return res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
+server.use('/images/',  express.static(path.join(__dirname, '../../uploads/avatar')))
+
 server.use(allowCors)
 server.use(queryParser())
 // server.use('/', express.static(path.join(__dirname, 'public')));

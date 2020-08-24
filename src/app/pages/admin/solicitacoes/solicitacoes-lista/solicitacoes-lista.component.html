@@ -19,7 +19,7 @@
           </div>
           <div>
             <button
-              [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
+              [disabled]="!permissaoRelatorio"
               nbTooltip="Ver relatórios"
               nbTooltipStatus="primary" nbButton
               status="basic" size="tiny"
@@ -75,7 +75,7 @@
           </div>
           <div>
             <button
-              [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
+              [disabled]="!filtroStatus || !alterarStatusPermissao"
               nbTooltip="Alterar Status"
               nbTooltipStatus="primary" nbButton
               status="basic" size="tiny"
@@ -109,7 +109,7 @@
       <ng-container  nbTreeGridColumnDef="action">
         <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
           <button
-          [disabled]="!filtroStatus || filtroStatus === 'PAGO' || filtroStatus === 'CANCELADO'"
+          [disabled]="!filtroStatus || !alterarStatusPermissao"
           nbTooltip="Alterar status das solicitações selecionadas"
           nbTooltipStatus="primary" nbButton
           status="basic" size="tiny"

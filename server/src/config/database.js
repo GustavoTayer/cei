@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
+const migration = require('./migration')
 mongoose.Promise = global.Promise
 const url = 'mongodb://localhost/cnv'
-module.exports = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, err => console.log(err || 'Acesso realizado com sucesso'))
+module.exports = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true }, err => {
+  console.log(err || 'Acesso realizado com sucesso')
+  if(!err) {
+    migration.mudancas()
+  }
+})
 
 mongoose.Error.messages.general.required = "O campo '{PATH}' é obrigatório."
 mongoose.Error.messages.Number.min =

@@ -1,5 +1,6 @@
 const restful = require('node-restful')
 const mongoose = restful.mongoose
+const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
@@ -7,20 +8,13 @@ const userSchema = new mongoose.Schema({
     bd: {type: Date, required: false},
     comunidade: { type: String, uppercase: true, default: 'PROPEDEUTICO',
       enum: ['PROPEDEUTICO', 'FILOSOFIA' ,'TEOLOGIA', 'TIROCINIO']},
-    equipe: { type: String, uppercase: true, default: 'OUTROS',
-      enum: [
-        'COMPRAS',
-        'REDES_SOCIAIS',
-        'JARDINAGEM',
-        'TIROCINIO',
-        'PARTILHA_SOLIDARIA',
-        'PRODUTOS',
-        'OUTROS'
-      ]},
+    equipe: {type: Schema.Types.ObjectId, ref: 'Equipe'},
+    cargo:  {type: Schema.Types.ObjectId, ref: 'EquipeCargo'},
     hierarquia: {type: String, uppercase: true, default: 'SEMINARISTA',
-      enum: ['SEMINARISTA', 'FORMADOR', 'REITOR']},
+      enum: ['SEMINARISTA', 'FORMADOR', 'REITOR', 'CONSELHO_GESTOR', 'OUTROS']},
     ativo: {type: Boolean, default: true},
     coordenaEquipe: {type: Boolean, default: false},
-    tolkenConvite: {type: String}
+    passagem: {type: Number, default: 0},
+    paroquia: {type: String},
 });
 module.exports = restful.model('User', userSchema)

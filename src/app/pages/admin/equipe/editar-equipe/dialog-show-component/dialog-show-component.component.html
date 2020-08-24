@@ -1,0 +1,10 @@
+<nb-card>
+  <nb-card-header>{{header}}</nb-card-header>
+  <nb-card-body>
+    {{body}}
+  </nb-card-body>
+  <nb-card-footer>
+    <button class="cancel" nbButton status="danger" (click)="cancel()">Cancelar</button>
+    <button nbButton status="success" (click)="submit()">Remover</button>
+  </nb-card-footer>
+</nb-card>

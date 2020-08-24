@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { UsuarioGestaoGuard } from './usuario-gestao.guard';
 
 
 
@@ -11,6 +12,7 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: '',
+        canActivate: [UsuarioGestaoGuard],
         children: [
           {
             path: '',

@@ -1,0 +1,66 @@
+
+<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="editar">
+  <nb-card-front>
+    <nb-card>
+      <nb-card-header>
+        <input nbInput [formControl]="seminarista" placeholder="Seminarista" />
+      </nb-card-header>
+      <nb-card-body>
+        <div *ngIf="!seminaristas.length" style="text-align: center;">
+          Não foi encontrado nenhum seminarista
+        </div>
+        <nb-list *ngIf="seminaristas.length">
+          <nb-list-item *ngFor="let sem of seminaristas">
+            <div class="col-3">
+              <nb-user [name]="sem.name" [title]="comunidade(sem.comunidade)"></nb-user>
+            </div>
+            <div class="col-3">
+             Passagem: <b>{{sem.passagem | currency:'BRL':true}}</b>
+            </div>
+            <div class="col-5">
+              Paróquia: <b>{{sem.paroquia || '-'}}</b>
+            </div>
+            <div class="col-md-1">
+              <button nbButton ghost status="info" (click)="editarSem(sem)"><nb-icon icon="edit-outline"></nb-icon></button>
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </nb-card-front>
+  <nb-card-back>
+    <nb-card>
+      <nb-card-header>   <nb-icon icon='arrow-left-outline' (click)="editar = false"></nb-icon>{{seminaristaSelecionado.name}}</nb-card-header>
+      <nb-card-body>
+        <div class="row form-group">
+          <div class="col-md-4 form-group">
+            <label class="label">
+               Passagem
+            </label>
+            <input
+              shape="round"
+              type="tel"
+              nbInput
+              currencyMask
+              [formControl]="passagem"
+              maxlength="15"
+            />
+          </div>
+          <div class="col-md-4 form-group">
+            <label class="label">
+               Paróquia
+            </label>
+            <input
+              nbInput
+              placeholder="Paróquia"
+              [formControl]="paroquia"
+            />
+          </div>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="salvar()" status="primary">Salvar</button>
+      </nb-card-footer>
+    </nb-card>
+  </nb-card-back>
+</nb-flip-card>

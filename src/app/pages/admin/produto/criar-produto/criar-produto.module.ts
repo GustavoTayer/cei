@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CriarProdutoComponent } from './criar-produto.component';
-import { NbCardModule, NbInputModule, NbButtonModule, NbIconModule } from '@nebular/theme';
+import { NbCardModule, NbInputModule, NbButtonModule, NbIconModule, NbCheckboxModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxCurrencyModule } from 'ngx-currency';
@@ -29,6 +29,7 @@ export const customCurrencyMaskConfig = {
     FormsModule,
     NbIconModule,
     ColorPickerModule,
+    NbCheckboxModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     RouterModule.forChild([
       {
