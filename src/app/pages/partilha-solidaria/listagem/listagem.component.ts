@@ -65,7 +65,7 @@ export class ListagemComponent extends UnsubscribeOnDestroyAdapter implements On
     }
   }
   teste() {
-    this.partilhaService.teste().subscribe(res => console.log(res))
+    this.partilhaService.teste().subscribe(res => res);
   }
   correcao(status) {
     return EStatusPartilha[status] === EStatusPartilha.CORRECAO || EStatusPartilha[status] === EStatusPartilha.EM_ANALISE;

@@ -45,7 +45,6 @@ export class UsuarioEditarComponent extends UnsubscribeOnDestroyAdapter implemen
         this.usuarioService.buscarPorId(this.id).subscribe(res => {
           this.equipeSerivice.select().subscribe(eqps => {
             this.equipes = eqps;
-            console.log(res)
             this.dados.patchValue({
               ...res,
               bd: res.bd && new Date(res.bd),

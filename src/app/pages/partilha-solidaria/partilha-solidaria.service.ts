@@ -73,7 +73,7 @@ export class PartilhaSolidariaService {
   }
 
   teste() {
-    return this.http.get(`${SECURED_URL}/partilha/teste`)
+    return this.http.get(`${SECURED_URL}/partilha/teste`);
   }
 
   obterArquivoComprovante(comprovante) {

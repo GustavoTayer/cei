@@ -14,7 +14,7 @@ export class PartilhaAdiantamentoListaComponent implements OnInit {
   meses = todosMeses;
 
   adiantamentos: IAdiantamento[]  = [];
-  loading = false
+  loading = false;
   form = this.fb.group({
     usuario: null,
     dataDe: startOfMonth(new Date()),

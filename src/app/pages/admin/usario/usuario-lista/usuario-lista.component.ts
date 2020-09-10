@@ -3,7 +3,6 @@ import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormBuilder } from '@angular/forms';
 import { UsuarioService } from '../usuario.service';
 import { EComunidadeUsuario } from '../../../../models/DbModels';
-import { BASE_URL } from '../../../../auth/urls';
 @Component({
   selector: 'ngx-usuario-lista',
   templateUrl: './usuario-lista.component.html',

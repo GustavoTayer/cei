@@ -119,14 +119,14 @@ export class UsuarioService {
   //   return url;
   // }
 
-  private createImageFromBlob(image: Blob) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      this._image.next(reader.result);
-    }, false);
+  // private createImageFromBlob(image: Blob) {
+  //   const reader = new FileReader();
+  //   reader.addEventListener('load', () => {
+  //     this._image.next(reader.result);
+  //   }, false);
 
-    if (image) {
-      reader.readAsDataURL(image);
-    }
-  }
+  //   if (image) {
+  //     reader.readAsDataURL(image);
+  //   }
+  // }
 }

@@ -68,7 +68,7 @@ export class SolicitacoesListaComponent implements OnInit {
   permissaoRelatorio = false;
 
   loadingLista = false;
-  loadingInfo = false
+  loadingInfo = false;
   async ngOnInit() {
     this.loadingLista = true;
     this.loadingInfo = true;
