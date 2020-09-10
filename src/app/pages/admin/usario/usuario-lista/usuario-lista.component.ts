@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormBuilder } from '@angular/forms';
-import {UsuarioService} from '../usuario.service';
-import { EComunidadeUsuario} from '../../../../models/DbModels';
+import { UsuarioService } from '../usuario.service';
+import { EComunidadeUsuario } from '../../../../models/DbModels';
 import { BASE_URL } from '../../../../auth/urls';
 @Component({
   selector: 'ngx-usuario-lista',
@@ -15,29 +15,37 @@ export class UsuarioListaComponent implements OnInit {
   filtro = this.fb.group({
     nome: null,
   });
+  loading = false;
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
-    ) { }
+  ) { }
   users = [];
 
   buscar() {
-    this.usuarioService.buscar(this.filtro.value).subscribe(res => this.setDataUser(res));
+    this.loading = true;
+    this.usuarioService.buscar(this.filtro.value).subscribe(
+      res => this.setDataUser(res),
+      err => err, () => this.loading = false);
   }
 
   ngOnInit(): void {
-    this.usuarioService.buscar({}).subscribe(res => this.setDataUser(res));
+    this.loading = true;
+    this.usuarioService.buscar({}).subscribe(
+      res => this.setDataUser(res),
+      err => err, () => this.loading = false,
+    );
   }
 
   setDataUser(usuarios) {
-   this.users = usuarios.map(it => ({
+    this.users = usuarios.map(it => ({
       ...it,
       comunidade: EComunidadeUsuario[it.comunidade],
     }));
   }
 
   getPicture(id) {
-    return `${BASE_URL}/images/${id}.JPG`;
+    // return this.usuarioService.obterImagem(id);
   }
 
 }

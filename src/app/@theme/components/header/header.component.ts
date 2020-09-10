@@ -48,11 +48,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private usuarioService: UsuarioService) {
   }
   picture;
+  avatarUrl;
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
     this.usuarioService.getAvatarFromService();
     this.user = localStorage.getItem('usuarioNome');
-    this.usuarioService.image.subscribe(res => this.imageToShow = res);
+    this.usuarioService.image.subscribe(res => this.avatarUrl = res);
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(

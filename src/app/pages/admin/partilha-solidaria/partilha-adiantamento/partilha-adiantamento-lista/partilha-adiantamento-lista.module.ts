@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PartilhaAdiantamentoListaRoutingModule } from './partilha-adiantamento-lista-routing.module';
 import { PartilhaAdiantamentoListaComponent } from './partilha-adiantamento-lista.component';
-import { NbCardModule, NbButtonModule, NbInputModule, NbSelectModule, NbDatepickerModule } from '@nebular/theme';
+import { NbCardModule, NbButtonModule, NbInputModule, NbSelectModule, NbDatepickerModule, NbSpinnerModule } from '@nebular/theme';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { ReactiveFormsModule,  FormsModule } from '@angular/forms';
 
@@ -22,7 +22,7 @@ import { ReactiveFormsModule,  FormsModule } from '@angular/forms';
     NbDateFnsDateModule,
     ReactiveFormsModule,
     FormsModule,
-
+    NbSpinnerModule,
   ],
 })
 export class PartilhaAdiantamentoListaModule { }

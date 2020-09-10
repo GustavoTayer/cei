@@ -6,7 +6,7 @@ import { UsuarioEditarComponent } from './usuario-editar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbCardModule, NbInputModule,
   NbSelectModule, NbToggleModule, NbDatepickerModule,
-  NbButtonModule, NbIconModule } from '@nebular/theme';
+  NbButtonModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { customCurrencyMaskConfig } from '../../produto/criar-produto/criar-produto.module';
 import { NgxCurrencyModule } from 'ngx-currency';
@@ -28,6 +28,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
     NbDateFnsDateModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     UsuarioEditarRoutingModule,
+    NbSpinnerModule,
   ],
 })
 export class UsuarioEditarModule { }

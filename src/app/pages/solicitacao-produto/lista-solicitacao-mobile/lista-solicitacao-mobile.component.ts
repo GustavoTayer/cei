@@ -29,6 +29,7 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
   pageNumber: number = 1;
   solicitacaoFlipada;
   faTrash = faTrash;
+  loading = false;
   constructor (
     private fb: FormBuilder,
     private solicitacaoProdutoService: SolicitacaoProdutoService,
@@ -50,27 +51,28 @@ export class ListaSolicitacaoMobileComponent implements OnInit {
       dataCriacao: {start, end},
       dataDesejada: {start, end},
     });
+    this.loading = true;
     this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
       .subscribe(res => {
         this.data = res.solicitacoes;
         this.setLastPageAndCount(res.count);
-      });
+      }, (err) => err, () => this.loading = false);
   }
   toggleView(solicitacao?: any) {
     this.revealed = !this.revealed;
     this.solicitacaoFlipada = solicitacao;
   }
   buscar() {
+    this.loading = false;
     this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
       .subscribe(res => {
         this.data = res.solicitacoes;
         this.setLastPageAndCount(res.count);
-      });
+      }, (err) => err, () => this.loading = false);
   }
   formatarData(data) {
     return format(new Date(data), 'dd/MM/yyyy');
   }
-  loading = false;
 
   setLastPageAndCount(count: number) {
     this.countSolicitacoes = count;

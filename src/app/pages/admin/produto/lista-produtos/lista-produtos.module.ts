@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListaProdutosComponent } from './lista-produtos.component';
-import { NbCardModule, NbListModule, NbButtonModule, NbIconModule } from '@nebular/theme';
+import { NbCardModule, NbListModule, NbButtonModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
@@ -14,6 +14,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
     NbEvaIconsModule,
     NbIconModule,
     NbButtonModule,
+    NbSpinnerModule,
     RouterModule.forChild([
       {
         path: '',

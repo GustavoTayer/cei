@@ -41,7 +41,7 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   data: TreeNode<any>[];
   sortColumn: string;
   status = Object.keys(EStatusSolicitacao).map(it => ({k: it, v: EStatusSolicitacao[it]}));
-
+  loading = false;
   sortDirection: NbSortDirection = NbSortDirection.NONE;
   filtro = this.fb.group({
     dataCriacao: null,
@@ -67,11 +67,13 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
       dataCriacao: {start, end},
       dataDesejada: {start, end},
     });
+
+    this.loading = true;
     this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
       .subscribe(res => {
         this.setData(res.solicitacoes);
         this.setLastPageAndCount(res.count);
-      });
+      }, (err) => err, () => this.loading = false);
   }
 
   setLastPageAndCount(count: number) {
@@ -118,12 +120,13 @@ export class ListaSolicitacaoDesktopComponent implements OnInit {
   }
 
   buscar() {
+    this.loading = true;
     this.solicitacaoProdutoService.buscarSolicitacoes(this.filtro.value, 1, this.nPerPage)
       .subscribe(res => {
         this.setData(res.solicitacoes);
         this.setLastPageAndCount(res.count);
         this.pageNumber = 1;
-      });
+      }, (err) => err, () => this.loading = false);
   }
 
   cancelar(id) {

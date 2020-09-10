@@ -26,6 +26,12 @@ export class PartilhaListaComponent implements OnInit {
   comprovanteEscolhido;
   verAtividade = false;
   checkeds = new Set();
+
+  loadingLista = false;
+  loadingInfo = false;
+  loadingAlterarStatus = false;
+  loadingDownloading = {};
+
   form = this.fb.group({
     ano: this.anoAtual,
     mes: getMonth(new Date()),
@@ -47,16 +53,21 @@ export class PartilhaListaComponent implements OnInit {
     depositado = 0;
 
   ngOnInit(): void {
+    this.loadingLista = true;
+    this.loadingInfo = true;
+
     this.partilhaService.buscar(this.form.value).subscribe(res => {
       this.comprovantes = res;
-    });
+      this.comprovantes.forEach(it => this.downloadComprovante[it._id] = false);
+    }, (err) => err, () => this.loadingLista = false);
+
     this.partilhaService.valoresGestao(this.form.value).subscribe(res => {
       this.caixa = res.caixa;
       this.enviaram = res.enviaram;
       this.faltam = res.faltam;
       this.doado = res.doado;
       this.depositado = res.depositado;
-    });
+    }, (err) => err, () => this.loadingInfo = false);
     this.form.controls.usuario.valueChanges.subscribe(
       value => this.usuarios = this.usuarioService.seminaristasAtivosAutocomplete(value).pipe(
         startWith(''),
@@ -66,6 +77,7 @@ export class PartilhaListaComponent implements OnInit {
   }
 
   alterarStatus() {
+    this.loadingAlterarStatus = true;
     const ids = Array.from(this.checkeds);
     this.dialogService.open(DialogShowcaseComponent, {
       context: {
@@ -86,7 +98,7 @@ export class PartilhaListaComponent implements OnInit {
                this.buscar();
              }, err => {
                this.toastrservice.danger(err.error.errors, 'Erro!');
-             });
+             }, () => this.loadingAlterarStatus = false);
          }
        });
   }
@@ -101,11 +113,13 @@ export class PartilhaListaComponent implements OnInit {
 
   buscar() {
     // this.partilhaService.gerarDocumento().subscribe(res => {console.log(res)})
+    this.loadingLista = true;
     this.partilhaService.buscar(this.form.value).subscribe(res => {
       this.comprovantes = res;
       this.filtroStatus = this.form.value.status;
       this.checkeds.clear();
-    });
+      this.comprovantes.forEach(it => this.downloadComprovante[it._id] = false);
+    }, (err) => err, () => this.loadingLista = false);
   }
 
   mes(mes: number) {
@@ -147,6 +161,8 @@ export class PartilhaListaComponent implements OnInit {
   }
 
   downloadComprovante(comprovante) {
-    this.partilhaService.obterArquivoComprovante(comprovante);
+    this.downloadComprovante[comprovante._id] = true;
+    this.partilhaService.obterArquivoComprovante(comprovante)
+      .subscribe(res => res, err => err, () => this.downloadComprovante[comprovante._id] = false);
   }
 }

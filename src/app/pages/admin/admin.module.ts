@@ -1,6 +1,8 @@
+import { PartilhaGuard } from './partilha-solidaria/partilha.guard';
+import { AuthGuard } from './../../auth/auth.guard';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, CanActivate } from '@angular/router';
 
 @NgModule({
   declarations: [],
@@ -32,6 +34,7 @@ import { RouterModule } from '@angular/router';
           },
           {
             path: 'partilha',
+            canActivate: [PartilhaGuard],
             loadChildren: () => import('./partilha-solidaria/partilha-solidaria.module')
               .then(m => m.PartilhaSolidariaModule),
           },

@@ -15,6 +15,7 @@ import { NbCardModule,
   NbCheckboxModule,
   NbDialogModule,
   NbAlertModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -50,6 +51,7 @@ import { NbDateFnsDateModule } from '@nebular/date-fns';
     NbTooltipModule,
     NbCheckboxModule,
     NbDialogModule.forChild(),
+    NbSpinnerModule,
     RouterModule.forChild([
       {
         path: '',

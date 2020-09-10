@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PartilhaPassagemRoutingModule } from './partilha-passagem-routing.module';
 import { PartilhaPassagemComponent } from './partilha-passagem.component';
-import { NbCardModule, NbListModule, NbInputModule, NbUserModule, NbButtonModule, NbIconModule } from '@nebular/theme';
+import { NbCardModule, NbListModule, NbInputModule, NbUserModule, NbButtonModule, NbIconModule, NbSpinnerModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { customCurrencyMaskConfig } from '../../produto/criar-produto/criar-produto.module';
@@ -23,6 +23,7 @@ import { customCurrencyMaskConfig } from '../../produto/criar-produto/criar-prod
     NbButtonModule,
     NbIconModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    NbSpinnerModule,
   ],
 })
 export class PartilhaPassagemModule { }

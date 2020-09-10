@@ -496,6 +496,14 @@ function queryBuscarPartilhas(filtros) {
   return query;
 }
 
+// const validarUsuario = async (user) => {
+//   if(user.hierarquia === 'SEMINARISTA') {
+//     user.
+//   } else {
+
+//   }
+// }
+
 const valoresGestao = async (req, res, next) => {
   const caixa = await Caixa.findOne({ nome: "PARTILHA_SOLIDARIA" });
   const seminaristas = await User.find({

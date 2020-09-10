@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card >
   <nb-card-header>
     <div class="row">
       <div class="col-md-8">
@@ -11,7 +11,7 @@
       </div>
     </div>
   </nb-card-header>
-  <nb-card-body>
+  <nb-card-body [nbSpinner]="loading" nbSpinnerStatus="primary">
     <nb-list>
       <nb-list-item *ngFor="let produto of produtos" [routerLink]="['/pages/admin/produto/editar', produto._id]">
 

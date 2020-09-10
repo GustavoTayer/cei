@@ -35,7 +35,7 @@
   </nb-card-footer>
 </nb-card>
 
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-body>
     <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
       <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>

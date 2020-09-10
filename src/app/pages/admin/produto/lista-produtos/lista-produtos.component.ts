@@ -11,10 +11,11 @@ export class ListaProdutosComponent implements OnInit {
 
   produtos;
   constructor(private produtoService: ProdutoService) { }
-
+  loading = true;
   ngOnInit() {
+
     this.produtoService.buscarProdutos()
-      .subscribe(res => this.produtos = res);
+      .subscribe(res => this.produtos = res, err => err, () => this.loading = false);
   }
 
 }

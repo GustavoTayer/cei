@@ -52,6 +52,10 @@ export class PartilhaSolidariaService {
     );
   }
 
+  validarTelaAdmin() {
+    return this.http.get<{ autorizado: boolean }>(`${this.URL}/validarTela`);
+  }
+
   buscar(filtro?: {}) {
     return this.http.post(`${this.URL}/buscar`, filtro).pipe(
       map(res => {
@@ -64,22 +68,31 @@ export class PartilhaSolidariaService {
     );
   }
 
-  obterDoc(file) {
-    return this.http.post(`${SECURED_URL}/partilha/obterDoc2`, {file}, {responseType: 'blob'});
+  obterDoc(file, comprovanteId) {
+    return this.http.post(`${SECURED_URL}/partilha/obterDoc2`, { file, comprovanteId }, { responseType: 'blob' });
   }
+
+  teste() {
+    return this.http.get(`${SECURED_URL}/partilha/teste`)
+  }
+
   obterArquivoComprovante(comprovante) {
-    const {file} = comprovante;
-    this.obterDoc(file).subscribe(data => {
-      // this.createImageFromBlob(data);
-      const downloadURL = window.URL.createObjectURL(data);
-      const link = document.createElement('a');
-      link.href = downloadURL;
-      link.download = `${comprovante.usuario.name}_${comprovante.ano}${comprovante.mes + 1}`;
-      link.click();
-    }, error => {
-      this.toastrService.danger('', 'Arquivo não encontrado');
-    });
-}
+    const { file, _id } = comprovante;
+    return this.obterDoc(file, _id).pipe(
+      map(res => {
+        // this.createImageFromBlob(data);
+        const downloadURL = window.URL.createObjectURL(res);
+        const link = document.createElement('a');
+        link.href = downloadURL;
+        link.download = `${comprovante.usuario.name}_${comprovante.ano}${comprovante.mes + 1}`;
+        link.click();
+      }),
+      catchError(err => {
+        this.toastrService.danger(err.error.errors, 'Erro!');
+        return of(false);
+      }),
+    );
+  }
 
   calculaDataPrevista(mes: number, year: number): { success: boolean, data: Date } {
     const now = new Date();
@@ -126,6 +139,6 @@ export class PartilhaSolidariaService {
   }
 
   obterPartilha(id: string) {
-    return this.http.post<any>(`${this.URL}/buscarPorId`, {id});
+    return this.http.post<any>(`${this.URL}/buscarPorId`, { id });
   }
 }

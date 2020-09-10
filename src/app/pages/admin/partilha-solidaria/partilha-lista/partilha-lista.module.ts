@@ -6,7 +6,7 @@ import { PartilhaListaComponent } from './partilha-lista.component';
 import { NbCardModule, NbListModule,
   NbIconModule, NbInputModule,
    NbButtonModule, NbSelectModule, NbAutocompleteModule,
-   NbDatepickerModule, NbCheckboxModule, NbDialogModule, NbTooltipModule } from '@nebular/theme';
+   NbDatepickerModule, NbCheckboxModule, NbDialogModule, NbTooltipModule, NbSpinnerModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
@@ -37,6 +37,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
     FontAwesomeModule,
     NbTooltipModule,
+    NbSpinnerModule,
   ],
 })
 export class PartilhaListaModule { }

@@ -1,6 +1,6 @@
 
 <form [formGroup]="dados">
-  <nb-card>
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
     <nb-card-header>
       <button nbButton size="small" ghost routerLink="/pages/admin/usuarios"><nb-icon icon="arrow-left"></nb-icon></button>
       Editar usuário

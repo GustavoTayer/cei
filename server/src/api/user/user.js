@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     equipe: {type: Schema.Types.ObjectId, ref: 'Equipe'},
     cargo:  {type: Schema.Types.ObjectId, ref: 'EquipeCargo'},
     hierarquia: {type: String, uppercase: true, default: 'SEMINARISTA',
-      enum: ['SEMINARISTA', 'FORMADOR', 'REITOR', 'CONSELHO_GESTOR', 'OUTROS']},
+      enum: ['SEMINARISTA', 'FORMADOR', 'REITOR', 'CONSELHO_GESTOR']},
     ativo: {type: Boolean, default: true},
     coordenaEquipe: {type: Boolean, default: false},
     passagem: {type: Number, default: 0},

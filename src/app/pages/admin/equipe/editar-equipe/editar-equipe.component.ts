@@ -22,6 +22,8 @@ export class EditarEquipeComponent implements OnInit {
   headerMessage = '';
   equipe;
   usuariosParaAdd;
+
+  loading = false;
   adicionarMembro: FormControl;
   form = this.fb.group({
     nome: [null, Validators.required],
@@ -53,11 +55,12 @@ export class EditarEquipeComponent implements OnInit {
       } else if (this.id === 'minha-equipe') {
         this.equipeService.buscarMinhaEquipe();
       } else {
+        this.loading = true;
         this.equipeService.buscarPorId(this.id)
           .subscribe(res => {
             this.equipe = res;
             this.form.patchValue({...res});
-          });
+          }, (err) => err, () => this.loading = false);
       }
     });
     this.adicionarMembro =  new FormControl();
@@ -100,12 +103,14 @@ export class EditarEquipeComponent implements OnInit {
     }
   }
 
+  loadingSC = false;
   salvar() {
     if (this.form.valid) {
       this.editar = false;
       this.equipe = {...this.equipe, ...this.form.value};
+      this.loadingSC = true;
       if (this.id === 'novo') {
-        this.equipeService.criar(this.form.value).subscribe(res => {});
+        this.equipeService.criar(this.form.value).subscribe(res => {}, err => err, () => this.loadingSC = false);
       }
     }
   }
@@ -114,27 +119,32 @@ export class EditarEquipeComponent implements OnInit {
     return EComunidadeUsuario[comunidade];
   }
 
+  loadingSF = false;
   salvarFuncao() {
     if (this.funcaoForm.valid) {
       if (this.funcaoForm.value._id) {
 
       } else {
+        this.loadingSF = true;
         this.equipeService.criarCargo({...this.funcaoForm.value, equipe: this.id})
           .subscribe(res => {
             this.equipe = res;
             this.editarFuncao = false;
-          });
+          }, err => err, () => this.loadingSF = false);
       }
     }
   }
 
+
+  loadingAdd = false;
   add() {
     if (this.adicionarMembro.value && this.adicionarMembro.value._id) {
+      this.loadingAdd = true;
       this.equipeService.adicionarMembro(this.id, this.adicionarMembro.value._id)
         .subscribe(res => {
           this.usuariosParaAdd = of([]);
           this.equipe = res;
-        });
+        }, (err) => err, () => this.loadingAdd = false);
       this.adicionarMembro.patchValue('');
     }
   }
@@ -144,6 +154,7 @@ export class EditarEquipeComponent implements OnInit {
     this.membroSelecionado = membro;
   }
 
+  loadingRM = false;
   removerMembro(usuarioId: string, nome: string) {
     this.dialogService.open(DialogShowComponentComponent, {
       context: {
@@ -151,14 +162,17 @@ export class EditarEquipeComponent implements OnInit {
         body: `Você tem certeza que deseja remover ${nome} da sua equipe?`,
       },
     }).onClose.subscribe(name => {
+      this.loadingRM = true;
       if (name) {
         this.equipeService.removerMembro(this.id, usuarioId)
           .subscribe(res => {
             this.equipe = res;
-          });
+          }, err => err, () => this.loadingRM = false);
       }
     });
   }
+
+  loadingRF = false;
   removerFuncao(cargoId: string, nome: string) {
     this.dialogService.open(DialogShowComponentComponent, {
       context: {
@@ -167,25 +181,28 @@ export class EditarEquipeComponent implements OnInit {
       },
     }).onClose.subscribe(name => {
       if (name) {
+        this.loadingRM = true;
         this.equipeService.removerCargo(this.id, cargoId)
           .subscribe(res => {
             if (res) {
               this.equipe = res;
             }
-          });
+          }, err => err, () => this.loadingRM = false);
       }
     });
   }
 
+  loadingAdicionarCM = false;
   adicionarCargoMembro() {
     if (this.cargoMembro.value) {
+      this.loadingAdicionarCM = true;
       this.equipeService.adicionarCargoUsuario(this.id, this.membroSelecionado._id, this.cargoMembro.value)
         .subscribe(res => {
           if (res) {
             this.equipe = res;
             this.editarMembro = false;
           }
-        });
+        }, err => err, () => this.loadingAdicionarCM = false);
     }
   }
 }

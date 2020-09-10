@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ListagemRoutingModule } from './listagem-routing.module';
 import { ListagemComponent } from './listagem.component';
-import { NbListModule, NbCardModule, NbButtonModule, NbIconModule, NbTooltipModule } from '@nebular/theme';
+import { NbListModule, NbCardModule, NbButtonModule, NbIconModule, NbTooltipModule, NbSpinnerModule } from '@nebular/theme';
 
 
 @NgModule({
@@ -14,6 +14,7 @@ import { NbListModule, NbCardModule, NbButtonModule, NbIconModule, NbTooltipModu
     NbListModule,
     NbCardModule,
     NbButtonModule,
+    NbSpinnerModule,
     NbIconModule,
     NbTooltipModule,
   ],

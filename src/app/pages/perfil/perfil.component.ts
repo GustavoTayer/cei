@@ -30,7 +30,8 @@ export class PerfilComponent implements OnInit {
     password: null,
     password_confirm: null,
   });
-
+  loading = false;
+  loadingFoto = false;
   equipes: {_id: string, nome: string}[];
   comunidades = Object.keys(EComunidadeUsuario).map(it => ({k: it, v: EComunidadeUsuario[it]}));
   hierarquia = Object.keys(EHierarquiaUsuario).map(it => ({k: it, v: EHierarquiaUsuario[it]}));
@@ -43,9 +44,10 @@ export class PerfilComponent implements OnInit {
     private http: HttpClient,
     private toastrService: NbToastrService) { }
 
-
     avatar;
+
   ngOnInit(): void {
+    this.loading = true;
     this.usuarioService.usuarioLogado().subscribe(res => {
       this.equipeService.select().subscribe(eqps => {
         this.equipes = eqps;
@@ -54,8 +56,9 @@ export class PerfilComponent implements OnInit {
           bd: res.bd && new Date(res.bd),
         });
       });
-    });
-
+    }, (err) => err, () => this.loading = false);
+    // this.usuarioService.getAvatarFromService()
+    // .subscribe(res => this.avatar = res.url)
     this.usuarioService.image.subscribe(res => {
       this.avatar = res;
     });
@@ -101,6 +104,7 @@ export class PerfilComponent implements OnInit {
   }
   image;
   uploadFiles(file) {
+    this.loadingFoto = true;
     if (file.length > 0) {
       this.image = file[0];
       this.enviarDoc();
@@ -114,7 +118,9 @@ export class PerfilComponent implements OnInit {
       .subscribe((res) => {
        this.toastrService.success('Doc enviado com sucesso');
        this.usuarioService.getAvatarFromService();
-      }, err => this.toastrService.danger('erro ao enviar o arquivo, favor tentar novamente'));
+      //  .subscribe(res => this.avatar = res.url);
+      }, err => this.toastrService.danger('erro ao enviar o arquivo, favor tentar novamente'),
+      () => this.loadingFoto = false);
     // return this.http.post(`${SECURED_URL}/partilha/obterDoc2`,
     // {file: 'f4b5164f-1993-4903-8867-2bad19fd8221-1596485555705.jpeg'},
     // {responseType: 'blob'})

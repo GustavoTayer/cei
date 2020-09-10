@@ -9,7 +9,7 @@ import {
   NbIconModule,
   NbSelectModule,
   NbToggleModule,
-  NbButtonModule, NbDatepickerModule, NbCheckboxModule } from '@nebular/theme';
+  NbButtonModule, NbDatepickerModule, NbCheckboxModule, NbSpinnerModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NbDateFnsDateModule } from '@nebular/date-fns';
 import { DndDirective } from './dnd.directive';
@@ -30,6 +30,7 @@ import { DndDirective } from './dnd.directive';
     NbButtonModule,
     NbDatepickerModule,
     NbDateFnsDateModule,
+    NbSpinnerModule,
     NbCheckboxModule,
   ],
   exports: [DndDirective],

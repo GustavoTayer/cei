@@ -26,13 +26,16 @@ export class PartilhaPassagemComponent extends UnsubscribeOnDestroyAdapter imple
     private toastrService: NbToastrService) {
     super();
   }
-
+  loading = false;
   ngOnInit(): void {
+    this.loading = true;
     this.subs.sink = this.usuarioService.semPassListagem().subscribe(res => {
       this.seminaristas = res;
-    });
+    }, err => err, () => this.loading = false);
     this.subs.sink = this.seminarista.valueChanges.subscribe(res => {
-      this.subs.sink = this.usuarioService.semPassListagem(res).subscribe(seminaristas => this.seminaristas = seminaristas);
+      this.subs.sink = this.usuarioService.semPassListagem(res)
+        .subscribe(seminaristas => this.seminaristas = seminaristas,
+           err => err, () => this.loading = false);
     });
   }
 
@@ -46,9 +49,10 @@ export class PartilhaPassagemComponent extends UnsubscribeOnDestroyAdapter imple
   comunidade(comunidade) {
     return EComunidadeUsuario[comunidade];
   }
-
+  loadingSalvar = false;
   salvar() {
     if (this.passagem.valid && this.paroquia.valid) {
+      this.loadingSalvar = true;
       this.subs.sink = this.usuarioService.semPassAlterar(this.seminaristaSelecionado._id, this.passagem.value, this.paroquia.value)
         .subscribe(res => {
           this.toastrService.success('Valores de paróquia e passagem foram atualizados', 'Usuário atualizado');

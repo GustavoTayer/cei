@@ -16,7 +16,6 @@
             <label class="label">Data de criação:</label>
             <input  nbInput formControlName="dataCriacao" [nbDatepicker]="rangepicker">
             <nb-rangepicker #rangepicker></nb-rangepicker>
-
         </div>
         <div class="col-md-4 form-group">
             <label class="label">Data desejada:</label>
@@ -35,7 +34,7 @@
         </button>
   </nb-card-footer>
 </nb-card>
-<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="revealed">
+<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="revealed" [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-front>
     <nb-card>
       <nb-card-header class="item" style="font-size: small;" >

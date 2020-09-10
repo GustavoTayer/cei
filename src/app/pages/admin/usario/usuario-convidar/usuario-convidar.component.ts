@@ -17,6 +17,7 @@ export class UsuarioConvidarComponent implements OnInit {
   comunidades = Object.keys(EComunidadeUsuario).map(it => ({k: it, v: EComunidadeUsuario[it]}));
   hierarquia = Object.keys(EHierarquiaUsuario).filter(it => it !== 'REITOR').map(it => ({k: it, v: EHierarquiaUsuario[it]}));
   convidados: FormGroup[] = [];
+  loadingConvite = false;
   constructor(private fb: FormBuilder,
     private usuarioService: UsuarioService,
     ) { }
@@ -41,10 +42,11 @@ export class UsuarioConvidarComponent implements OnInit {
   }
 
   enviarConvites() {
+    this.loadingConvite = true;
     const convites = this.convidados.map(it => ({email: it.value.email, hierarquia: it.value.hierarquia}));
     this.usuarioService.criarConvite(convites).subscribe(res => {
       this.convidados = [];
-    });
+    }, (err) => err, () => this.loadingConvite = false);
   }
 
   verificaValidacaoCampo(campo: string, erro?: string) {

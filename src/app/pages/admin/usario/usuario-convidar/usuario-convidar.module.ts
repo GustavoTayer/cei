@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { UsuarioConvidarRoutingModule } from './usuario-convidar-routing.module';
 import { UsuarioConvidarComponent } from './usuario-convidar.component';
-import { NbCardModule, NbInputModule, NbListModule, NbButtonModule, NbIconModule, NbSelectModule } from '@nebular/theme';
+import { NbCardModule, NbInputModule, NbListModule, NbButtonModule, NbIconModule, NbSelectModule, NbSpinnerModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
@@ -20,6 +20,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     NbIconModule,
     ReactiveFormsModule,
     FormsModule,
+    NbSpinnerModule,
     UsuarioConvidarRoutingModule,
   ],
 })

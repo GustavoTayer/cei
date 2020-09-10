@@ -11,17 +11,34 @@ import { UnsubscribeOnDestroyAdapter } from '../../util/UnsubscribeOnDestroyAdap
   styleUrls: ['./listagem.component.scss'],
 })
 export class ListagemComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
+  loadingDownload = {};
   comprovantes;
+  loading = false;
   constructor(private partilhaService: PartilhaSolidariaService) {
     super();
   }
 
   ngOnInit(): void {
-    this.subs.sink = this.partilhaService.lista().subscribe(res => this.comprovantes = res || []);
+    this.loading = true;
+    this.subs.sink = this.partilhaService.lista().subscribe(
+      res => {
+        this.comprovantes = res || [];
+        this.comprovantes.forEach(comprovante => {
+          this.loadingDownload[comprovante._id] = false;
+        });
+      },
+      (err) => err,
+      () => this.loading = false,
+      );
   }
 
   buscar() {
-    this.subs.sink = this.partilhaService.lista().subscribe(res => this.comprovantes = res || []);
+    this.loading = true;
+    this.subs.sink = this.partilhaService.lista().subscribe(
+      res => this.comprovantes = res || [],
+      (err) => err,
+      () => this.loading = false,
+      );
   }
 
   formataData(data) {
@@ -47,12 +64,15 @@ export class ListagemComponent extends UnsubscribeOnDestroyAdapter implements On
         return 'warning';
     }
   }
-
+  teste() {
+    this.partilhaService.teste().subscribe(res => console.log(res))
+  }
   correcao(status) {
     return EStatusPartilha[status] === EStatusPartilha.CORRECAO || EStatusPartilha[status] === EStatusPartilha.EM_ANALISE;
   }
-
   downloadComprovante(comprovante) {
-    this.partilhaService.obterArquivoComprovante(comprovante);
+    this.loadingDownload[comprovante._id] = true;
+    this.partilhaService.obterArquivoComprovante(comprovante)
+      .subscribe(res => res, err => err, () => this.loadingDownload[comprovante._id] = false);
   }
 }

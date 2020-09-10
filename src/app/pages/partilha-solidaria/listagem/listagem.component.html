@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-header
     >Partilha solidária
     <button
@@ -78,6 +78,8 @@
         style="margin-right: 5px;"
         nbTooltip="Ver documento"
         nbTooltipStatus="info"
+        [nbSpinner]="loadingDownload[comprovante._id]"
+        nbSpinnerStatus="success"
         (click)="downloadComprovante(comprovante)"
       >
         <nb-icon icon="eye-outline"></nb-icon>

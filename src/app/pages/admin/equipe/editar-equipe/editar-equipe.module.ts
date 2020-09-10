@@ -6,7 +6,7 @@ import { EditarEquipeComponent } from './editar-equipe.component';
 import { NbCardModule, NbInputModule,
   NbButtonModule, NbIconModule,
   NbCheckboxModule, NbListModule,
-  NbSelectModule, NbAutocompleteModule } from '@nebular/theme';
+  NbSelectModule, NbAutocompleteModule, NbSpinnerModule } from '@nebular/theme';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DialogShowComponentComponent } from './dialog-show-component/dialog-show-component.component';
 
@@ -24,6 +24,7 @@ import { DialogShowComponentComponent } from './dialog-show-component/dialog-sho
     FormsModule,
     NbIconModule,
     NbSelectModule,
+    NbSpinnerModule,
     NbAutocompleteModule,
     NbCheckboxModule,
     NbListModule,

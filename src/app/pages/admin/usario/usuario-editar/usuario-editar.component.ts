@@ -31,23 +31,26 @@ export class UsuarioEditarComponent extends UnsubscribeOnDestroyAdapter implemen
   hierarquia = Object.keys(EHierarquiaUsuario).map(it => ({ k: it, v: EHierarquiaUsuario[it] }));
   equipeAntiga: string;
   equipeAtual: string;
+  loading = false;
   constructor(private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
     private equipeSerivice: EquipeService) {
     super();
+    this.loading = true;
     this.route.params.subscribe(params => {
       this.id = params['id'];
       if (this.id !== 'novo') {
         this.usuarioService.buscarPorId(this.id).subscribe(res => {
           this.equipeSerivice.select().subscribe(eqps => {
             this.equipes = eqps;
+            console.log(res)
             this.dados.patchValue({
               ...res,
               bd: res.bd && new Date(res.bd),
             });
-          });
+          }, (err) => err, () => this.loading = false);
         });
       }
     });

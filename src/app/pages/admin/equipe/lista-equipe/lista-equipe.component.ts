@@ -9,10 +9,11 @@ import { EquipeService } from '../equipe.service';
 export class ListaEquipeComponent implements OnInit {
   equipes;
   constructor(private equipeService: EquipeService) { }
-
+  loading = false;
   ngOnInit(): void {
+    this.loading = true;
     this.equipeService.lista()
-      .subscribe(res => this.equipes = res);
+      .subscribe(res => this.equipes = res, err => err, () => this.loading = false);
   }
 
 }

@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { NbToastrService } from '@nebular/theme';
 import { BehaviorSubject } from 'rxjs';
+// const AWS = require('aws-sdk');
+// import * as AWS from 'aws-sdk';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -91,10 +94,9 @@ export class UsuarioService {
   }
 
   getAvatarFromService() {
-    this.http.get(`${SECURED_URL}/user/obterAvatar`, { responseType: 'blob' }).subscribe(data => {
-      this.createImageFromBlob(data);
-    }, error => {
-    });
+    this.http.get<{url: string}>(`${SECURED_URL}/user/obterAvatar`,
+    // { responseType: 'blob' }
+    ).subscribe(res => this._image.next(res.url));
   }
   private _image = new BehaviorSubject<any>(null);
 
@@ -102,6 +104,20 @@ export class UsuarioService {
   get image() {
     return this._image.asObservable();
   }
+
+  // obterImagem(id) {
+
+  //   const s3Client = new AWS.S3({
+  //     region : 'sa-east-1',
+  //   });
+  //   const params = {
+  //     Bucket: 'ce-i',
+  //     Key: `avatar/${id}`,
+  //     Expires: 100,
+  //   };
+  //   const url = s3Client.getSignedUrl('getObject', params);
+  //   return url;
+  // }
 
   private createImageFromBlob(image: Blob) {
     const reader = new FileReader();

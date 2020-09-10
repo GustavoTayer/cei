@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <nb-card>
+  <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
     <nb-card-header>
       <button nbButton size="small" ghost routerLink="/pages/admin/produto"><nb-icon icon="arrow-left"></nb-icon></button>
       {{headerMessage}} Produto
@@ -9,7 +9,7 @@
       <div class="form-group col-md-6">
         <label for="Nome" class="label" required>Nome </label>
         <input type="text" nbInput placeholder="Nome" fullWidth id="nome"
-          [status]="verificaValidacaoCampo('nome') ? 'danger' : ''" formControlName="nome" />
+          [status]="verificaValidacaoCampo('nome') ? 'danger' : 'basic'" formControlName="nome" />
         <p class="caption status-danger" *ngIf="verificaValidacaoCampo('nome', 'required')">
           Campo obrigatório!
         </p>
@@ -18,7 +18,7 @@
         <label for="valor" class="label">Valor</label>
         <input type="tel" nbInput currencyMask placeholder="Valor" fullWidth id="valor"
           formControlName="valor" maxlength="15"
-          [status]="verificaValidacaoCampo('valor') ? 'danger' : ''" />
+          [status]="verificaValidacaoCampo('valor') ? 'danger' : 'basic'" />
         <p class="caption status-danger" *ngIf="verificaValidacaoCampo('valor', 'required')">
           Campo obrigatório!
         </p>
@@ -35,12 +35,12 @@
       <div class="form-group col-md-9">
         <label for="Nome" class="label" required>Descrição</label>
         <textarea nbInput placeholder="Descrição" fullWidth id="descricao"
-          [status]="verificaValidacaoCampo('descricao') ? 'danger' : ''" formControlName="descricao" ></textarea>
+          [status]="verificaValidacaoCampo('descricao') ? 'danger' : 'basic'" formControlName="descricao" ></textarea>
       </div>
     </div>
   </nb-card-body>
     <nb-card-footer>
-      <button nbButton (click)="salvar()" [disabled]="form.invalid">Enviar</button>
+      <button [nbSpinner]="loadingSalvar" [disabled]="loadingSalvar" nbSpinnerStatus="primary" nbButton (click)="salvar()" [disabled]="form.invalid">Enviar</button>
     </nb-card-footer>
   </nb-card>
 </form>

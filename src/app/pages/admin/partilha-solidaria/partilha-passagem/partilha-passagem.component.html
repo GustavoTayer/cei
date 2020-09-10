@@ -1,5 +1,5 @@
 
-<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="editar">
+<nb-flip-card class="own-scroll" [showToggleButton]="false" [flipped]="editar" [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-card-front>
     <nb-card>
       <nb-card-header>
@@ -59,7 +59,7 @@
         </div>
       </nb-card-body>
       <nb-card-footer>
-        <button nbButton (click)="salvar()" status="primary">Salvar</button>
+        <button nbButton (click)="salvar()" status="primary" [disabled]="loadingSalvar" [nbSpinner]="loadingSalvar">Salvar</button>
       </nb-card-footer>
     </nb-card>
   </nb-card-back>

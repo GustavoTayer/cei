@@ -18,10 +18,10 @@
     </button>
   </nb-card-footer>
 </nb-card>
-<nb-card >
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
   <nb-list>
     <nb-list-item *ngFor="let user of users" [routerLink]="['/pages/admin/usuarios/editar/', user._id]">
-      <nb-user showInitials [name]="user.name" [title]="user.comunidade" [picture]="getPicture(user._id)">
+      <nb-user showInitials [name]="user.name" [title]="user.comunidade" >
       </nb-user>
     </nb-list-item>
   </nb-list>

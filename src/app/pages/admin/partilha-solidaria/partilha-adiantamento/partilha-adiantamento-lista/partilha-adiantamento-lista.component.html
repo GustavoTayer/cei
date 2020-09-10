@@ -33,7 +33,7 @@
     </form>
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton  style="margin-right: 5px;" (click)="buscar()">Buscar</button>
+    <button nbButton  style="margin-right: 5px;" (click)="buscar()" [disabled]="loading" [nbSpinner]="loading" nbSpinnerStatus="primary">{{loading ? '' : 'Buscar'}}</button>
     <button nbButton status='primary' routerLink="/pages/admin/partilha/adiantamento/editar">Criar adiantamento</button>
   </nb-card-footer>
 </nb-card>

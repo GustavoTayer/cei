@@ -14,6 +14,7 @@ export class PartilhaAdiantamentoListaComponent implements OnInit {
   meses = todosMeses;
 
   adiantamentos: IAdiantamento[]  = [];
+  loading = false
   form = this.fb.group({
     usuario: null,
     dataDe: startOfMonth(new Date()),
@@ -23,15 +24,17 @@ export class PartilhaAdiantamentoListaComponent implements OnInit {
     private partilhaService: PartilhaSolidariaService) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.partilhaService.adiantamentoLista(this.form.value).subscribe(res => {
       this.adiantamentos = res;
-    });
+    }, err => err, () => this.loading = false);
   }
 
   buscar() {
+    this.loading = true;
     this.partilhaService.adiantamentoLista(this.form.value).subscribe(res => {
       this.adiantamentos = res;
-    });
+    }, err => err, () => this.loading = false);
   }
 
   formataData(data) {

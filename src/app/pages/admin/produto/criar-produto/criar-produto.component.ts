@@ -21,6 +21,8 @@ export class CriarProdutoComponent implements OnInit {
   id: string;
   headerMessage: 'Criar' | 'Editar';
   color = '#fff';
+  loading = false;
+  loadingSalvar = false;
   constructor(private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -30,13 +32,14 @@ export class CriarProdutoComponent implements OnInit {
       this.route.params.subscribe(params => {
       this.id = params['id'];
       if (this.id !== 'novo') {
+        this.loading = true;
         this.headerMessage = 'Editar';
         this.produtoService.buscarProdutoPorId(this.id).subscribe(res => {
           this.form.patchValue({
             ...res,
           });
           this.color = res.cor || '#fff';
-        });
+        }, err => err, () => this.loading = false);
       } else {
         this.headerMessage = 'Criar';
       }
@@ -48,19 +51,22 @@ export class CriarProdutoComponent implements OnInit {
 
   salvar() {
     if (this.form.valid) {
+      this.loadingSalvar = true;
       if (this.id === 'novo') {
         this.produtoService.criarProduto({...this.form.value, cor: this.color}).subscribe(res => {
           this.router.navigate(['/pages/admin/produto']);
           this.toastrService.success('Produto criado com sucesso!', 'Sucesso!');
         },
-        err => this.toastrService.danger('Erro!', err.errors));
+        err => this.toastrService.danger('Erro!', err.errors),
+        () => this.loadingSalvar = false);
       } else {
         this.produtoService.atualizarProduto({...this.form.value, cor: this.color}, this.id)
           .subscribe(res => {
             this.router.navigate(['/pages/admin/produto']);
             this.toastrService.success('Produto atualizado com sucesso!');
           },
-          err => this.toastrService.danger('Erro!', err.errors));
+          err => this.toastrService.danger('Erro!', err.errors),
+          () => this.loadingSalvar = false);
       }
     }
   }

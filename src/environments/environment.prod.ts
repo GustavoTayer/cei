@@ -5,5 +5,5 @@
  */
 export const environment = {
   production: true,
-  url: 'http://52.202.132.143',
+  url: 'http://ceinterno-org-br.umbler.net',
 };

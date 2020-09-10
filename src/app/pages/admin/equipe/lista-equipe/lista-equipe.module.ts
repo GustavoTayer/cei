@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ListaEquipeRoutingModule } from './lista-equipe-routing.module';
 import { ListaEquipeComponent } from './lista-equipe.component';
-import { NbCardModule, NbListModule, NbIconModule, NbButtonModule } from '@nebular/theme';
+import { NbCardModule, NbListModule, NbIconModule, NbButtonModule, NbSpinnerModule } from '@nebular/theme';
 
 
 @NgModule({
@@ -15,6 +15,7 @@ import { NbCardModule, NbListModule, NbIconModule, NbButtonModule } from '@nebul
     NbListModule,
     NbIconModule,
     NbButtonModule,
+    NbSpinnerModule,
   ],
 })
 export class ListaEquipeModule { }

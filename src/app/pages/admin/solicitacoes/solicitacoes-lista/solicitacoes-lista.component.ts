@@ -66,7 +66,12 @@ export class SolicitacoesListaComponent implements OnInit {
   });
   produtosCount: IProdutoCount[];
   permissaoRelatorio = false;
+
+  loadingLista = false;
+  loadingInfo = false
   async ngOnInit() {
+    this.loadingLista = true;
+    this.loadingInfo = true;
     this.route.queryParams
       .subscribe(params => {
         const start = startOfWeek(new Date());
@@ -93,8 +98,9 @@ export class SolicitacoesListaComponent implements OnInit {
               this.permissoes = new Set(res.permissoes);
               this.permissoesBotoes();
               this.permissaoRelatorio = this.permissoes.has('RELATORIO');
-            });
-          this.solicitacaoProdutoService.countProdutos(this.filtro.value).subscribe(res => this.produtosCount = res);
+            }, (err) => err, () => this.loadingLista = false);
+          this.solicitacaoProdutoService.countProdutos(this.filtro.value)
+            .subscribe(res => this.produtosCount = res, (err) => err, () => this.loadingInfo = false);
       });
 
     this.solicitacaoProdutoService.usuariosSelect().subscribe(res => this.usuarios = res);
@@ -163,13 +169,15 @@ export class SolicitacoesListaComponent implements OnInit {
   }
 
   buscar() {
+    this.loadingInfo = true;
+    this.loadingLista = true;
     this.solicitacaoProdutoService.buscarSolicitacoesGeral(this.filtro.value, this.pageNumber, this.nPerPage)
       .subscribe(res => {
         this.setData(res.solicitacoes);
         this.setLastPageAndCount(res.count);
-      });
+      }, (err) => err, () => this.loadingLista = false);
     this.solicitacaoProdutoService.countProdutos(this.filtro.value)
-      .subscribe(res => this.produtosCount = res);
+      .subscribe(res => this.produtosCount = res, (err) => err, () => this.loadingInfo = false);
     this.filtroStatus = this.filtro.value.status;
     this.permissoesBotoes();
     this.checkeds.clear();

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { UsuarioListaRoutingModule } from './usuario-lista-routing.module';
 import { UsuarioListaComponent } from './usuario-lista.component';
-import { NbCardModule, NbListModule, NbUserModule, NbButtonModule, NbInputModule } from '@nebular/theme';
+import { NbCardModule, NbListModule, NbUserModule, NbButtonModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
@@ -20,6 +20,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FormsModule,
     NbButtonModule,
     NbInputModule,
+    NbSpinnerModule,
     UsuarioListaRoutingModule,
   ],
 })
