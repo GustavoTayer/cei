@@ -32,6 +32,8 @@ export class EditarEquipeComponent implements OnInit {
 
   cargoMembro = new FormControl();
   editarFuncao = false;
+
+
   funcaoForm = this.fb.group({
     _id: null,
     nome: [null, Validators.required],
@@ -94,6 +96,7 @@ export class EditarEquipeComponent implements OnInit {
     this.editar = true;
   }
 
+  // para criar ou editar uma função
   editarFuncaoAct(funcao?: any) {
     this.editarFuncao = true;
     if (funcao) {
@@ -103,6 +106,7 @@ export class EditarEquipeComponent implements OnInit {
     }
   }
 
+  // salvar alterações no editar equipe
   loadingSC = false;
   salvar() {
     if (this.form.valid) {
@@ -119,23 +123,32 @@ export class EditarEquipeComponent implements OnInit {
     return EComunidadeUsuario[comunidade];
   }
 
+  // botão de salvar ou criar função
   loadingSF = false;
   salvarFuncao() {
     if (this.funcaoForm.valid) {
       if (this.funcaoForm.value._id) {
-
+        this.equipeService.editarCargo({...this.funcaoForm.value})
+        .subscribe(res => {
+          this.equipe = res;
+          this.editarFuncao = false;
+          this.funcaoForm.reset();
+        }, err => err, () => this.loadingSF = false);
       } else {
         this.loadingSF = true;
         this.equipeService.criarCargo({...this.funcaoForm.value, equipe: this.id})
           .subscribe(res => {
             this.equipe = res;
             this.editarFuncao = false;
-          }, err => err, () => this.loadingSF = false);
+            this.funcaoForm.reset();
+          }, err => err, () => {
+            this.loadingSF = false;
+          });
       }
     }
   }
 
-
+  // adicionar usuário a equipe
   loadingAdd = false;
   add() {
     if (this.adicionarMembro.value && this.adicionarMembro.value._id) {
@@ -154,6 +167,7 @@ export class EditarEquipeComponent implements OnInit {
     this.membroSelecionado = membro;
   }
 
+  // remover membro da equipe
   loadingRM = false;
   removerMembro(usuarioId: string, nome: string) {
     this.dialogService.open(DialogShowComponentComponent, {
@@ -172,6 +186,7 @@ export class EditarEquipeComponent implements OnInit {
     });
   }
 
+  // excluir função da equipe
   loadingRF = false;
   removerFuncao(cargoId: string, nome: string) {
     this.dialogService.open(DialogShowComponentComponent, {
@@ -192,6 +207,7 @@ export class EditarEquipeComponent implements OnInit {
     });
   }
 
+  // adicionar cargo a algum membro da equipe
   loadingAdicionarCM = false;
   adicionarCargoMembro() {
     if (this.cargoMembro.value) {

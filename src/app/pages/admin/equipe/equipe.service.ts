@@ -65,6 +65,19 @@ export class EquipeService {
     );
   }
 
+  editarCargo(cargo: Cargo) {
+    return this.http.post<Equipe>(`${this.url}/editarCargo`, cargo).pipe(
+      map(res => {
+        this.toastrService.success('', 'Cargo editado com sucesso');
+        return res;
+      }),
+      catchError(err => {
+        this.toastrService.danger(err, 'Erro!');
+        return of({nome: ''});
+      }),
+    );
+  }
+
   removerMembro(id: string, usuarioId: string) {
     return this.http.post<Equipe>(`${this.url}/removerMembro`, {id, usuarioId}).pipe(
       map(res => {

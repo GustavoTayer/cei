@@ -173,7 +173,7 @@ export class EditarComponent implements OnInit {
             }
           });
       } else {
-        this.partilhaService.enviarComprovante({ ...this.form.value, id: this.id })
+        this.partilhaService.editarComprovante({ ...this.form.value, id: this.id })
           .subscribe(res => {
             if (res) {
               this.router.navigate(['./pages/partilha-solidaria/lista']);
