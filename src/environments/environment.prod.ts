@@ -5,5 +5,5 @@
  */
 export const environment = {
   production: true,
-  url: 'http://ceinterno-org-br.umbler.net',
+  url: 'https://cei-server.ag0bs9e6up524.us-east-1.cs.amazonlightsail.com',
 };
