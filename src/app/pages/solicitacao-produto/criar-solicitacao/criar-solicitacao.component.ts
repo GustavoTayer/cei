@@ -16,6 +16,7 @@ import { getDay } from 'date-fns';
 export class CriarSolicitacaoComponent implements OnInit {
   form = this.fb.group({
     dataEntrega: [null, Validators.required],
+    usuario: [null, Validators.required]
   });
 
   date = new Date();
@@ -25,6 +26,8 @@ export class CriarSolicitacaoComponent implements OnInit {
 
   tiposProduto: Produto[] = [];
   produtos = [];
+
+  usuarios;
 
   settings: any = {
     noDataMessage: '',
@@ -103,6 +106,8 @@ export class CriarSolicitacaoComponent implements OnInit {
         this.tiposProduto = res;
         this.listaProdutos(res);
       });
+
+      this.solicitacaoProdutoService.usuariosSelect().subscribe(res => this.usuarios = res);
   }
 
   listaProdutos(res: Produto[]) {
@@ -159,6 +164,7 @@ export class CriarSolicitacaoComponent implements OnInit {
       this.solicitacaoProdutoService.criarSolicitacao({
         dataDesejada: this.form.value.dataEntrega,
         produtos: this.produtosSolicitados,
+        usuario: this.form.value.usuario
       }).subscribe(res => {
         this.toastrService.success('', 'Solicitação criada com sucesso!');
         this.router.navigate(['/pages/solicitacao-produto']);

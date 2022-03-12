@@ -13,6 +13,7 @@ import {
   faAngleRight, faAngleLeft,
   faAngleDoubleLeft, faAngleDoubleRight,
   faChartLine,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { DialogShowcaseComponent } from './dialog-showcase/dialog-showcase.component';
 import { ActivatedRoute } from '@angular/router';
@@ -45,6 +46,7 @@ export class SolicitacoesListaComponent implements OnInit {
   faSearch = faSearch;
   faChartLine = faChartLine;
   faAngleRight = faAngleRight;
+  faPlus = faPlus;
   faAngleLeft = faAngleLeft;
   faAngleDoubleLeft = faAngleDoubleLeft;
   faAngleDoubleRight = faAngleDoubleRight;
